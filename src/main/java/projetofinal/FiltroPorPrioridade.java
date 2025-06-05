@@ -1,0 +1,30 @@
+package projetofinal;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// verificar se cria outro filtro que ordena pela prioridade
+public class FiltroPorPrioridade implements Filter<TodoItem> {
+    
+    private String prioridade;
+
+    public FiltroPorPrioridade(String prioridade){
+        this.prioridade = prioridade;
+    }
+
+
+    @Override
+    public List<TodoItem> meetCriteria(List<TodoItem> TodoItens){
+        List<TodoItem> TodoItensFiltrados = new ArrayList<TodoItem>();
+
+        for(TodoItem item: TodoItens){
+            if(item.getData().equals(prioridade)){
+                TodoItensFiltrados.add(item);
+            }
+        }
+
+        return TodoItensFiltrados;
+    }
+
+    
+}
