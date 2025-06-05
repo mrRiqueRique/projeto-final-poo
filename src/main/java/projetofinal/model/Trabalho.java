@@ -1,7 +1,9 @@
-package projetofinal;
+package projetofinal.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import projetofinal.exceptions.AlunoNaoEncontradoException;
 
 public class Trabalho extends MetodoDeAvaliacao{
 
@@ -46,10 +48,16 @@ public class Trabalho extends MetodoDeAvaliacao{
         this.grupo.add(aluno);
     }
 
-    // depois tratar a exceção de se não achar o aluno
     public void removerMembro(Aluno alunoRemovido){
-        for(Aluno aluno: this.grupo){
-            if(aluno.equals(alunoRemovido)) this.grupo.remove(aluno);
+        try{
+            if(!this.grupo.contains(alunoRemovido))
+                throw new AlunoNaoEncontradoException("Aluno não pertencee ao grupo");
+            
+            this.grupo.remove(alunoRemovido);
+            
+
+        }catch(AlunoNaoEncontradoException e){
+            System.out.println(e.getMessage());
         }
     }
 

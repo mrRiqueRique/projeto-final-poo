@@ -1,9 +1,11 @@
-package projetofinal;
+package projetofinal.filters;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import projetofinal.model.TodoItem;
 
 public class FiltroPorOrdemAlfabetica implements Filter<TodoItem> {
     

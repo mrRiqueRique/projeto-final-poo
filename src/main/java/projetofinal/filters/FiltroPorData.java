@@ -1,7 +1,9 @@
-package projetofinal;
+package projetofinal.filters;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import projetofinal.model.TodoItem;
 
 public class FiltroPorData implements Filter<TodoItem> {
 

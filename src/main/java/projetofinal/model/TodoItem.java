@@ -1,4 +1,4 @@
-package projetofinal;
+package projetofinal.model;
 
 public class TodoItem {
 

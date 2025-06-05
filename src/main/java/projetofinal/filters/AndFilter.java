@@ -1,6 +1,8 @@
-package projetofinal;
+package projetofinal.filters;
 
 import java.util.List;
+
+import projetofinal.model.TodoItem;
 
 public class AndFilter implements Filter<TodoItem>{
 

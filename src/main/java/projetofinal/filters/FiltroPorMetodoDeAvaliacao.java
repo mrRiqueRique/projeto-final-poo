@@ -1,14 +1,17 @@
-package projetofinal;
+package projetofinal.filters;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FiltroPorDisciplina implements Filter<TodoItem> {
-    
-    private String disciplina;
+import projetofinal.model.MetodoDeAvaliacao;
+import projetofinal.model.TodoItem;
 
-    public FiltroPorDisciplina(Disciplina disciplina){
-        this.disciplina = disciplina;
+public class FiltroPorMetodoDeAvaliacao implements Filter<TodoItem> {
+    
+    private MetodoDeAvaliacao metodo;
+
+    public FiltroPorMetodoDeAvaliacao(MetodoDeAvaliacao metodo){
+        this.metodo = metodo;
     }
 
 
@@ -17,7 +20,7 @@ public class FiltroPorDisciplina implements Filter<TodoItem> {
         List<TodoItem> TodoItensFiltrados = new ArrayList<TodoItem>();
 
         for(TodoItem item: TodoItens){
-            if(item.getData().equals(disciplina)){
+            if(item.getData().equals(metodo)){
                 TodoItensFiltrados.add(item);
             }
         }

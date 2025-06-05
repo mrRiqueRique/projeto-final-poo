@@ -1,4 +1,4 @@
-package projetofinal;
+package projetofinal.filters;
 
 import java.util.List;
 

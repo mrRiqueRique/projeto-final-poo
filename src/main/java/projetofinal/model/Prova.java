@@ -1,4 +1,4 @@
-package projetofinal;
+package projetofinal.model;
 
 public class Prova extends MetodoDeAvaliacao{
 
@@ -23,5 +23,13 @@ public class Prova extends MetodoDeAvaliacao{
 
     public String getData() {
         return data;
+    }
+
+    public void alterarData(String data){
+        this.data = data;
+    }
+
+    public void alterarLocal(String local){
+        this.local = local;
     }
 }

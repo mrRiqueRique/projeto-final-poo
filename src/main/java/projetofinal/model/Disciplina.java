@@ -1,4 +1,4 @@
-package projetofinal;
+package projetofinal.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +37,10 @@ public class Disciplina {
         return this.professor;
     }
 
+    public List<MetodoDeAvaliacao> getAvaliacoes(){
+        return this.avaliacoes;
+    }
+
     // ver como quer tratar quando ultrapassar as faltas restantes, se vai mandar mensagem, etc
 
     public int consultarFaltasRestantes(){
@@ -50,6 +54,12 @@ public class Disciplina {
     public void computarFalta(){
         this.faltas++;
     }
+
+    public void adicionarAvaliacao(MetodoDeAvaliacao avaliacao){
+        this.avaliacoes.add(avaliacao);
+    }
+
+
 
 
     

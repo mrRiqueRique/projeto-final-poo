@@ -1,4 +1,4 @@
-package projetofinal;
+package projetofinal.model;
 
 public abstract class MetodoDeAvaliacao {
     private double nota;
