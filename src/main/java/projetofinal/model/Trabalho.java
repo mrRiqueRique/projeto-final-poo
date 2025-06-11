@@ -1,9 +1,12 @@
 package projetofinal.model;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import projetofinal.exceptions.AlunoNaoEncontradoException;
+import projetofinal.exceptions.DataInvalidaException;
 
 public class Trabalho extends MetodoDeAvaliacao{
 
@@ -51,7 +54,7 @@ public class Trabalho extends MetodoDeAvaliacao{
     public void removerMembro(Aluno alunoRemovido){
         try{
             if(!this.grupo.contains(alunoRemovido))
-                throw new AlunoNaoEncontradoException("Aluno não pertencee ao grupo");
+                throw new AlunoNaoEncontradoException("Aluno não pertence ao grupo");
             
             this.grupo.remove(alunoRemovido);
             
@@ -61,9 +64,37 @@ public class Trabalho extends MetodoDeAvaliacao{
         }
     }
 
-    // verificar se tem como checar a data atual, e não permitir mudar a data
-    // se a data nova a ser modificada ja passou
-    public void alterarDataEntrega(String dataEntrega){
-        this.dataEntrega = dataEntrega;
+    public void alterarDataInicio(String data){
+        LocalDate dataAtual = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dataNova = LocalDate.parse(data, formatter);
+
+        try{
+            // se a nova data já ocorreu não é possível modificar
+            if(dataNova.isBefore(dataAtual))
+                throw new DataInvalidaException("Não é possível inserir uma data passada");
+            
+            this.dataInicio=data;
+            
+            } catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void alterarDataEntrega(String data){
+        LocalDate dataAtual = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dataNova = LocalDate.parse(data, formatter);
+
+        try{
+            // se a nova data já ocorreu não é possível modificar
+            if(dataNova.isBefore(dataAtual))
+                throw new DataInvalidaException("Não é possível inserir uma data passada");
+            
+            this.dataEntrega=data;
+            
+            } catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }
