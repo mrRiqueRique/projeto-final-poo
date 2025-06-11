@@ -1,5 +1,10 @@
 package projetofinal.model;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import projetofinal.exceptions.DataInvalidaException;
+
 public class TodoItem {
 
     private String nome;
@@ -56,6 +61,23 @@ public class TodoItem {
 
     public void setPrioridade(String prioridade){
         this.prioridade = prioridade;
+    }
+
+    public void alterarData(String data){
+        LocalDate dataAtual = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dataNova = LocalDate.parse(data, formatter);
+
+        try{
+            // se a nova data já ocorreu não é possível modificar
+            if(dataNova.isBefore(dataAtual))
+                throw new DataInvalidaException("Não é possível inserir uma data passada");
+            
+            this.data=data;
+            
+            } catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public void concluir(){
