@@ -10,7 +10,7 @@ javafx {
 }
 
 application{
-    mainClass = 'Lab03.ui.Main'
+    mainClass = 'projetofinal.model.Main'
 }
 
 
