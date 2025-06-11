@@ -1,6 +1,18 @@
 plugins {
+    id 'application'
     id 'java'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
+
+javafx {
+    version '20'
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+application{
+    mainClass = 'Lab03.ui.Main'
+}
+
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
