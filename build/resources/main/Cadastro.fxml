@@ -4,27 +4,52 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="projetofinal.ui.CadastroController">
 
     <top>
-        <VBox alignment="CENTER">
-            <padding>
-                <Insets top="150" right="0" bottom="10" left="0"/>
-            </padding>
-            <Label fx:id="bemVindoLabel" text="CADASTRO"/>
+        <VBox>
+            <HBox>
+                <padding>
+                    <Insets top="30" right="0" bottom="0" left="100"/>
+                </padding>
+                <Button onAction="#handleVoltar"
+                        style="-fx-background-color: transparent; -fx-padding: 0; -fx-border-width: 0;">
+                    <graphic>
+                        <ImageView fitWidth="50" fitHeight="50">
+                            <image>
+                                <Image url="@images/botaoVoltar.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- Título centralizado -->
+            <HBox alignment="CENTER">
+                <Label fx:id="cadastroLabel" text="CADASTRO">
+                    <font>
+                        <Font size="24"/>
+                    </font>
+                </Label>
+            </HBox>
             
+            <!-- Espaço vertical abaixo do título, caso queira -->
+            <Region minHeight="20"/>
         </VBox>
     </top>
 
     <center>
         <VBox spacing="20" alignment="TOP_CENTER">
             <padding>
-                <Insets top="40" right="0" bottom="0" left="0"/>
+                <Insets top="20" right="0" bottom="0" left="0"/>
             </padding>
+
             <TextField
                 fx:id="nomeField"
-                promptText="Inserir nome"
+                promptText="Inserir usuário"
                 maxWidth="300"
                 style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;"
             />
@@ -35,6 +60,7 @@
                 maxWidth="300"
                 style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;"
             />
+            
             <Button text="Subir Foto" maxWidth="200" onAction="#handleSubirFoto"/>
             <Button text="Criar Conta" maxWidth="200" onAction="#handleCriarConta"/>
             <Label fx:id="messageLabel" textFill="red"/>

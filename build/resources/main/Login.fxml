@@ -7,32 +7,22 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="projetofinal.ui.CadastroController">
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="projetofinal.ui.LoginController">
 
     <top>
-        <!-- <VBox alignment="TOP_LEFT">
-            <HBox alignment="TOP_LEFT">
-                <padding>
-                    <Insets top="150" left="200"/>
-                </padding>
-                <Button onAction="#handleVoltar"  style="-fx-background-color: transparent; -fx-padding: 0; -fx-border-width: 0;">
-                    <graphic>
-                        <ImageView fitWidth="50" fitHeight="50">
-                            <image>
-                                <Image url="@images/botaoVoltar.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
-            </HBox>
-        </VBox> -->
-        <VBox alignment="CENTER">
+        <VBox alignment="CENTER" spacing="20">
             <padding>
                 <Insets top="150" right="0" bottom="10" left="0"/>
             </padding>
-            <Label fx:id="cadastroLabel" text="CADASTRO"/>
+            <Label fx:id="bemVindoLabel" text="BEM-VINDO"/>
+            
+            <ImageView fx:id="fotoView" fitWidth="90" fitHeight="90" preserveRatio="true">
+                <image>
+                    <Image url="@images/unicamp.png" />
+                </image>
+            </ImageView>
         </VBox>
-        
     </top>
 
     <center>
@@ -53,8 +43,8 @@
                 maxWidth="300"
                 style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;"
             />
-            <Button text="Subir Foto" maxWidth="200" onAction="#handleSubirFoto"/>
-            <Button text="Criar Conta" maxWidth="200" onAction="#handleCriarConta"/>
+            <Button text="Entrar" maxWidth="200" onAction="#handleEntrar"/>
+            <Button text="Cadastro" maxWidth="200" onAction="#handleCadastro"/>
             <Label fx:id="messageLabel" textFill="red"/>
         </VBox>
     </center>
