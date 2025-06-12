@@ -3,16 +3,18 @@ package projetofinal.model;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/LoginView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Cadastro.fxml"));
+        Scene scene = new Scene(loader.load(), 1440, 810);
+        scene.getStylesheets().add(getClass().getResource("/styleButton.css").toExternalForm());
+
+        primaryStage.setScene(scene);
         primaryStage.setTitle("Marketplace");
-        primaryStage.setScene(new Scene(root, 1440, 810));
         primaryStage.show();
     }
 
