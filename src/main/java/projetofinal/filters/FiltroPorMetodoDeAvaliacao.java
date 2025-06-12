@@ -20,7 +20,7 @@ public class FiltroPorMetodoDeAvaliacao implements Filter<TodoItem> {
         List<TodoItem> TodoItensFiltrados = new ArrayList<TodoItem>();
 
         for(TodoItem item: TodoItens){
-            if(item.getData().equals(metodo)){
+            if(item.getAvaliacao().equals(metodo)){
                 TodoItensFiltrados.add(item);
             }
         }

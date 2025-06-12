@@ -20,7 +20,7 @@ public class FiltroPorDisciplina implements Filter<TodoItem> {
         List<TodoItem> TodoItensFiltrados = new ArrayList<TodoItem>();
 
         for(TodoItem item: TodoItens){
-            if(item.getData().equals(disciplina)){
+            if(item.getDisciplina().equals(disciplina)){
                 TodoItensFiltrados.add(item);
             }
         }

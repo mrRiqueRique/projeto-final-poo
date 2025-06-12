@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="projetofinal.ui.CadastroController">
+
+    <top>
+        <VBox alignment="CENTER">
+            <padding>
+                <Insets top="150" right="0" bottom="10" left="0"/>
+            </padding>
+            <Label fx:id="bemVindoLabel" text="CADASTRO"/>
+            
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="20" alignment="TOP_CENTER">
+            <padding>
+                <Insets top="40" right="0" bottom="0" left="0"/>
+            </padding>
+            <TextField
+                fx:id="nomeField"
+                promptText="Inserir nome"
+                maxWidth="300"
+                style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;"
+            />
+
+            <PasswordField
+                fx:id="senhaField"
+                promptText="Inserir senha"
+                maxWidth="300"
+                style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;"
+            />
+            <Button text="Subir Foto" maxWidth="200" onAction="#handleSubirFoto"/>
+            <Button text="Criar Conta" maxWidth="200" onAction="#handleCriarConta"/>
+            <Label fx:id="messageLabel" textFill="red"/>
+        </VBox>
+    </center>
+
+</BorderPane>
