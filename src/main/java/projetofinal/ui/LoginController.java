@@ -13,10 +13,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class CadastroController {
+public class LoginController {
 
     @FXML
-    private Label cadastroLabel;
+    private Label bemVindoLabel;
 
     @FXML
     private TextField nomeField;
@@ -31,30 +31,20 @@ public class CadastroController {
     @FXML
     public void initialize() {
         Font minhaFonte = Font.loadFont(getClass().getResourceAsStream("/fonts/ComicRelief-Bold.ttf"), 35);
-        cadastroLabel.setFont(minhaFonte);
+        bemVindoLabel.setFont(minhaFonte);
     }
     
     @FXML
-    private void handleSubirFoto() {
-        // inserir logica de captar a foto
-        System.out.println("Foto\n");
-    }
-    @FXML
-    private void handleCriarConta(ActionEvent event) {
-        String username = nomeField.getText();
-        String password = senhaField.getText(); // Senha é ignorada nesse exemplo
-
-        // Verifica se os campos estão preenchidos
-        if (username.isEmpty() || password.isEmpty()) {
-            messageLabel.setText("Preencha usuário e senha");
-            return;
-        }
+    private void handleEntrar() {
+        // inserir logica de ir para a tela principal
+        System.out.println("Entrou\n");
     }
 
     @FXML
-    private void handleVoltar(ActionEvent event) {
+    private void handleCadastro(ActionEvent event) {
+
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Cadastro.fxml"));
             Scene scene = new Scene(loader.load(), 1440, 810);
             scene.getStylesheets().add(getClass().getResource("/styleButton.css").toExternalForm());
 
