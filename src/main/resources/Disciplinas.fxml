@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="projetofinal.ui.DisciplinasController">
+    <top>
+        <StackPane xmlns:fx="http://javafx.com/fxml">
+            <padding>
+                <Insets top="50" right="0" bottom="10" left="0"/>
+            </padding>
+
+            <Button fx:id="botaoVoltar"
+                    styleClass="botao-padrao"
+                    onAction="#handleVoltar"
+                    text="Voltar"
+                    StackPane.alignment="TOP_LEFT"
+                    translateX="30">
+                <graphic>
+                    <FontIcon iconLiteral="fas-arrow-left" iconSize="16"/>
+                </graphic>
+            </Button>
+
+            <Label fx:id="disciplinasLabel"
+                text="Disciplinas"
+                StackPane.alignment="CENTER">
+                <font>
+                    <Font size="24"/>
+                </font>
+            </Label>
+        </StackPane>
+    </top>
+
+    <center>
+        <VBox spacing="10" alignment="CENTER">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            
+            <ListView fx:id="listaDisciplinas" prefHeight="580"  />
+
+            <Button text="Lançar Nota" styleClass="botao-personalizado" onAction="#handleLancarNota"/>
+            <Button text="+ Cadastrar Disciplina" styleClass="botao-personalizado" onAction="#handleCadastrarDisciplina"/>
+        </VBox>
+    </center>
+</BorderPane>

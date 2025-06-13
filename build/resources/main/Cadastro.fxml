@@ -4,42 +4,31 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.scene.control.Button?>
+
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="projetofinal.ui.CadastroController">
+<top>
+    <StackPane>
+        <padding>
+            <Insets top="200" right="0" bottom="10" left="0"/>
+        </padding>
 
-    <top>
-        <VBox>
-            <HBox>
-                <padding>
-                    <Insets top="30" right="0" bottom="0" left="100"/>
-                </padding>
-                <Button onAction="#handleVoltar"
-                        style="-fx-background-color: transparent; -fx-padding: 0; -fx-border-width: 0;">
-                    <graphic>
-                        <ImageView fitWidth="50" fitHeight="50">
-                            <image>
-                                <Image url="@images/botaoVoltar.png"/>
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
-                <Region HBox.hgrow="ALWAYS"/>
-            </HBox>
+        <Button fx:id="botaoVoltar" styleClass="botao-padrao" onAction="#handleVoltar" text="Voltar"
+                StackPane.alignment="TOP_LEFT" 
+                translateX="400">
+            <graphic>
+                <FontIcon iconLiteral="fas-arrow-left" iconSize="16" />
+            </graphic>
+        </Button>
 
-            <!-- Título centralizado -->
-            <HBox alignment="CENTER">
-                <Label fx:id="cadastroLabel" text="CADASTRO">
-                    <font>
-                        <Font size="24"/>
-                    </font>
-                </Label>
-            </HBox>
-            
-            <!-- Espaço vertical abaixo do título, caso queira -->
-            <Region minHeight="20"/>
-        </VBox>
-    </top>
+        <Label fx:id="cadastroLabel" text="CADASTRO" StackPane.alignment="CENTER">
+            <font>
+                <Font size="24"/>
+            </font>
+        </Label>
+    </StackPane>
+</top>
 
     <center>
         <VBox spacing="20" alignment="TOP_CENTER">
@@ -60,9 +49,9 @@
                 maxWidth="300"
                 style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;"
             />
-            
-            <Button text="Subir Foto" maxWidth="200" onAction="#handleSubirFoto"/>
-            <Button text="Criar Conta" maxWidth="200" onAction="#handleCriarConta"/>
+           
+            <Button text="Subir Foto"  styleClass="botao-personalizado" maxWidth="200" onAction="#handleSubirFoto"/>
+            <Button text="Criar Conta" styleClass="botao-personalizado" maxWidth="200" onAction="#handleCriarConta"/>
             <Label fx:id="messageLabel" textFill="red"/>
         </VBox>
     </center>
