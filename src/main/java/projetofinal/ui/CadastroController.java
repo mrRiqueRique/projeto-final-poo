@@ -26,7 +26,6 @@ public class CadastroController {
 
     @FXML
     private Label messageLabel;
-
     
     @FXML
     public void initialize() {
@@ -56,7 +55,8 @@ public class CadastroController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             Scene scene = new Scene(loader.load(), 1440, 810);
-            scene.getStylesheets().add(getClass().getResource("/styleButton.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/botao-personalizado.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/botao-padrao.css").toExternalForm());
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);

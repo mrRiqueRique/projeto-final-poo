@@ -1,0 +1,23 @@
+.botao-padrao {
+    -fx-background-color: #c8ced1;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 5 10 5 10;
+    -fx-effect: none;
+}
+
+/* .botao-personalizado {
+    -fx-background-color: #2780bb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 2);
+}
+
+.botao-personalizado:hover {
+    -fx-background-color: #88b7f8;
+} */
