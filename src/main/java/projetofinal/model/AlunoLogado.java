@@ -1,20 +1,12 @@
 package projetofinal.model;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.List;
-
 public class AlunoLogado {
-    public static AlunoLogado alunoLogado;
+    private static AlunoLogado alunoLogado;
     private Aluno aluno;
-    private GoogleSheetsFacade sheetsFacade;
+    private Service service;
 
     private AlunoLogado() {
-        try {
-            sheetsFacade = new GoogleSheetsFacade();
-        } catch (IOException | GeneralSecurityException e) {
-            System.err.println(e.getMessage());
-        }
+        this.service = new Service(); // Inicializa o Service
     }
 
     public static AlunoLogado getInstance() {
@@ -33,20 +25,15 @@ public class AlunoLogado {
     }
 
     public void logarAluno(String ra) {
-        try {
-            List<Object> dataAluno = sheetsFacade.lerDadosLinhaPorId("Aluno", "A", "D", ra);
-            System.out.println(dataAluno);
-            aluno = new Aluno(dataAluno.get(0).toString(), dataAluno.get(1).toString(), dataAluno.get(2).toString());
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
+        this.aluno = service.getAluno(ra); // Obtém o aluno via Service
+        if (this.aluno == null) {
+            System.out.println("Aluno não encontrado.");
         }
     }
 
     public void cadastrarDisciplina(Disciplina disciplina) {
         if (aluno != null) {
-            // todo verificar se a disciplina já existe
-            aluno.cadastrarDisciplina(disciplina);
-
+            aluno.cadastrarDisciplina(disciplina); // Delegação para a classe Aluno
         } else {
             System.out.println("Nenhum aluno logado.");
         }
