@@ -1,4 +1,7 @@
 # 📚 Gerenciador Acadêmico
+- [UML](https://app.diagrams.net/#G1gtKTzDHyposuOEo_MXRLSdPxKTevUIVq#%7B%22pageId%22%3A%22xjf5HWkRNmCtRanLKS7O%22%7D)
+- [Google Docs](https://docs.google.com/document/d/1oL_Vor21liBjnLuWA0td5tS9-XJMVKEF66hNHhqbRN0/edit?tab=t.0)
+- [Google Sheets](https://docs.google.com/spreadsheets/d/1Ie0FsmkwFZHv4AO-4pdGRV4lLMaRH1mLMQq-BSKB0BA/edit?gid=1304622245#gid=1304622245)
 
 ## 🛠️ Comandos Chave do Git
 
