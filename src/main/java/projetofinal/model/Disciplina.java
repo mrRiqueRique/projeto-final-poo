@@ -12,7 +12,7 @@ public class Disciplina {
     private String professor;
     private List<MetodoDeAvaliacao> avaliacoes;
 
-    public Disciplina(String nome, String codigo, int creditos, int faltas, String professor){
+    public Disciplina(String codigo, String nome,  int creditos, int faltas, String professor){
         this.nome=nome;
         this.codigo = codigo;
         this.creditos = creditos;
@@ -35,6 +35,14 @@ public class Disciplina {
 
     public String getProfessor(){
         return this.professor;
+    }
+
+    public int getFaltas() {
+        return this.faltas;
+    }
+
+    public void setFaltas(int faltas) {
+        this.faltas = faltas;
     }
 
     public List<MetodoDeAvaliacao> getAvaliacoes(){

@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import projetofinal.exceptions.DataInvalidaException;
 
 public class TodoItem {
-
+    private String id;
     private String nome;
     private Disciplina disciplina;
     private MetodoDeAvaliacao avaliacao;

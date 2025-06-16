@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import projetofinal.exceptions.DataInvalidaException;
 
 public class Prova extends MetodoDeAvaliacao{
-
+    private String id;
     private String local;
     private String duracao;
     private String data;

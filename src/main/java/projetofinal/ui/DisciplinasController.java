@@ -7,8 +7,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import projetofinal.model.Disciplina;
+import projetofinal.model.DisciplinaRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DisciplinasController {
@@ -16,13 +16,15 @@ public class DisciplinasController {
     @FXML
     private ListView<Disciplina> listaDisciplinas;
 
-    private List<Disciplina> disciplinas = new ArrayList<>();
-
     @FXML
     private Label disciplinasLabel;
 
+    private DisciplinaRepository disciplinaRepository;
+
     @FXML
     public void initialize() {
+        disciplinaRepository = DisciplinaRepository.getInstancia();
+
         Font minhaFonte = Font.loadFont(getClass().getResourceAsStream("/fonts/ComicRelief-Bold.ttf"), 30);
         disciplinasLabel.setFont(minhaFonte);
 
@@ -49,7 +51,7 @@ public class DisciplinasController {
                     HBox mediaBox = new HBox(5);
                     Label mediaLabel = new Label("Média:");
                     mediaLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: black;");
-                    Label mediaValor = new Label("[cálculo]" );
+                    Label mediaValor = new Label("[cálculo]");
                     mediaValor.setStyle("-fx-text-fill: black;");
                     mediaBox.getChildren().addAll(mediaLabel, mediaValor);
 
@@ -79,7 +81,6 @@ public class DisciplinasController {
                     faltasLabel.setStyle("-fx-font-weight: bold;-fx-text-fill: red;");
                     Label faltasValor = new Label(String.valueOf(disciplina.consultarFaltasRestantes()));
                     faltasValor.setStyle("-fx-text-fill: red;");
-                    faltasValor.setStyle("-fx-text-fill: red;");
                     faltasBox.getChildren().addAll(faltasLabel, faltasValor);
 
                     VBox container = new VBox(5);
@@ -108,31 +109,30 @@ public class DisciplinasController {
             }
         });
 
-        // Exemplo de dados
-        disciplinas.add(new Disciplina("Cálculo III", "MA311", 6, 2, "Samuel Rocha"));
-        disciplinas.add(new Disciplina("Programação Orientada a Objetos", "MC322", 4, 1, "Marcos Raimundo"));
-        disciplinas.add(new Disciplina("Fundamentos Matemáticos Computacionais", "MC358", 4, 1, "Christiane"));
-        disciplinas.add(new Disciplina("Física Experimental II", "F259", 2, 1, "Diego Murata"));
+        carregarDisciplinas();
+    }
 
-        listaDisciplinas.getItems().addAll(disciplinas);
+    private void carregarDisciplinas() {
+        List<Disciplina> disciplinas = disciplinaRepository.getDisciplinas();
+        System.out.println("Disciplinas carregadas: " + disciplinas);
+        listaDisciplinas.getItems().setAll(disciplinas);
     }
 
     @FXML
     public void handleCadastrarDisciplina() {
         System.out.println("Botão 'Cadastrar Disciplina' clicado.");
-        // implementar abertura de tela para cadastrar nova disciplina
+        // todo - implementar abertura de tela para cadastrar nova disciplina
     }
 
     @FXML
     public void handleLancarNota() {
         System.out.println("Lançar nota");
-        // implementar lançar nota
+        // todo - implementar lançar nota
     }
 
     @FXML
     public void handleVoltar() {
         System.out.println("Voltar");
-        // implementar voltar
+        // todo - implementar voltar
     }
 }
-

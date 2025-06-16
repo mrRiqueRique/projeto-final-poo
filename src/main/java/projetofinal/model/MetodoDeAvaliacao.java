@@ -1,6 +1,7 @@
 package projetofinal.model;
 
 public abstract class MetodoDeAvaliacao {
+    private String id;
     private double nota;
     private String nome;
 
