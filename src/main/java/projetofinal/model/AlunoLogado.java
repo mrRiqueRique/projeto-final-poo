@@ -3,10 +3,10 @@ package projetofinal.model;
 public class AlunoLogado {
     private static AlunoLogado alunoLogado;
     private Aluno aluno;
-    private Service service;
+    private AlunoRepository alunoRepository;
 
     private AlunoLogado() {
-        this.service = new Service(); // Inicializa o Service
+        this.alunoRepository = AlunoRepository.getInstancia(); // Use AlunoRepository
     }
 
     public static AlunoLogado getInstance() {
@@ -25,7 +25,11 @@ public class AlunoLogado {
     }
 
     public void logarAluno(String ra) {
-        this.aluno = service.getAluno(ra); // Obtém o aluno via Service
+        this.aluno = alunoRepository.getAlunos()
+                                    .stream()
+                                    .filter(a -> a.getRa().equals(ra))
+                                    .findFirst()
+                                    .orElse(null); // Fetch the student from AlunoRepository
         if (this.aluno == null) {
             System.out.println("Aluno não encontrado.");
         }
@@ -33,7 +37,7 @@ public class AlunoLogado {
 
     public void cadastrarDisciplina(Disciplina disciplina) {
         if (aluno != null) {
-            aluno.cadastrarDisciplina(disciplina); // Delegação para a classe Aluno
+            aluno.cadastrarDisciplina(disciplina); // Delegate to Aluno
         } else {
             System.out.println("Nenhum aluno logado.");
         }
