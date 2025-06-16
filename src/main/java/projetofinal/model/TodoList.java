@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TodoList {
-
+    private String id;
     private List<TodoItem> todoList;
 
     public TodoList(){
