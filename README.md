@@ -14,7 +14,7 @@ git pull
 git add .
 ```
 
-**✅ Criar um commit**
+**✅ Cria um commit**
 
 ```bash
 git commit -m "Descrição do commit"
@@ -66,12 +66,12 @@ git push --force-with-lease
 
 ## 📌 Mergear sua branch na main
 
-**1. Faça o tópico anterior**
+**1. Faça a [atualização da sua branch com a main](https://github.com/mrRiqueRique/projeto-final-poo/tree/main?tab=readme-ov-file#-atualizar-sua-branch-com-as-mudan%C3%A7as-da-main) do tópico anterior**
 
 **2. No github vá em [`Pull requests`](https://github.com/mrRiqueRique/projeto-final-poo/pulls)**
 
 **3. Crie seu PR e clique no botão de mergear caso não tenha conflito**
 
-> Se deu conflito é porque a atualização da sua branch com a main não aconteceu
+> Se deu conflito é porque o passo **1** não aconteceu
 
 ![image](https://github.com/user-attachments/assets/c78b3ec7-3e50-4af9-b6e2-b592d8594bf7)
