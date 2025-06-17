@@ -1,12 +1,22 @@
 package projetofinal.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AlunoLogado {
     private static AlunoLogado alunoLogado;
     private Aluno aluno;
+    private List<MetodoDeAvaliacao> avaliacoes;
     private AlunoRepository alunoRepository;
+    private Service service;
 
     private AlunoLogado() {
-        this.alunoRepository = AlunoRepository.getInstancia(); // Use AlunoRepository
+        try {
+            this.alunoRepository = AlunoRepository.getInstancia(); // Use AlunoRepository
+            this.service = new Service();
+        } catch (Exception e) {
+            System.err.println("Erro ao inicializar AlunoRepository: " + e.getMessage());
+        }
     }
 
     public static AlunoLogado getInstance() {
@@ -25,15 +35,53 @@ public class AlunoLogado {
     }
 
     public void logarAluno(String ra) {
-        this.aluno = alunoRepository.getAlunos()
-                                    .stream()
-                                    .filter(a -> a.getRa().equals(ra))
-                                    .findFirst()
-                                    .orElse(null); // Fetch the student from AlunoRepository
+        this.aluno = alunoRepository.getAlunos().stream().filter(a -> a.getRa().equals(ra)).findFirst().orElse(null); // Fetch the student from AlunoRepository
+        this.aluno.setTodoList(service.getTodoListAluno(ra));
+        List<Disciplina> disciplinas = service.getDiciplinasDoAluno(ra);
+        for (Disciplina disciplina : disciplinas)
+            this.aluno.cadastrarDisciplina(disciplina);
+
+        this.avaliacoes = new ArrayList<>(service.getAvaliacoesAluno(ra));
+        this.avaliacoes.addAll(service.getTrabalhos());
+
         if (this.aluno == null) {
             System.out.println("Aluno não encontrado.");
         }
     }
+
+    public List<MetodoDeAvaliacao> getAvaliacoes() {
+        return this.avaliacoes;
+    }
+
+    public TodoList getTodoList() {
+        return this.aluno.getTodoList();
+    }
+
+    public List<Disciplina> getDisciplinasHoje() {
+        if (aluno != null) {
+            return aluno.getDisciplinas(); // Delegate to Aluno
+        } else {
+            System.out.println("Nenhum aluno logado.");
+            return new ArrayList<>();
+        }
+    }
+
+    public void concluirTodoItem(TodoItem item) {
+        if (aluno != null) {
+            this.aluno.getTodoList().concluirTarefa(item); // Delegate to Aluno's TodoList
+        } else {
+            System.out.println("Nenhum aluno logado.");
+        }
+    }
+
+    public void adicionarNota(MetodoDeAvaliacao metodoDeAvaliacao, double nota) {
+        if (aluno != null) {
+            aluno.lancarNota(metodoDeAvaliacao, nota); // Delegate to Aluno
+        } else {
+            System.out.println("Nenhum aluno logado.");
+        }
+    }
+
 
     public void cadastrarDisciplina(Disciplina disciplina) {
         if (aluno != null) {

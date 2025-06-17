@@ -16,7 +16,7 @@ public class TodoList {
     }
 
     public void concluirTarefa(TodoItem item){
-        item.concluir();
+        item.concluir(true);
         todoList.remove(item);
     }
     

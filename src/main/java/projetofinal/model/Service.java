@@ -44,7 +44,7 @@ public class Service {
 
     public List<Disciplina> getDisciplinas() {
         try {
-            List<List<Object>> dataDisciplina = sheetsFacade.lerDados("Disciplina", "A", "D");
+            List<List<Object>> dataDisciplina = sheetsFacade.lerDados("Disciplina", "A", "E");
 
             List<Disciplina> disciplinas = new ArrayList<>();
             for (List<Object> linha : dataDisciplina) {
@@ -61,7 +61,7 @@ public class Service {
 
     public Disciplina getDisciplina(String codigo) {
         try {
-            List<Object> dataDisciplina = sheetsFacade.lerDadosLinhaPorId("Disciplina", "A", "D", codigo);
+            List<Object> dataDisciplina = sheetsFacade.lerDadosLinhaPorId("Disciplina", "A", "E", codigo);
             if (dataDisciplina.isEmpty()) return null;
             Disciplina disciplina = new Disciplina(dataDisciplina.get(0).toString(), dataDisciplina.get(1).toString(), Integer.parseInt(dataDisciplina.get(2).toString()), 0, dataDisciplina.get(3).toString());
             return disciplina;
@@ -71,12 +71,12 @@ public class Service {
         }
     }
 
-    public List<Disciplina> getDiciplinasDoAluno(Aluno aluno) {
+    public List<Disciplina> getDiciplinasDoAluno(String raAluno) {
         List<Disciplina> disciplinasDoAluno = new ArrayList<>();
         try {
             List<List<Object>> dataDisciplinaAluno = sheetsFacade.lerDados("AlunoDisciplina", "A", "C");
             for (List<Object> linha : dataDisciplinaAluno) {
-                if (linha.get(0).toString().equals(aluno.getRa())) {
+                if (linha.get(0).toString().equals(raAluno)) {
                     Disciplina disciplina = getDisciplina(linha.get(1).toString());
                     if (disciplina != null) {
                         disciplina.setFaltas(Integer.parseInt(linha.get(2).toString()));
@@ -136,6 +136,8 @@ public class Service {
             return List.of(); // Retorna uma lista vazia em caso de erro
         }
     }
+
+
 
     public int getNotaProva(String nomeProva, String codigoDisciplina, String raAluno) {
         try {
@@ -212,30 +214,55 @@ public class Service {
         }
     }
 
-    public TodoList getTodoListAluno(Aluno aluno) {
+    public TodoList getTodoListAluno(String raAluno) {
         TodoList todoList = new TodoList();
         try {
-            List<List<Object>> dataTodoList = sheetsFacade.lerDados("TodoItem", "A", "h");
-            for (List<Object> linha : dataTodoList) {
-                if (linha.get(0).toString().equals(aluno.getRa()))
-                {
+            List<List<Object>> dataTodoItem = sheetsFacade.lerDados("TodoItem", "A", "h");
+            for (List<Object> linha : dataTodoItem) {
+                if (linha.get(0).toString().equals(raAluno)) {
                     Disciplina disciplina = getDisciplina(linha.get(2).toString());
+
                     MetodoDeAvaliacao metodoDeAvaliacao;
                     Prova prova = getProva(linha.get(3).toString(), linha.get(2).toString());
-
                     if (prova == null)
                         metodoDeAvaliacao = getTrabalho(linha.get(3).toString(), linha.get(2).toString());
                     else metodoDeAvaliacao = prova;
 
                     TodoItem todoItem = new TodoItem(linha.get(1).toString(), disciplina, metodoDeAvaliacao, linha.get(4).toString(), linha.get(5).toString());
-                    if (Boolean.parseBoolean(linha.get(6).toString())) todoItem.concluir();
+                    todoItem.setConcluido(Boolean.parseBoolean(linha.get(6).toString()));
 
                     todoList.adicionarItem(todoItem);
                 }
             }
         } catch (Exception e) {
             System.err.println("Erro ao obter TodoLists do aluno: " + e.getMessage());
-        } return todoList;
+        }
+        return todoList;
+    }
+
+    public List<MetodoDeAvaliacao> getAvaliacoesAluno(String raAluno){
+        List<MetodoDeAvaliacao> avaliacoes = new ArrayList<>();
+        try {
+            List<List<Object>> dataAlunoProva = sheetsFacade.lerDados("AlunoProva", "A", "D");
+            for (List<Object> linha : dataAlunoProva) {
+                if (linha.get(0).toString().equals(raAluno)) {
+                    Prova prova = getProva(linha.get(1).toString(), linha.get(2).toString());
+                    if (prova != null) {
+                        prova.setNota(Integer.parseInt(linha.get(3).toString()));
+                        avaliacoes.add(prova);
+                    }else {
+                        Trabalho trabalho = getTrabalho(linha.get(1).toString(), linha.get(2).toString());
+                        if (trabalho != null) {
+                            trabalho.setNota(Integer.parseInt(linha.get(3).toString()));
+                            avaliacoes.add(trabalho);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao obter avaliações do aluno: " + e.getMessage());
+        }
+        return avaliacoes;
     }
 
     // add s
@@ -252,7 +279,7 @@ public class Service {
     public void adicionarDisciplina(Disciplina disciplina) {
         try {
             List<List<Object>> novaDisciplina = List.of(List.of(disciplina.getCodigo(), disciplina.getNome(), disciplina.getCreditos(), disciplina.getProfessor()));
-            sheetsFacade.escreverDados("Disciplina", "A", "D", novaDisciplina);
+            sheetsFacade.escreverDados("Disciplina", "A", "E", novaDisciplina);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar disciplina: " + e.getMessage());
         }
@@ -314,21 +341,212 @@ public class Service {
 
     // put
 
-    public void atualizarFalta(Disciplina disciplina, Aluno aluno) {
+    public void atualizarAluno(Aluno alunoVelho, Aluno alunoNovo) {
         try {
-            // todo - DEVE DAR UM UPDATE N CRIAR OUTRO!!!
-            // sheetsFacade.escreverDados("AlunoDisciplina", "A", "C", novaFalta);
+            List<List<Object>> dadosAluno = sheetsFacade.lerDados("Aluno", "A", "D");
+            List<Object> linhaNova = new ArrayList<>(List.of(alunoNovo.getRa(), alunoNovo.getNome(), alunoNovo.getCurso(), alunoNovo.getCR()));
+            for (List<Object> linha : dadosAluno) {
+                if (linha.get(0).toString().equals(alunoVelho.getRa())) {
+                    sheetsFacade.atualizarDados("Aluno", "A", "D", List.of(linha), List.of(linhaNova));
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar aluno: " + e.getMessage());
+        }
+    }
+
+    public void atualizarDisciplina(Disciplina disciplinaVelha, Disciplina disciplinaNova) {
+        try {
+            List<List<Object>> dadosDisciplina = sheetsFacade.lerDados("Disciplina", "A", "E");
+            List<Object> linhaNova = new ArrayList<>(List.of(disciplinaNova.getCodigo(), disciplinaNova.getNome(), disciplinaNova.getCreditos(), disciplinaNova.getProfessor()));
+            for (List<Object> linha : dadosDisciplina) {
+                if (linha.get(0).toString().equals(disciplinaVelha.getCodigo())) {
+                    sheetsFacade.atualizarDados("Disciplina", "A", "E", List.of(linha), List.of(linhaNova));
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar disciplina: " + e.getMessage());
+        }
+    }
+
+    public void atualizarFalta(Disciplina disciplina, String raAluno) {
+        try {
+            // adiciona 1 falta ao aluno na disciplina
+            List<List<Object>> dadosAlunoDisciplina = sheetsFacade.lerDados("AlunoDisciplina", "A", "C");
+            for (List<Object> linha : dadosAlunoDisciplina) {
+                if (linha.get(0).toString().equals(raAluno) && linha.get(1).toString().equals(disciplina.getCodigo())) {
+                    int faltasAtuais = Integer.parseInt(linha.get(2).toString());
+                    faltasAtuais++;
+                    List<Object> novaLinha = new ArrayList<>(List.of(raAluno, disciplina.getCodigo(), faltasAtuais));
+                    sheetsFacade.atualizarDados("AlunoDisciplina", "A", "C", List.of(linha), List.of(novaLinha));
+                    disciplina.setFaltas(faltasAtuais);
+                    return;
+                }
+            }
+
         } catch (Exception e) {
             System.err.println("Erro ao adicionar falta: " + e.getMessage());
         }
     }
 
-    public void atualizarStatusTodoItem(TodoItem todoItem) {
+    public void atulizarNotaProva(String raAluno, String nomeProva, String codigoDisciplina, int nota) {
         try {
-            // todo
-            // sheetsFacade.atualizarDados("TodoItem", "A", "G", novoTodoItem, todoItem.getNome());
+            List<List<Object>> dadosNotaProva = sheetsFacade.lerDados("AlunoProva", "A", "D");
+            List<Object> novaLinha = new ArrayList<>(List.of(raAluno, nomeProva, codigoDisciplina, nota));
+            for (List<Object> linha : dadosNotaProva) {
+                if (linha.get(0).toString().equals(raAluno) && linha.get(1).toString().equals(nomeProva) && linha.get(2).toString().equals(codigoDisciplina)) {
+                    sheetsFacade.atualizarDados("AlunoProva", "A", "D", List.of(linha), List.of(novaLinha));
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar nota da prova: " + e.getMessage());
+        }
+    }
+
+    public void atualizarNotaTrabalho(String raAluno, String nomeTrabalho, String codigoDisciplina, int nota) {
+        try {
+            List<List<Object>> dadosNotaTrabalho = sheetsFacade.lerDados("AlunoTrabalho", "A", "D");
+            List<Object> novaLinha = new ArrayList<>(List.of(raAluno, nomeTrabalho, codigoDisciplina, nota));
+            for (List<Object> linha : dadosNotaTrabalho) {
+                if (linha.get(0).toString().equals(raAluno) && linha.get(1).toString().equals(nomeTrabalho) && linha.get(2).toString().equals(codigoDisciplina)) {
+                    sheetsFacade.atualizarDados("AlunoTrabalho", "A", "D", List.of(linha), List.of(novaLinha));
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar nota do trabalho: " + e.getMessage());
+        }
+    }
+
+    public void atualizarProva(String codigoDisciplina, Prova provaAntiga, Prova provaNova) {
+        try {
+            List<List<Object>> dadosProva = sheetsFacade.lerDados("Prova", "A", "E");
+            List<Object> novaLinha = new ArrayList<>(List.of(provaNova.getNome(), provaNova.getLocal(), provaNova.getDuracao(), provaNova.getData(), codigoDisciplina));
+            for (List<Object> linha : dadosProva) {
+                if (linha.get(0).toString().equals(provaAntiga.getNome()) && linha.get(4).toString().equals(codigoDisciplina)) {
+                    sheetsFacade.atualizarDados("Prova", "A", "E", List.of(linha), List.of(novaLinha));
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar prova: " + e.getMessage());
+        }
+    }
+
+    public void atualizarTrabalho(String codigoDisciplina, Trabalho trabalhoAntigo, Trabalho trabalhoNovo) {
+        try {
+            List<List<Object>> dadosTrabalho = sheetsFacade.lerDados("Trabalho", "A", "F");
+            List<Object> novaLinha = new ArrayList<>(List.of(trabalhoNovo.getNome(), trabalhoNovo.getDataInicio(), trabalhoNovo.getDataEntrega(), trabalhoNovo.getEmGrupo(), trabalhoNovo.getGrupo(), codigoDisciplina));
+            for (List<Object> linha : dadosTrabalho) {
+                if (linha.get(0).toString().equals(trabalhoAntigo.getNome()) && linha.get(5).toString().equals(codigoDisciplina)) {
+                    sheetsFacade.atualizarDados("Trabalho", "A", "F", List.of(linha), List.of(novaLinha));
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar trabalho: " + e.getMessage());
+        }
+    }
+
+    public void atualizarStatusTodoItem(TodoItem todoItem, String raAluno) {
+        try {
+            // se o to do estiver concluído, atualiza para não concluído e vice-versa
+            List<List<Object>> dadosTodoItem = sheetsFacade.lerDados("TodoItem", "A", "G");
+            for (List<Object> linha : dadosTodoItem) {
+                if (linha.get(0).toString().equals(raAluno) && linha.get(1).toString().equals(todoItem.getNome())) {
+                    List<Object> novaLinha = new ArrayList<>(List.of(raAluno, todoItem.getNome(), todoItem.getDisciplina().getCodigo(), todoItem.getAvaliacao().getNome(), todoItem.getPrioridade(), todoItem.getData(), String.valueOf(!todoItem.getConcluido())));
+                    sheetsFacade.atualizarDados("TodoItem", "A", "G", List.of(linha), List.of(novaLinha));
+                    todoItem.setConcluido(!todoItem.getConcluido());
+                    return;
+                }
+            }
         } catch (Exception e) {
             System.err.println("Erro ao atualizar TodoItem: " + e.getMessage());
+        }
+    }
+
+    // delete
+
+    public void deletarAluno(Aluno aluno) {
+        try {
+            List<Aluno> dadosAluno = getAlunos();
+            for (int index = 0; index < dadosAluno.size(); index++) {
+                Aluno alunoAtual = dadosAluno.get(index);
+                if (alunoAtual.getRa().equals(aluno.getRa())) {
+                    sheetsFacade.deletarDados("Aluno", "A", "D", index + 2); // +2 para pular o cabeçalho e ajustar o índice
+                    return;
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erro ao deletar aluno: " + e.getMessage());
+        }
+    }
+
+    public void deletarDisciplina(Disciplina disciplina) {
+        try {
+            List<Disciplina> dadosDisciplina = getDisciplinas();
+            for (int index = 0; index < dadosDisciplina.size(); index++) {
+                Disciplina disciplinaAtual = dadosDisciplina.get(index);
+                if (disciplinaAtual.getCodigo().equals(disciplina.getCodigo())) {
+                    sheetsFacade.deletarDados("Disciplina", "A", "E", index + 2); // +2 para pular o cabeçalho e ajustar o índice
+                    return;
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erro ao deletar disciplina: " + e.getMessage());
+        }
+    }
+
+    public void deletarProva(String codigoDisciplina, Prova prova) {
+        try {
+            List<Prova> dadosProva = getProvas();
+            for (int index = 0; index < dadosProva.size(); index++) {
+                Prova provaAtual = dadosProva.get(index);
+                if (provaAtual.getNome().equals(prova.getNome()) && codigoDisciplina.equals(codigoDisciplina)) {
+                    sheetsFacade.deletarDados("Prova", "A", "E", index + 2); // +2 para pular o cabeçalho e ajustar o índice
+                    return;
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erro ao deletar prova: " + e.getMessage());
+        }
+    }
+
+    public void deletarTrabalho(String codigoDisciplina, Trabalho trabalho) {
+        try {
+            List<Trabalho> dadosTrabalho = getTrabalhos();
+            for (int index = 0; index < dadosTrabalho.size(); index++) {
+                Trabalho trabalhoAtual = dadosTrabalho.get(index);
+                if (trabalhoAtual.getNome().equals(trabalho.getNome()) && codigoDisciplina.equals(codigoDisciplina)) {
+                    sheetsFacade.deletarDados("Trabalho", "A", "F", index + 2); // +2 para pular o cabeçalho e ajustar o índice
+                    return;
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erro ao deletar trabalho: " + e.getMessage());
+        }
+    }
+
+    public void deletarTodoItem(TodoItem todoItem, String raAluno) {
+        try {
+            List<List<Object>> dadosTodoItem = sheetsFacade.lerDados("TodoItem", "A", "G");
+            for (int index = 0; index < dadosTodoItem.size(); index++) {
+                List<Object> linha = dadosTodoItem.get(index);
+                if (linha.get(0).toString().equals(raAluno) && linha.get(1).toString().equals(todoItem.getNome())) {
+                    sheetsFacade.deletarDados("TodoItem", "A", "G", index + 2); // +2 para pular o cabeçalho e ajustar o índice
+                    return;
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erro ao deletar TodoItem: " + e.getMessage());
         }
     }
 }
