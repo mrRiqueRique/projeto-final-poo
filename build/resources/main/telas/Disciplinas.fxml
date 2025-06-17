@@ -26,7 +26,8 @@
             </Button>
 
             <Label fx:id="disciplinasLabel"
-                text="Disciplinas"
+                text="Disciplinas" 
+                style="-fx-text-fill: #395BC7;"
                 StackPane.alignment="CENTER">
                 <font>
                     <Font size="24"/>

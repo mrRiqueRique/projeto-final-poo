@@ -13,16 +13,14 @@
         <padding>
             <Insets top="200" right="0" bottom="10" left="0"/>
         </padding>
-
-        <Button fx:id="botaoVoltar" styleClass="botao-padrao" onAction="#handleVoltar" text="Voltar"
-                StackPane.alignment="TOP_LEFT" 
-                translateX="400">
+        <Button fx:id="voltarButton" styleClass="botao-voltar" onAction="#handleVoltar"
+                StackPane.alignment="TOP_LEFT" translateX="400">
             <graphic>
-                <FontIcon iconLiteral="fas-arrow-left" iconSize="16" />
+                <FontIcon iconLiteral="fas-arrow-left" iconSize="40" iconColor="#87A5EF"/>
             </graphic>
         </Button>
 
-        <Label fx:id="cadastroLabel" text="CADASTRO" StackPane.alignment="CENTER">
+        <Label fx:id="cadastroLabel" text="Cadastro" StackPane.alignment="CENTER" style="-fx-text-fill: #395BC7;">
             <font>
                 <Font size="24"/>
             </font>

@@ -9,10 +9,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Disciplinas.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Disciplinas.fxml"));
         Scene scene = new Scene(loader.load(), 1440, 810);
-        scene.getStylesheets().add(getClass().getResource("/botao-personalizado.css").toExternalForm());
-        scene.getStylesheets().add(getClass().getResource("/botao-padrao.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Trabalho Final");
