@@ -37,6 +37,18 @@ public class Aluno {
         return this.CR;
     }
 
+    public TodoList getTodoList() {
+        return this.todoList;
+    }
+
+    public void setCR(double CR) {
+        this.CR = CR;
+    }
+
+    public void setTodoList(TodoList todoList) {
+        this.todoList = todoList;
+    }
+
     public void cadastrarDisciplina(Disciplina disciplina) {
         this.disciplinas.add(disciplina);
     }

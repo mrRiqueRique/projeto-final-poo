@@ -138,5 +138,75 @@ public class GoogleSheetsFacade {
         System.out.printf("%d células atualizadas na aba '%s'.%n", result.getUpdatedCells(), nomePlanilha);
     }
 
-    // todo - update
+    public void atualizarDados(String nomePlanilha, String colunaInicial, String colunaFinal,
+                               List<List<Object>> valoresAntigos, List<List<Object>> valoresNovos) throws IOException {
+        if (valoresAntigos.isEmpty() || valoresNovos.isEmpty()) {
+            throw new IllegalArgumentException("Listas de valores antigos ou novos estão vazias.");
+        }
+
+        // Lê todos os dados da planilha no intervalo desejado
+        List<List<Object>> todasAsLinhas = lerDados(nomePlanilha, colunaInicial, colunaFinal);
+
+        // Encontra o índice da linha a ser atualizada
+        int linhaAlvo = -1;
+        for (int i = 0; i < todasAsLinhas.size(); i++) {
+            List<Object> linha = todasAsLinhas.get(i);
+
+            // Compara o conteúdo da linha com valoresAntigos
+            if (linha.equals(valoresAntigos.get(0))) {
+                linhaAlvo = i + 2; // +2: uma para pular o cabeçalho, outra porque índice começa em 0
+                break;
+            }
+        }
+
+        if (linhaAlvo == -1) {
+            throw new IOException("Linha a ser atualizada não encontrada.");
+        }
+
+        // Monta o intervalo com base na linhaAlvo
+        String intervalo = nomePlanilha + "!" + colunaInicial + linhaAlvo + ":" + colunaFinal + linhaAlvo;
+
+        ValueRange corpo = new ValueRange()
+                .setRange(intervalo)
+                .setValues(valoresNovos);
+
+        UpdateValuesResponse resultado = sheetsService.spreadsheets().values()
+                .update(spreadsheetId, intervalo, corpo)
+                .setValueInputOption("RAW")
+                .execute();
+
+        System.out.printf("Linha %d atualizada (%d células) na aba '%s'.%n",
+                linhaAlvo, resultado.getUpdatedCells(), nomePlanilha);
+    }
+
+    public void deletarDados(String nomePlanilha, String colunaInicial, String colunaFinal, int numeroLinha){
+        try {
+            // Define o intervalo a ser deletado
+            String intervalo = nomePlanilha + "!" + colunaInicial + numeroLinha + ":" + colunaFinal + numeroLinha;
+
+            // Cria a requisição de exclusão
+            Request request = new Request().setDeleteRange(new DeleteRangeRequest()
+                    .setRange(new GridRange()
+                            .setSheetId(sheetsService.spreadsheets().get(spreadsheetId).execute()
+                                    .getSheets().stream()
+                                    .filter(s -> s.getProperties().getTitle().equals(nomePlanilha))
+                                    .findFirst()
+                                    .orElseThrow(() -> new IOException("Aba '" + nomePlanilha + "' não encontrada"))
+                                    .getProperties().getSheetId())
+                            .setStartRowIndex(numeroLinha - 1)
+                            .setEndRowIndex(numeroLinha))
+                    .setShiftDimension("ROWS"));
+
+            // Executa a atualização da planilha
+            BatchUpdateSpreadsheetRequest bodyUpdate = new BatchUpdateSpreadsheetRequest()
+                    .setRequests(Collections.singletonList(request));
+
+            sheetsService.spreadsheets().batchUpdate(spreadsheetId, bodyUpdate).execute();
+
+            System.out.printf("Linha %d deletada com sucesso na aba '%s'.%n", numeroLinha, nomePlanilha);
+        } catch (IOException e) {
+            System.err.println("Erro ao deletar linha: " + e.getMessage());
+        }
+    }
+
 }

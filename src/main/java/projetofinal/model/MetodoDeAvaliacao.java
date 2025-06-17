@@ -1,12 +1,24 @@
 package projetofinal.model;
 
 public abstract class MetodoDeAvaliacao {
-    private String id;
     private double nota;
     private String nome;
 
     public MetodoDeAvaliacao(String nome){
         this.nome = nome;
+    }
+
+    public MetodoDeAvaliacao(String nome, double nota){
+        this.nome = nome;
+        this.nota = nota;
+    }
+
+    public void setNome() {
+        this.nome = nome;
+    }
+
+    public void setNota(double nota) {
+        this.nota = nota;
     }
 
     public double getNota(){

@@ -9,7 +9,6 @@ import projetofinal.exceptions.AlunoNaoEncontradoException;
 import projetofinal.exceptions.DataInvalidaException;
 
 public class Trabalho extends MetodoDeAvaliacao{
-    private String id;
     private String dataInicio;
     private String dataEntrega;
     private boolean emGrupo;

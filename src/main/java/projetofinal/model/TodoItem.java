@@ -80,8 +80,8 @@ public class TodoItem {
         }
     }
 
-    public void concluir(){
-        this.concluido = true;
+    public void setConcluido(Boolean concluido){
+        this.concluido = concluido;
     }
 
     public void setData(String data){
