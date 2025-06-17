@@ -87,5 +87,8 @@ public class TodoItem {
     public void setData(String data){
         this.data = data;
     }
-    
+
+    public void concluir(boolean concluir) {
+        this.concluido = concluir;
+    }
 }

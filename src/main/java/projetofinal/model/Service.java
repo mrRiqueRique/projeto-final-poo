@@ -44,7 +44,7 @@ public class Service {
 
     public List<Disciplina> getDisciplinas() {
         try {
-            List<List<Object>> dataDisciplina = sheetsFacade.lerDados("Disciplina", "A", "D");
+            List<List<Object>> dataDisciplina = sheetsFacade.lerDados("Disciplina", "A", "E");
 
             List<Disciplina> disciplinas = new ArrayList<>();
             for (List<Object> linha : dataDisciplina) {
@@ -61,7 +61,7 @@ public class Service {
 
     public Disciplina getDisciplina(String codigo) {
         try {
-            List<Object> dataDisciplina = sheetsFacade.lerDadosLinhaPorId("Disciplina", "A", "D", codigo);
+            List<Object> dataDisciplina = sheetsFacade.lerDadosLinhaPorId("Disciplina", "A", "E", codigo);
             if (dataDisciplina.isEmpty()) return null;
             Disciplina disciplina = new Disciplina(dataDisciplina.get(0).toString(), dataDisciplina.get(1).toString(), Integer.parseInt(dataDisciplina.get(2).toString()), 0, dataDisciplina.get(3).toString());
             return disciplina;
@@ -279,7 +279,7 @@ public class Service {
     public void adicionarDisciplina(Disciplina disciplina) {
         try {
             List<List<Object>> novaDisciplina = List.of(List.of(disciplina.getCodigo(), disciplina.getNome(), disciplina.getCreditos(), disciplina.getProfessor()));
-            sheetsFacade.escreverDados("Disciplina", "A", "D", novaDisciplina);
+            sheetsFacade.escreverDados("Disciplina", "A", "E", novaDisciplina);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar disciplina: " + e.getMessage());
         }
@@ -358,11 +358,11 @@ public class Service {
 
     public void atualizarDisciplina(Disciplina disciplinaVelha, Disciplina disciplinaNova) {
         try {
-            List<List<Object>> dadosDisciplina = sheetsFacade.lerDados("Disciplina", "A", "D");
+            List<List<Object>> dadosDisciplina = sheetsFacade.lerDados("Disciplina", "A", "E");
             List<Object> linhaNova = new ArrayList<>(List.of(disciplinaNova.getCodigo(), disciplinaNova.getNome(), disciplinaNova.getCreditos(), disciplinaNova.getProfessor()));
             for (List<Object> linha : dadosDisciplina) {
                 if (linha.get(0).toString().equals(disciplinaVelha.getCodigo())) {
-                    sheetsFacade.atualizarDados("Disciplina", "A", "D", List.of(linha), List.of(linhaNova));
+                    sheetsFacade.atualizarDados("Disciplina", "A", "E", List.of(linha), List.of(linhaNova));
                     return;
                 }
             }
@@ -492,7 +492,7 @@ public class Service {
             for (int index = 0; index < dadosDisciplina.size(); index++) {
                 Disciplina disciplinaAtual = dadosDisciplina.get(index);
                 if (disciplinaAtual.getCodigo().equals(disciplina.getCodigo())) {
-                    sheetsFacade.deletarDados("Disciplina", "A", "D", index + 2); // +2 para pular o cabeçalho e ajustar o índice
+                    sheetsFacade.deletarDados("Disciplina", "A", "E", index + 2); // +2 para pular o cabeçalho e ajustar o índice
                     return;
                 }
             }
