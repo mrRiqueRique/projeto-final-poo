@@ -10,8 +10,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.scene.image.ImageView;
+
 
 public class LoginController {
 
@@ -27,11 +30,16 @@ public class LoginController {
     @FXML
     private Label messageLabel;
 
+    @FXML
+    private ImageView fotoView;
     
     @FXML
     public void initialize() {
-        Font minhaFonte = Font.loadFont(getClass().getResourceAsStream("/fonts/ComicRelief-Bold.ttf"), 35);
+        Font minhaFonte = Font.loadFont(getClass().getResourceAsStream("/fonts/Raleway/static/Raleway-ExtraBold.ttf"), 40);
         bemVindoLabel.setFont(minhaFonte);
+
+        Image imagem = new Image(getClass().getResource("/images/unicamp.png").toExternalForm());
+        fotoView.setImage(imagem);
     }
     
     @FXML
@@ -44,10 +52,10 @@ public class LoginController {
     private void handleCadastro(ActionEvent event) {
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Cadastro.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Cadastro.fxml"));
             Scene scene = new Scene(loader.load(), 1440, 810);
-            scene.getStylesheets().add(getClass().getResource("/botao-personalizado.css").toExternalForm());
-            scene.getStylesheets().add(getClass().getResource("/botao-padrao.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);

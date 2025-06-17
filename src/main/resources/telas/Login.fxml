@@ -15,7 +15,7 @@
             <padding>
                 <Insets top="150" right="0" bottom="10" left="0"/>
             </padding>
-            <Label fx:id="bemVindoLabel" text="BEM-VINDO"/>
+            <Label fx:id="bemVindoLabel" text="Bem-Vindo" style="-fx-text-fill: #395BC7;"/>
             
             <ImageView fx:id="fotoView" fitWidth="90" fitHeight="90" preserveRatio="true">
                 <image>

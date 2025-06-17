@@ -1,3 +1,4 @@
+
 package projetofinal.ui;
 
 import javafx.fxml.FXML;
@@ -25,7 +26,7 @@ public class DisciplinasController {
     public void initialize() {
         disciplinaRepository = DisciplinaRepository.getInstancia();
 
-        Font minhaFonte = Font.loadFont(getClass().getResourceAsStream("/fonts/ComicRelief-Bold.ttf"), 30);
+        Font minhaFonte = Font.loadFont(getClass().getResourceAsStream("/fonts/Raleway/static/Raleway-ExtraBold.ttf"), 40);
         disciplinasLabel.setFont(minhaFonte);
 
         listaDisciplinas.setPrefWidth(450); // define largura preferida da ListView

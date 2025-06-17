@@ -1,0 +1,12 @@
+.botao-voltar {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 5;
+    -fx-background-radius: 30;
+    -fx-effect: none;
+}
+
+/* Quando o mouse passa por cima */
+.botao-voltar:hover {
+    -fx-background-color: rgba(145, 174, 245, 0.2);
+}

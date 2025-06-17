@@ -29,7 +29,7 @@ public class CadastroController {
     
     @FXML
     public void initialize() {
-        Font minhaFonte = Font.loadFont(getClass().getResourceAsStream("/fonts/ComicRelief-Bold.ttf"), 35);
+        Font minhaFonte = Font.loadFont(getClass().getResourceAsStream("/fonts/Raleway/static/Raleway-ExtraBold.ttf"), 40);
         cadastroLabel.setFont(minhaFonte);
     }
     
@@ -53,10 +53,10 @@ public class CadastroController {
     @FXML
     private void handleVoltar(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Login.fxml"));
             Scene scene = new Scene(loader.load(), 1440, 810);
-            scene.getStylesheets().add(getClass().getResource("/botao-personalizado.css").toExternalForm());
-            scene.getStylesheets().add(getClass().getResource("/botao-padrao.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
