@@ -1,5 +1,6 @@
 package projetofinal.ui;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javafx.animation.FadeTransition;
@@ -8,11 +9,16 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import projetofinal.model.AlunoLogado;
 import projetofinal.model.Disciplina;
@@ -23,6 +29,7 @@ import projetofinal.model.TodoList;
 import projetofinal.model.Trabalho;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.DatePicker;
 import javafx.util.Duration;
 
 public class TarefasController {
@@ -32,6 +39,13 @@ public class TarefasController {
 
     @FXML
     private VBox tarefasContainer;
+
+    @FXML private Region fundoModal;
+
+    @FXML private VBox modalContainer;
+    @FXML private TextField campoNome, campoDisciplina, campoAvaliacao;
+    @FXML private DatePicker campoData;
+    @FXML private ToggleGroup prioridadeGroup;
 
     @FXML
     public void initialize() {
@@ -106,7 +120,7 @@ public class TarefasController {
             HBox linha = new HBox(5);
             Label titulo = new Label("Prova:");
             titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
-            Label valor = criarTag(prova.getNome(), "#F8BBD0", "#006064"); // rosa
+            Label valor = criarTag(prova.getNome(), "rgb(169, 233, 219)", "#006064"); // rosa
             linha.getChildren().addAll(titulo, valor);
             textos.getChildren().add(linha);
         }
@@ -172,8 +186,36 @@ public class TarefasController {
 
     @FXML
     private void handleNovoItem() {
-        //Implementar ainda
+        modalContainer.setVisible(true);
+        fundoModal.setVisible(true);
     }
+
+    @FXML
+    private void handleFecharModal() {
+        modalContainer.setVisible(false);
+        fundoModal.setVisible(false);
+    }
+
+    @FXML
+    private void handleSalvarTarefa() {
+        String nome = campoNome.getText();
+        String disciplina = campoDisciplina.getText();
+        String avaliacao = campoAvaliacao.getText();
+        LocalDate data = campoData.getValue();
+
+        ToggleButton selecionado = (ToggleButton) prioridadeGroup.getSelectedToggle();
+        if (selecionado != null) {
+            String prioridade = selecionado.getText(); // "Baixa", "Média" ou "Alta"
+        }
+        // Aqui você cria a tarefa (ajuste conforme suas classes)
+        // Exemplo:
+        // TodoItem item = new TodoItem(nome, ..., data, prioridade);
+        // alunoLogado.getTodoList().adicionarItem(item);
+        // carregarTodoList();
+
+        modalContainer.setVisible(false);
+    }
+
 
     @FXML
     private void handleVoltar() {

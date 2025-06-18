@@ -20,7 +20,8 @@ public class FiltroPorPrioridade implements Filter<TodoItem> {
         List<TodoItem> TodoItensFiltrados = new ArrayList<TodoItem>();
 
         for(TodoItem item: TodoItens){
-            if(item.getData().equals(prioridade)){
+            if (item.getPrioridade() != null &&
+                item.getPrioridade().toLowerCase().trim().equals(prioridade)) {
                 TodoItensFiltrados.add(item);
             }
         }

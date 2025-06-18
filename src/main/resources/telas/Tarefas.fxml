@@ -7,59 +7,119 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.shape.Circle?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.scene.shape.Rectangle?>
 
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="projetofinal.ui.TarefasController">
 
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="projetofinal.ui.TarefasController">
+    <!-- Tela principal -->
+    <BorderPane>
 
-    <top>
-        <VBox spacing="0">
-            <!-- Cabeçalho azul -->
-            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="85">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
-                <Label text="Gerenciador de Estudos" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Circle radius="12" fill="#C0C3E5"/>
-            </HBox>
-
-            <!-- Área da seta com posição fixa -->
-            <AnchorPane prefHeight="50">
-                <Button styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="20">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-arrow-left" iconSize="40" iconColor="#87A5EF"/>
-                    </graphic>
-                </Button>
-            </AnchorPane>
-
-            <AnchorPane prefHeight="50">
-                 <!-- Título fixo -->
-                <Label text="Tarefas" style="-fx-font-weight: bold; -fx-font-size: 40px; -fx-text-fill: #395BC7;" layoutX="600" layoutY="0" />
-            </AnchorPane>
-
-
-        </VBox>
-    </top>
-
-
-
-    <center>
-        <HBox alignment="CENTER">
-            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" maxHeight="500" prefWidth="700">
-                <VBox alignment="TOP_CENTER" spacing="10" maxWidth="600" fx:id="tarefasContainer">
+        <!-- Topo -->
+        <top>
+            <VBox spacing="0">
+                <!-- Cabeçalho azul -->
+                <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="85">
                     <padding>
-                        <Insets top="10" right="10" bottom="10" left="10"/>
+                        <Insets top="0" right="10" bottom="10" left="10"/>
                     </padding>
-                </VBox>
-            </ScrollPane>
-        </HBox>
-    </center>
+                    <Label text="Gerenciador de Estudos" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Circle radius="12" fill="#C0C3E5"/>
+                </HBox>
 
-     <bottom>
-    <AnchorPane prefHeight="80">
-        <Button text="+ Novo item" styleClass="botao-personalizado" maxWidth="150" onAction="#handleNovoItem" 
-                layoutX="640"
-                AnchorPane.bottomAnchor="20"/>
-    </AnchorPane>
-</bottom>
-</BorderPane>
+                <!-- Botão de voltar -->
+                <AnchorPane prefHeight="50">
+                    <Button styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="20">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-arrow-left" iconSize="40" iconColor="#87A5EF"/>
+                        </graphic>
+                    </Button>
+                </AnchorPane>
+
+                <!-- Título -->
+                <StackPane prefHeight="30">
+                    <Label text="Tarefas" style="-fx-font-weight: bold; -fx-font-size: 40px; -fx-text-fill: #395BC7;"/>
+                </StackPane>
+            </VBox>
+        </top>
+
+        <!-- Centro -->
+        <center>
+            <HBox alignment="CENTER">
+                <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" maxHeight="500" prefWidth="700">
+                    <VBox fx:id="tarefasContainer" alignment="TOP_CENTER" spacing="10" maxWidth="700" prefWidth="700">
+                        <!-- Exemplo de tarefa -->
+                        <HBox alignment="CENTER" prefWidth="700">
+                            <Pane prefWidth="600" style="-fx-background-color: lightblue; -fx-background-radius: 12; -fx-padding: 10;">
+                                <!-- Conteúdo da tarefa -->
+                            </Pane>
+                        </HBox>
+                    </VBox>
+                </ScrollPane>
+            </HBox>
+        </center>
+
+        <!-- Rodapé -->
+        <bottom>
+            <HBox prefHeight="80" alignment="CENTER">
+                <Button text="+ Novo item" styleClass="botao-personalizado" maxWidth="150" onAction="#handleNovoItem"/>
+            </HBox>
+        </bottom>
+
+    </BorderPane>
+
+    <!-- Region que cobre toda a tela -->
+    <Region fx:id="fundoModal"
+            visible="false"
+            style="-fx-background-color: rgba(0,0,0,0.5);"
+            StackPane.alignment="CENTER" />
+
+    <!-- Modal sobreposto -->
+    <VBox fx:id="modalContainer" visible="false" alignment="CENTER"
+          style="-fx-background-color:rgb(205, 218, 248); -fx-background-radius: 12;"
+          minHeight="400" prefHeight="400" maxHeight="450" maxWidth="700"
+          spacing="10" StackPane.alignment="CENTER">
+
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <!-- Botão fechar -->
+        <HBox alignment="TOP_RIGHT">
+            <Button text="❌" onAction="#handleFecharModal"
+                    style="-fx-background-color: transparent; -fx-font-size: 14px; -fx-text-fill: #395BC7;"/>
+        </HBox>
+
+        <!-- Título do modal -->
+        <Label text="Nova tarefa" style="-fx-font-family: 'Raleway'; -fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #395BC7;" />
+
+        <!-- Formulário do modal -->
+        <VBox alignment="CENTER" spacing="10" VBox.vgrow="ALWAYS">
+            <TextField promptText="Nome da Tarefa" fx:id="campoNome" styleClass="campo-arredondado"/>
+            <TextField promptText="Código da Disciplina" fx:id="campoDisciplina" styleClass="campo-arredondado"/>
+            <TextField promptText="Nome da Prova ou Trabalho" fx:id="campoAvaliacao" styleClass="campo-arredondado"/>
+            <DatePicker fx:id="campoData" promptText="Data" styleClass="campo-arredondado"/>
+
+            <Label text="Prioridade" style="-fx-font-family: 'Raleway'; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+            <fx:define>
+                <ToggleGroup fx:id="prioridadeGroup"/>
+            </fx:define>
+
+            <HBox spacing="10" alignment="CENTER">
+                <ToggleButton text="Baixa" fx:id="botaoBaixa" toggleGroup="$prioridadeGroup" styleClass="botao-prioridade"/>
+                <ToggleButton text="Média" fx:id="botaoMedia" toggleGroup="$prioridadeGroup" styleClass="botao-prioridade"/>
+                <ToggleButton text="Alta" fx:id="botaoAlta" toggleGroup="$prioridadeGroup" styleClass="botao-prioridade"/>
+            </HBox>
+        </VBox>
+
+        <!-- Botão salvar -->
+        <HBox alignment="CENTER">
+            <Button text="Salvar" onAction="#handleSalvarTarefa" styleClass="botao-personalizado" />
+        </HBox>
+
+    </VBox>
+
+</StackPane>

@@ -1,0 +1,72 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="projetofinal.ui.DashboardController">
+
+    
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10" prefHeight="85"
+              style="-fx-background-color: #6A7FC1;">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+
+            <Label text="Gerenciador de Estudos"
+                   style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Circle radius="20" fill="#C0C3E5"/>
+        </HBox>
+    </top>
+
+    
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="40">
+            <padding><Insets top="40" right="10" bottom="10" left="10"/></padding>
+
+            <!-- Saudação -->
+            <Label fx:id="bemVindoLabel"
+                   style="-fx-font-weight: bold; -fx-font-size: 48px;"/>
+
+            <!-- Conteúdo principal -->
+            <HBox alignment="TOP_CENTER" spacing="40">
+
+                <!-- Tarefas -->
+                <VBox alignment="TOP_CENTER" spacing="10">
+                    <Label text="Tarefas urgentes"
+                           style="-fx-font-weight: bold; -fx-font-size: 28px;"/>
+                    <ScrollPane fitToWidth="true" prefHeight="330" prefWidth="450"
+                                style="-fx-background-color: transparent;">
+                        <VBox fx:id="tarefasUrgentesContainer" spacing="10" alignment="TOP_CENTER" maxWidth="400"/>
+                    </ScrollPane>
+                    <Button text="Lista Completa  ➔"
+                            styleClass="botao-personalizado"
+                            onAction="#handleAbrirTarefas"/>
+                </VBox>
+
+                <!-- Aulas -->
+                <VBox alignment="TOP_CENTER" spacing="10">
+                    <Label text="Aulas de hoje"
+                           style="-fx-font-weight: bold; -fx-font-size: 28px;"/>
+                    <ScrollPane fitToWidth="true" prefHeight="330" prefWidth="450"
+                                style="-fx-background-color: transparent;">
+                        <VBox fx:id="aulasHojeContainer" spacing="10" alignment="TOP_CENTER" maxWidth="400"/>
+                    </ScrollPane>
+                    <Button text="Horário Completo  ➔"
+                            styleClass="botao-personalizado"
+                            onAction="#handleAbrirHorario"/>
+                </VBox>
+            </HBox>
+
+            <!-- Botão Disciplinas -->
+            <Button text="Disciplinas  ➔"
+                    styleClass="botao-personalizado"
+                    onAction="#handleAbrirDisciplinas"/>
+        </VBox>
+    </center>
+</BorderPane> -->
