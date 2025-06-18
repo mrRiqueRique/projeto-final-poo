@@ -91,4 +91,20 @@ public class AlunoLogado {
             System.out.println("Nenhum aluno logado.");
         }
     }
+
+    public List<Aula> getAulas() {
+        if (aluno != null) {
+            List<Aula> aulas = new ArrayList<>();
+            for (Disciplina disciplina : aluno.getDisciplinas()) {
+                List<Aula> aulasDaDisciplina = AulasRepository.getInstancia().listarAulasPorDisciplina(disciplina.getCodigo());
+                if (aulasDaDisciplina != null) {
+                    aulas.addAll(aulasDaDisciplina);
+                }
+            }
+            return aulas;
+        } else {
+            System.out.println("Nenhum aluno logado.");
+            return new ArrayList<>();
+        }
+    }
 }

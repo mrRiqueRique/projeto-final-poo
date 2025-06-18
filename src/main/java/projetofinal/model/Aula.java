@@ -5,6 +5,20 @@ public class Aula {
     private String horarioFim;
     private String diaSemana;
     private String local;
+    private String codigoDisciplina;
+
+    public Aula(String horarioInicio, String horarioFim, String diaSemana) {
+        this.horarioInicio = horarioInicio;
+        this.horarioFim = horarioFim;
+        this.diaSemana = diaSemana;
+    }
+
+    public Aula(String horarioInicio, String horarioFim, String diaSemana, String codigoDisciplina) {
+        this.horarioInicio = horarioInicio;
+        this.horarioFim = horarioFim;
+        this.diaSemana = diaSemana;
+        this.codigoDisciplina = codigoDisciplina;
+    }
 
     public String getHorarioInicio(){
         return this.horarioInicio;
@@ -20,5 +34,13 @@ public class Aula {
 
     public String getLocal(){
         return this.local;
+    }
+    
+    public String getDisciplina() {
+        return this.codigoDisciplina;
+    }
+
+    public void setDisciplina(String codigoDisciplina) {
+        this.codigoDisciplina = codigoDisciplina;
     }
 }
