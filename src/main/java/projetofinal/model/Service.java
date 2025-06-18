@@ -93,11 +93,11 @@ public class Service {
 
     public List<Prova> getProvas() {
         try {
-            List<List<Object>> dataProva = sheetsFacade.lerDados("Prova", "A", "E");
+            List<List<Object>> dataProva = sheetsFacade.lerDados("Prova", "A", "F");
             List<Prova> provas = new ArrayList<>();
             for (List<Object> linha : dataProva) {
 
-                provas.add(new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString()));
+                provas.add(new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString()));
             }
             return provas;
         } catch (Exception e) {
@@ -108,10 +108,10 @@ public class Service {
 
     public Prova getProva(String nomeProva, String codigoDisciplina) {
         try {
-            List<List<Object>> dataProva = sheetsFacade.lerDados("Prova", "A", "E");
+            List<List<Object>> dataProva = sheetsFacade.lerDados("Prova", "A", "F");
             for (List<Object> linha : dataProva) {
                 if (linha.get(0).toString().equals(nomeProva) && linha.get(4).toString().equals(codigoDisciplina)) {
-                    return new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString());
+                    return new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(),linha.get(5).toString());
                 }
             }
             return null; // Retorna null se não encontrar a prova
@@ -123,11 +123,11 @@ public class Service {
 
     public List<Prova> getProvasPorDisciplina(String codigoDisciplina) {
         try {
-            List<List<Object>> dataProva = sheetsFacade.lerDados("Prova", "A", "E");
+            List<List<Object>> dataProva = sheetsFacade.lerDados("Prova", "A", "F");
             List<Prova> provas = new ArrayList<>();
             for (List<Object> linha : dataProva) {
                 if (linha.get(4).toString().equals(codigoDisciplina)) { // Filtra pelo código da disciplina
-                    provas.add(new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString()));
+                    provas.add(new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(),linha.get(5).toString()));
                 }
             }
             return provas;
@@ -305,7 +305,7 @@ public class Service {
     public void adicionarProva(Prova prova, String codigoDisciplina) {
         try {
             List<List<Object>> novaProva = List.of(List.of(prova.getNome(), prova.getLocal(), prova.getDuracao(), prova.getData(), codigoDisciplina));
-            sheetsFacade.escreverDados("Prova", "A", "E", novaProva);
+            sheetsFacade.escreverDados("Prova", "A", "F", novaProva);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar prova: " + e.getMessage());
         }
@@ -431,11 +431,11 @@ public class Service {
 
     public void atualizarProva(String codigoDisciplina, Prova provaAntiga, Prova provaNova) {
         try {
-            List<List<Object>> dadosProva = sheetsFacade.lerDados("Prova", "A", "E");
-            List<Object> novaLinha = new ArrayList<>(List.of(provaNova.getNome(), provaNova.getLocal(), provaNova.getDuracao(), provaNova.getData(), codigoDisciplina));
+            List<List<Object>> dadosProva = sheetsFacade.lerDados("Prova", "A", "F");
+            List<Object> novaLinha = new ArrayList<>(List.of(provaNova.getNome(), provaNova.getLocal(), provaNova.getDuracao(), provaNova.getData(), provaNova.getHorarioInicio(),codigoDisciplina));
             for (List<Object> linha : dadosProva) {
                 if (linha.get(0).toString().equals(provaAntiga.getNome()) && linha.get(4).toString().equals(codigoDisciplina)) {
-                    sheetsFacade.atualizarDados("Prova", "A", "E", List.of(linha), List.of(novaLinha));
+                    sheetsFacade.atualizarDados("Prova", "A", "F", List.of(linha), List.of(novaLinha));
                     return;
                 }
             }
@@ -516,7 +516,7 @@ public class Service {
             for (int index = 0; index < dadosProva.size(); index++) {
                 Prova provaAtual = dadosProva.get(index);
                 if (provaAtual.getNome().equals(prova.getNome()) && codigoDisciplina.equals(codigoDisciplina)) {
-                    sheetsFacade.deletarDados("Prova", "A", "E", index + 2); // +2 para pular o cabeçalho e ajustar o índice
+                    sheetsFacade.deletarDados("Prova", "A", "F", index + 2); // +2 para pular o cabeçalho e ajustar o índice
                     return;
                 }
             }
