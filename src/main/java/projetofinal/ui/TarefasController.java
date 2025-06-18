@@ -15,6 +15,7 @@ import projetofinal.model.TodoItem;
 import projetofinal.model.TodoList;
 import projetofinal.model.Trabalho;
 
+
 public class TarefasController {
 
     @FXML
@@ -29,19 +30,7 @@ public class TarefasController {
     private void carregarTodoList() {
         tarefasContainer.getChildren().clear(); // limpa tarefas anteriores
 
-        TodoList lista = new TodoList();
-        Disciplina disciplina = new Disciplina("ME323", "Probabilidade", 4, 2, "Élcio");
-        Disciplina disciplina2 = new Disciplina("MC322", "POO", 4, 3, "Marcos Raimundo");
-        disciplina.adicionarAvaliacao(new Prova("P2 ME323", "PB", "2 horas", "25/06"));
-        disciplina2.adicionarAvaliacao(new Trabalho("Trabalho Final", "09/06/2025", "23/06/2025", true));
-
-        lista.adicionarItem(new TodoItem("Concluir Telas", disciplina2, disciplina2.getAvaliacoes().get(0), "alta", "23/06/2025"));
-        lista.adicionarItem(new TodoItem("Fazer Relatório", disciplina2, disciplina2.getAvaliacoes().get(0), "alta", "23/06/2025"));
-        lista.adicionarItem(new TodoItem("Finalizar UML", disciplina2, disciplina2.getAvaliacoes().get(0), "média", "23/06/2025"));
-        lista.adicionarItem(new TodoItem("Estudar para probabilidade", disciplina, disciplina.getAvaliacoes().get(0), "baixa", "01/06/2025"));
-        lista.adicionarItem(new TodoItem("Comprar passagem para casa", null, null, "baixa", "07/07/2025"));
-        lista.adicionarItem(new TodoItem("Comemorar aniversário!", null, null, "baixa", "02/07/2025"));
-        lista.adicionarItem(new TodoItem("Limpar a casa", null, null, "baixa", "25/06/2025"));
+        
 
         for (TodoItem item : lista.listarItems()) {
             tarefasContainer.getChildren().add(criarItemTarefa(item));

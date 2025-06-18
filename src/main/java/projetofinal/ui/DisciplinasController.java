@@ -7,6 +7,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import projetofinal.model.Aluno;
+import projetofinal.model.AlunoLogado;
 import projetofinal.model.Disciplina;
 import projetofinal.model.DisciplinaRepository;
 
@@ -20,11 +22,11 @@ public class DisciplinasController {
     @FXML
     private Label disciplinasLabel;
 
-    private DisciplinaRepository disciplinaRepository;
+    private AlunoLogado alunoLogado;
 
     @FXML
     public void initialize() {
-        disciplinaRepository = DisciplinaRepository.getInstancia();
+        alunoLogado = AlunoLogado.getInstance();
 
         Font minhaFonte = Font.loadFont(getClass().getResourceAsStream("/fonts/Raleway/static/Raleway-ExtraBold.ttf"), 40);
         disciplinasLabel.setFont(minhaFonte);
@@ -114,7 +116,7 @@ public class DisciplinasController {
     }
 
     private void carregarDisciplinas() {
-        List<Disciplina> disciplinas = disciplinaRepository.getDisciplinas();
+        List<Disciplina> disciplinas = alunoLogado.getDisciplinas();
         System.out.println("Disciplinas carregadas: " + disciplinas);
         listaDisciplinas.getItems().setAll(disciplinas);
     }

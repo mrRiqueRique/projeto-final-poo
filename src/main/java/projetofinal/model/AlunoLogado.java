@@ -57,7 +57,7 @@ public class AlunoLogado {
         return this.aluno.getTodoList();
     }
 
-    public List<Disciplina> getDisciplinasHoje() {
+    public List<Disciplina> getDisciplinas() {
         if (aluno != null) {
             return aluno.getDisciplinas(); // Delegate to Aluno
         } else {
