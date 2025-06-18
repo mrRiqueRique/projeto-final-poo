@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import projetofinal.model.AlunoLogado;
 import javafx.scene.image.ImageView;
 
 
@@ -32,6 +33,8 @@ public class LoginController {
 
     @FXML
     private ImageView fotoView;
+
+    private AlunoLogado alunoLogado = AlunoLogado.getInstance();
     
     @FXML
     public void initialize() {
@@ -41,11 +44,36 @@ public class LoginController {
         Image imagem = new Image(getClass().getResource("/images/unicamp.png").toExternalForm());
         fotoView.setImage(imagem);
     }
+
+    @FXML private void handleEntrar(ActionEvent event) {
+        
+        try {
+            String username = nomeField.getText();
+            String password = senhaField.getText(); // Senha é ignorada nesse exemplo
+
+            // Verifica se os campos estão preenchidos
+            if (username.isEmpty() || password.isEmpty()) {
+                messageLabel.setText("Preencha usuário e senha");
+                return;
+            }
     
-    @FXML
-    private void handleEntrar() {
-        // inserir logica de ir para a tela principal
-        System.out.println("Entrou\n");
+            alunoLogado.logarAluno(username);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Dashboard.fxml"));
+            Scene novaCena = new Scene(loader.load(), 1440, 810);
+
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
+
+            // Obtém o Stage atual a partir do botão que disparou o evento
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(novaCena);
+            stage.setTitle("Trabalho Final");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

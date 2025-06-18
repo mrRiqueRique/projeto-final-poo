@@ -4,6 +4,7 @@ package projetofinal.ui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -11,9 +12,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import projetofinal.model.AlunoLogado;
 import projetofinal.model.Disciplina;
 import javafx.event.ActionEvent;
-import projetofinal.model.DisciplinaRepository;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,23 +27,17 @@ public class DisciplinasController {
     @FXML
     private ListView<Disciplina> listaDisciplinas;
 
-
-    private DisciplinaRepository disciplinaRepository;
+    private AlunoLogado alunoLogado = AlunoLogado.getInstance();
 
     @FXML
     public void initialize() {
-        disciplinaRepository = DisciplinaRepository.getInstancia();
         carregarDisciplinas();
     }
 
     // ATUALIZAR PARA ALUNO LOGADO DEPOIS
     private void carregarDisciplinas() {
 
-        //  List<Disciplina> disciplinas = alunoLogado.getDisciplinasHoje();
-        // System.out.println("Disciplinas carregadas: " + disciplinas);
-        // listaDisciplinas.getItems().setAll(disciplinas);
-        List<Disciplina> disciplinas = disciplinaRepository.getDisciplinas();
-        System.out.println("Disciplinas carregadas: " + disciplinas);
+        List<Disciplina> disciplinas = alunoLogado.getDisciplinas();
         for (Disciplina d : disciplinas) {
             disciplinasContainer.getChildren().add(criarItemDisciplina(d));
         }
@@ -153,9 +148,24 @@ public class DisciplinasController {
         // todo - implementar lançar nota
     }
 
-    @FXML
-    public void handleVoltar() {
-        System.out.println("Voltar");
-        // todo - implementar voltar
+    @FXML private void handleVoltar(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Dashboard.fxml"));
+            Scene novaCena = new Scene(loader.load(), 1440, 810);
+
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
+
+            // Obtém o Stage atual a partir do botão que disparou o evento
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(novaCena);
+            stage.setTitle("Trabalho Final");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 }

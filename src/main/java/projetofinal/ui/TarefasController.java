@@ -1,11 +1,16 @@
 package projetofinal.ui;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 import javafx.animation.FadeTransition;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -24,6 +29,7 @@ import projetofinal.model.AlunoLogado;
 import projetofinal.model.Disciplina;
 import projetofinal.model.Prova;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 import projetofinal.model.TodoItem;
 import projetofinal.model.TodoList;
 import projetofinal.model.Trabalho;
@@ -50,7 +56,6 @@ public class TarefasController {
     @FXML
     public void initialize() {
         alunoLogado = AlunoLogado.getInstance();
-        alunoLogado.logarAluno("281773");
         carregarTodoList();
     }
 
@@ -223,9 +228,23 @@ public class TarefasController {
     }
 
 
-    @FXML
-    private void handleVoltar() {
-        System.out.println("Voltar clicado");
-        // implementar lógica de voltar para a tela anterior
+    @FXML private void handleVoltar(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Dashboard.fxml"));
+            Scene novaCena = new Scene(loader.load(), 1440, 810);
+
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
+
+            // Obtém o Stage atual a partir do botão que disparou o evento
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(novaCena);
+            stage.setTitle("Trabalho Final");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

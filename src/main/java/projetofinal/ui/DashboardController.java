@@ -1,14 +1,22 @@
 package projetofinal.ui;
 
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -19,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import projetofinal.filters.ComparatorPrioridade;
 import projetofinal.model.*;
@@ -30,30 +39,42 @@ public class DashboardController {
     @FXML private VBox tarefasUrgentesContainer;
     @FXML private VBox aulasHojeContainer;
 
-    private AlunoLogado aluno = AlunoLogado.getInstance();
-   
+    private AlunoLogado alunoLogado = AlunoLogado.getInstance();
 
     
     @FXML
     public void initialize() {
-        // garante que temos aluno logado (caso ainda não tenha sido feito)
-        aluno.logarAluno("281773");
+        bemVindoLabel.setText("Bem‑vindo, " + alunoLogado.getAluno().getNome() + "!");
 
-        bemVindoLabel.setText("Bem‑vindo, " + aluno.getAluno().getNome() + "!");
-
-        carregarTarefasUrgentes();
-        carregarAulasHoje();
+        // Executa o carregamento dos dados após renderizar o cabeçalho
+        Platform.runLater(() -> {
+            carregarTarefasUrgentes();
+            carregarAulasHoje();
+        });
     }
-
-    /* ---------- Tarefas ---------- */
     private void carregarTarefasUrgentes() {
         tarefasUrgentesContainer.getChildren().clear();
 
-        TodoList todo = aluno.getTodoList();
-        List<TodoItem> todos = todo.listarItems();
-        todos.sort(new ComparatorPrioridade());
+        Task<List<TodoItem>> task = new Task<>() {
+            @Override
+            protected List<TodoItem> call() {
+                return alunoLogado.getTodoList()
+                    .listarItems()
+                    .stream()
+                    .sorted(new ComparatorPrioridade())
+                    .toList();
+            }
+        };
 
-        todos.forEach(item -> tarefasUrgentesContainer.getChildren().add(criarItemTarefa(item)));
+        task.setOnSucceeded(event -> {
+            for (TodoItem item : task.getValue()) {
+                tarefasUrgentesContainer.getChildren().add(criarItemTarefa(item));
+            }
+        });
+
+        task.setOnFailed(e -> task.getException().printStackTrace());
+
+        new Thread(task).start();
     }
 
     private HBox criarItemTarefa(TodoItem item) {
@@ -180,25 +201,21 @@ public class DashboardController {
         return box;
     }
 
-
-    /* ---------- Aulas ---------- */
     private void carregarAulasHoje() {
         aulasHojeContainer.getChildren().clear();
 
         DayOfWeek hoje = LocalDate.now().getDayOfWeek();
-        List<Disciplina> disciplinas = aluno.getDisciplinas();
-        if (disciplinas == null) return;
+        List<Aula> aulas = alunoLogado.getAulas();
+        if (aulas == null) return;
 
-        disciplinas.stream()
-            .flatMap(d -> d.getAulas().stream()
-                        .filter(a -> DiaSemanaRepository.traduzir(a.getDiaSemana()) == hoje)
-                        .map(a -> new AulaDTO(d, a)))
-            .sorted(Comparator.comparing(dto ->LocalTime.parse(dto.aula().getHorarioInicio())))
-            .limit(3)
-            .forEach(dto -> aulasHojeContainer.getChildren().add(criarItemAula(dto)));
+        aulas.stream()
+            .filter(aula -> DiaSemanaRepository.traduzir(aula.getDiaSemana()) == hoje)
+            .map(this::criarItemAula)
+            .forEach(aulasHojeContainer.getChildren()::add);
     }
 
-    private HBox criarItemAula(AulaDTO dto) {
+
+    private HBox criarItemAula(Aula aula) {
         HBox box = new HBox(10);
         box.setPadding(new Insets(10));
         box.setMaxWidth(400);
@@ -211,21 +228,36 @@ public class DashboardController {
 
         VBox textos = new VBox(5);
 
-        Label materia = new Label(dto.disciplina().getNome());
+        // Nome da disciplina
+        Label materia = new Label(aula.getDisciplina());
         materia.setFont(Font.font("Raleway", FontWeight.BOLD, 14));
         textos.getChildren().add(materia);
 
-        textos.getChildren().add(linhaTag("Horário:",
-                criarTag(dto.aula().getHorarioInicio().toString(),
-                         "#BBDEFB", "#1565C0")));
+        // Função auxiliar para criar título cinza
+        java.util.function.Function<String, Label> criarTituloLabel = titulo -> {
+            Label l = new Label(titulo);
+            l.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
+            l.setTextFill(Color.web("#9E9E9E"));  // cinza grifado
+            return l;
+        };
 
-        // textos.getChildren().add(linhaTag("Local:",
-        //         criarTag(dto.aula().getLocal(),
-        //                  "#C8E6C9", "#2E7D32")));
+        // ----- HORÁRIO -----
+        String horarioTexto = aula.getHorarioInicio() + " - " + aula.getHorarioFim();
+        Label horarioTitulo = criarTituloLabel.apply("Horário:");
+        Label horarioValor = criarTag(horarioTexto, "#BBDEFB", "#1565C0");
+        textos.getChildren().add(new HBox(5, horarioTitulo, horarioValor));
+
+        // ----- LOCAL -----
+        Label localTitulo = criarTituloLabel.apply("Local:");
+        Label localValor = criarTag(aula.getLocal(), "#C8E6C9", "#2E7D32");
+        textos.getChildren().add(new HBox(5, localTitulo, localValor));
 
         box.getChildren().add(textos);
         return box;
     }
+
+
+
 
     /* ---------- Utilidades ---------- */
     private Label criarTag(String texto, String corFundo, String corTexto) {
@@ -240,18 +272,6 @@ public class DashboardController {
         return tag;
     }
 
-    private Label criarTituloTag(String titulo) {
-        Label tag = new Label(titulo);
-        tag.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
-        tag.setStyle("""
-            -fx-background-color: #E0E0E0;  /* cinza claro */
-            -fx-background-radius: 12;
-            -fx-padding: 4 10 4 10;
-            -fx-text-fill: #757575;  /* cinza médio */
-        """);
-        return tag;
-    }
-
     private HBox linhaTag(String titulo, Label valorTag) {
         Label tituloLbl = new Label(titulo);
         tituloLbl.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
@@ -260,12 +280,85 @@ public class DashboardController {
     }
 
     /* ---------- Navegação ---------- */
-    @FXML private void handleAbrirTarefas()      { /* trocar de cena */ }
-    @FXML private void handleAbrirHorario()      { /* trocar de cena */ }
-    @FXML private void handleAbrirDisciplinas()  { /* trocar de cena */ }
-     @FXML private void handleVoltar()  { /* trocar de cena */ }
+    @FXML private void handleAbrirTarefas(ActionEvent event){ 
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Tarefas.fxml"));
+            Scene novaCena = new Scene(loader.load(), 1440, 810);
+
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
+
+            // Obtém o Stage atual a partir do botão que disparou o evento
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(novaCena);
+            stage.setTitle("Trabalho Final");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML private void handleAbrirHorario(ActionEvent event){
+         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Aulas.fxml"));
+            Scene novaCena = new Scene(loader.load(), 1440, 810);
+
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
+
+            // Obtém o Stage atual a partir do botão que disparou o evento
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(novaCena);
+            stage.setTitle("Trabalho Final");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML private void handleAbrirDisciplinas(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Disciplinas.fxml"));
+            Scene novaCena = new Scene(loader.load(), 1440, 810);
+
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
+
+            // Obtém o Stage atual a partir do botão que disparou o evento
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(novaCena);
+            stage.setTitle("Trabalho Final");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML private void handleSair(ActionEvent event) {
+        try {
+            alunoLogado.logout();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Login.fxml"));
+            Scene novaCena = new Scene(loader.load(), 1440, 810);
+
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
+
+            // Obtém o Stage atual a partir do botão que disparou o evento
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(novaCena);
+            stage.setTitle("Trabalho Final");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
-    /* DTO bem simples para facilitar o flatMap */
-    private record AulaDTO(Disciplina disciplina, Aula aula) {}
+
 }
