@@ -11,7 +11,6 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="projetofinal.ui.DashboardController">
 
-    
     <top>
         <VBox spacing="0">
             <!-- Cabeçalho azul -->
@@ -32,17 +31,16 @@
                     </graphic>
                 </Button>
             </AnchorPane>
+
+            <StackPane prefHeight="0">
+                    <Label fx:id="bemVindoLabel" style="-fx-font-weight: bold; -fx-font-size: 30px;-fx-text-fill: #395BC7;"/>
+            </StackPane>
         </VBox>
     </top>
 
-    
     <center>
         <VBox alignment="TOP_CENTER" spacing="0">
             <padding><Insets top="40" right="10" bottom="10" left="10"/></padding>
-
-            <!-- Saudação -->
-            <Label fx:id="bemVindoLabel"
-                   style="-fx-font-weight: bold; -fx-font-size: 30px;-fx-text-fill: #395BC7;"/>
 
             <!-- Conteúdo principal -->
             <HBox alignment="TOP_CENTER" spacing="40">
@@ -51,33 +49,49 @@
                 <VBox alignment="TOP_CENTER" spacing="10">
                     <Label text="Tarefas urgentes"
                            style="-fx-font-weight: bold; -fx-font-size: 28px;"/>
-                    <ScrollPane fitToWidth="true" prefHeight="330" prefWidth="450"
+                    <ScrollPane fitToWidth="true" prefHeight="420" prefWidth="450"
                                 style="-fx-background-color: transparent;">
                         <VBox fx:id="tarefasUrgentesContainer" spacing="10" alignment="TOP_CENTER" maxWidth="400"/>
                     </ScrollPane>
-                    <Button text="Lista Completa  ➔"
-                            styleClass="botao-personalizado"
-                            onAction="#handleAbrirTarefas"/>
                 </VBox>
 
                 <!-- Aulas -->
                 <VBox alignment="TOP_CENTER" spacing="10">
                     <Label text="Aulas de hoje"
                            style="-fx-font-weight: bold; -fx-font-size: 28px;"/>
-                    <ScrollPane fitToWidth="true" prefHeight="330" prefWidth="450"
+                    <ScrollPane fitToWidth="true" prefHeight="420" prefWidth="450"
                                 style="-fx-background-color: transparent;">
                         <VBox fx:id="aulasHojeContainer" spacing="10" alignment="TOP_CENTER" maxWidth="400"/>
                     </ScrollPane>
-                    <Button text="Horário Completo  ➔"
-                            styleClass="botao-personalizado"
-                            onAction="#handleAbrirHorario"/>
                 </VBox>
             </HBox>
-
-            <!-- Botão Disciplinas -->
-            <Button text="Disciplinas  ➔"
-                    styleClass="botao-personalizado"
-                    onAction="#handleAbrirDisciplinas"/>
         </VBox>
     </center>
+
+    <bottom>
+        <VBox spacing="10" alignment="CENTER">
+            <padding>
+                    <Insets top="10" right="10" bottom="20" left="10"/>
+            </padding>
+            <HBox spacing="300" alignment="CENTER">
+                <padding>
+                    <Insets top="10" right="10" bottom="30" left="10"/>
+                </padding>
+            
+                <Button text="Lista Completa  ➔"
+                        styleClass="botao-personalizado"
+                        onAction="#handleAbrirTarefas"
+                        prefWidth="210"/>
+                <Button text="Horário Completo  ➔"
+                        styleClass="botao-personalizado"
+                        onAction="#handleAbrirHorario"
+                        prefWidth="210"/>
+            </HBox>
+
+            <Button text="Disciplinas  ➔"
+                    styleClass="botao-personalizado"
+                    onAction="#handleAbrirDisciplinas"
+                    prefWidth="150"/>
+        </VBox>
+    </bottom>
 </BorderPane>
