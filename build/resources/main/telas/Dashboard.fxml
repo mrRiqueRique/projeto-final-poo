@@ -1,4 +1,4 @@
-<!-- <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
@@ -13,25 +13,36 @@
 
     
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="10" prefHeight="85"
-              style="-fx-background-color: #6A7FC1;">
-            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+        <VBox spacing="0">
+            <!-- Cabeçalho azul -->
+            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="85">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Label text="Gerenciador de Estudos" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Circle radius="12" fill="#C0C3E5"/>
+            </HBox>
 
-            <Label text="Gerenciador de Estudos"
-                   style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Circle radius="20" fill="#C0C3E5"/>
-        </HBox>
+            <!-- Área da seta com posição fixa -->
+            <AnchorPane prefHeight="50">
+                <Button styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="20">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-arrow-left" iconSize="40" iconColor="#87A5EF"/>
+                    </graphic>
+                </Button>
+            </AnchorPane>
+        </VBox>
     </top>
 
     
     <center>
-        <VBox alignment="TOP_CENTER" spacing="40">
+        <VBox alignment="TOP_CENTER" spacing="0">
             <padding><Insets top="40" right="10" bottom="10" left="10"/></padding>
 
             <!-- Saudação -->
             <Label fx:id="bemVindoLabel"
-                   style="-fx-font-weight: bold; -fx-font-size: 48px;"/>
+                   style="-fx-font-weight: bold; -fx-font-size: 30px;-fx-text-fill: #395BC7;"/>
 
             <!-- Conteúdo principal -->
             <HBox alignment="TOP_CENTER" spacing="40">
@@ -69,4 +80,4 @@
                     onAction="#handleAbrirDisciplinas"/>
         </VBox>
     </center>
-</BorderPane> -->
+</BorderPane>

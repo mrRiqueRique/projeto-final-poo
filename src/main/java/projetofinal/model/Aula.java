@@ -19,6 +19,6 @@ public class Aula {
     }
 
     public String getLocal(){
-        return this.diaSemana;
+        return this.local;
     }
 }

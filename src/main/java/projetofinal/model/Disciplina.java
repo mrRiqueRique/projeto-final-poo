@@ -53,6 +53,10 @@ public class Disciplina {
         return this.avaliacoes;
     }
 
+    public List<Aula> getAulas(){
+        return this.aulas;
+    }
+
     // ver como quer tratar quando ultrapassar as faltas restantes, se vai mandar mensagem, etc
 
     public int consultarFaltasRestantes(){
