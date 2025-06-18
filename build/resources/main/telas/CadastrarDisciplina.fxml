@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.shape.Rectangle?>
+
+<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="projetofinal.ui.CadastrarDisciplinaController">
+    <VBox>
+        <HBox prefHeight="87" style="-fx-background-color:#87A5EF;">
+
+            <Label text="Gerenciador de Estudos"></Label>
+        </HBox>
+        <VBox alignment="CENTER" spacing="20">
+            <Label text="Cadastro de Disciplina" style="-fx-font-size: 45px; -fx-font-weight: bold;"></Label>
+            
+            <VBox alignment="CENTER" spacing="10" maxWidth="586">
+                <TextField
+                    fx:id="nomeInput"
+                    prefHeight="50"
+                    promptText="Inserir nome da disciplina"
+                    style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8; -fx-font-size: 18px;"
+                />
+
+                <TextField
+                    fx:id="professorInput"
+                    prefHeight="50"
+                    promptText="Inserir nome do professor"
+                    style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8; -fx-font-size: 18px;"
+                />
+
+                
+                <TextField
+                    fx:id="PEDInput"
+                    prefHeight="50"
+                    promptText="Inserir nome do PED"
+                    style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8; -fx-font-size: 18px;"
+                />
+
+                <HBox spacing="40" alignment="CENTER">
+                    <TextField
+                        fx:id="codigoInput"
+                        promptText="Inserir código da Disciplina"
+                        prefHeight="50"
+                        prefWidth="380"
+                        style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8; -fx-font-size: 18px"
+                    />
+
+                    <TextField 
+                        fx:id="creditosInput"
+                        promptText="Créditos"
+                        prefHeight="50"
+                        style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8; -fx-font-size: 18px"
+                    />
+                </HBox>        
+            </VBox>
+            
+            <VBox alignment="CENTER" spacing="20">
+                <Label text="Aulas" style="-fx-font-size: 20px; -fx-font-weight: bold;"></Label>
+                
+                <HBox maxWidth="840" alignment="CENTER" spacing="5" prefHeight="100">
+                    <Button 
+                        prefWidth="83"
+                        prefHeight="100"
+                        styleClass="botao-aula"
+                        text="Segunda"
+                        onAction="#handleBotaoDia">
+                    </Button>
+                    
+                    <Button 
+                        prefWidth="83"
+                        prefHeight="100"
+                        styleClass="botao-aula"
+                        text="Terça"
+                        onAction="#handleBotaoDia">
+                    </Button>   
+
+                    <Button 
+                        prefWidth="83"
+                        prefHeight="100"
+                        styleClass="botao-aula"
+                        text="Quarta"
+                        onAction="#handleBotaoDia">
+                    </Button>  
+                    
+                    <Button 
+                        prefWidth="83"
+                        prefHeight="100"
+                        styleClass="botao-aula"
+                        text="Quinta"
+                        onAction="#handleBotaoDia">
+                    </Button> 
+
+                    <Button 
+                        prefWidth="83"
+                        prefHeight="100"
+                        styleClass="botao-aula"
+                        text="Sexta"
+                        onAction="#handleBotaoDia">
+                    </Button> 
+
+                    <Button 
+                        prefWidth="83"
+                        prefHeight="100"
+                        styleClass="botao-aula"
+                        text="Sábado"
+                        onAction="#handleBotaoDia">
+                    </Button> 
+
+                    <Button 
+                        prefWidth="83"
+                        prefHeight="100"
+                        styleClass="botao-aula"
+                        text="Domingo"
+                        onAction="#handleBotaoDia">
+                    </Button> 
+
+                </HBox>
+            </VBox>
+
+            <Button text="Inserir avaliações e média" onAction="#handleInserirMedia"></Button>
+
+            <Button text="+ Cadastrar Disciplina" prefHeight="50" styleClass="botao-personalizado" onAction="#handleCadastrarDisciplina"/>
+        </VBox>
+    </VBox>
+
+    <Rectangle fx:id="fundoCalculadora" fill="black" opacity="0.8" width="1280" height="832" visible="false"/>
+    
+    <VBox fx:id="calculadora" maxWidth="486" maxHeight="608" style="-fx-background-color: white;" visible="false">
+        <Button text="Voltar" onAction="#handleVoltar"></Button>
+    </VBox>
+    
+</StackPane>

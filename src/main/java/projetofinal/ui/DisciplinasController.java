@@ -2,14 +2,19 @@
 package projetofinal.ui;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import projetofinal.model.Disciplina;
+import javafx.event.ActionEvent;
 import projetofinal.model.DisciplinaRepository;
 
+import java.io.IOException;
 import java.util.List;
 
 public class DisciplinasController {
@@ -120,9 +125,25 @@ public class DisciplinasController {
     }
 
     @FXML
-    public void handleCadastrarDisciplina() {
+    public void handleCadastrarDisciplina(ActionEvent event) {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/CadastrarDisciplina.fxml"));
+            Scene scene = new Scene(loader.load(), 1440, 810);
+            CadastrarDisciplinaController controller = loader.getController();
+            scene.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/botao-aula.css").toExternalForm());
+
+            Stage stage = (Stage)((javafx.scene.Node)event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+        }
+        catch(IOException e){
+            e.printStackTrace();
+            System.out.println("Tela de cadastrar disciplina não carregou");
+        }
+                     
+
         System.out.println("Botão 'Cadastrar Disciplina' clicado.");
-        // todo - implementar abertura de tela para cadastrar nova disciplina
+            // todo - implementar abertura de tela para cadastrar nova disciplina
     }
 
     @FXML

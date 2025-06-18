@@ -1,0 +1,10 @@
+.botao-aula {
+    -fx-background-color: white;
+    -fx-text-fill: gray;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-border-color: gray;
+    -fx-border-width: 2px;
+    -fx-border-radius: 20;
+}

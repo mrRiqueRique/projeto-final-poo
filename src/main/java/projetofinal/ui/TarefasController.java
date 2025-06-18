@@ -30,8 +30,8 @@ public class TarefasController {
         tarefasContainer.getChildren().clear(); // limpa tarefas anteriores
 
         TodoList lista = new TodoList();
-        Disciplina disciplina = new Disciplina("ME323", "Probabilidade", 4, 2, "Élcio");
-        Disciplina disciplina2 = new Disciplina("MC322", "POO", 4, 3, "Marcos Raimundo");
+        Disciplina disciplina = new Disciplina("ME323", "Probabilidade", "Caio", 4, 2, "Élcio");
+        Disciplina disciplina2 = new Disciplina("MC322", "POO", "Caio", 4, 3, "Marcos Raimundo");
         disciplina.adicionarAvaliacao(new Prova("P2 ME323", "PB", "2 horas", "25/06"));
         disciplina2.adicionarAvaliacao(new Trabalho("Trabalho Final", "09/06/2025", "23/06/2025", true));
 

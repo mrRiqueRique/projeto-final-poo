@@ -10,14 +10,18 @@ public class Disciplina {
     //private media
     private int faltas;
     private String professor;
+    private String PED;
+    private List<Aula> aulas;
     private List<MetodoDeAvaliacao> avaliacoes;
 
-    public Disciplina(String codigo, String nome,  int creditos, int faltas, String professor){
+    public Disciplina(String codigo, String nome, String PED,  int creditos, int faltas, String professor){
         this.nome=nome;
         this.codigo = codigo;
         this.creditos = creditos;
+        this.PED = PED;
         this.faltas = faltas;
         this.professor = professor;
+        this.aulas = new ArrayList<>();
         this.avaliacoes = new ArrayList<>();
     }
 

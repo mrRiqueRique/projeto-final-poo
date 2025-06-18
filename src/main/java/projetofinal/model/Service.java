@@ -49,7 +49,7 @@ public class Service {
             List<Disciplina> disciplinas = new ArrayList<>();
             for (List<Object> linha : dataDisciplina) {
                 // todo - arrumar tratamento do ultimo parametro de [avaliações]
-                disciplinas.add(new Disciplina(linha.get(0).toString(), linha.get(1).toString(), Integer.parseInt(linha.get(2).toString()), 0, linha.get(3).toString()));
+                disciplinas.add(new Disciplina(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Integer.parseInt(linha.get(3).toString()), 0, linha.get(4).toString()));
             }
 
             return disciplinas;
@@ -63,7 +63,7 @@ public class Service {
         try {
             List<Object> dataDisciplina = sheetsFacade.lerDadosLinhaPorId("Disciplina", "A", "E", codigo);
             if (dataDisciplina.isEmpty()) return null;
-            Disciplina disciplina = new Disciplina(dataDisciplina.get(0).toString(), dataDisciplina.get(1).toString(), Integer.parseInt(dataDisciplina.get(2).toString()), 0, dataDisciplina.get(3).toString());
+            Disciplina disciplina = new Disciplina(dataDisciplina.get(0).toString(), dataDisciplina.get(1).toString(), dataDisciplina.get(2).toString(), Integer.parseInt(dataDisciplina.get(3).toString()), 0, dataDisciplina.get(4).toString());
             return disciplina;
         } catch (Exception e) {
             System.err.println("Erro ao obter disciplina: " + e.getMessage());
