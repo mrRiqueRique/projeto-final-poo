@@ -24,4 +24,4 @@ hs_err_pid*
 replay_pid*
 
 # Ignore credentials file
-build/resources/main/credentials.json
+build/resources/main/credentials.jsonsrc/main/resources/credentials.json
