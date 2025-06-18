@@ -4,48 +4,65 @@
 <?import javafx.geometry.Pos?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.scene.shape.Circle?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="projetofinal.ui.DisciplinasController">
-    <top>
-        <StackPane xmlns:fx="http://javafx.com/fxml">
-            <padding>
-                <Insets top="50" right="0" bottom="10" left="0"/>
-            </padding>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="projetofinal.ui.DisciplinasController">
 
-            <Button fx:id="botaoVoltar"
-                    styleClass="botao-padrao"
-                    onAction="#handleVoltar"
-                    text="Voltar"
-                    StackPane.alignment="TOP_LEFT"
-                    translateX="30">
-                <graphic>
-                    <FontIcon iconLiteral="fas-arrow-left" iconSize="16"/>
-                </graphic>
-            </Button>
+    <!-- TOPO: Botão voltar e título -->
+      <top>
+        <VBox spacing="0">
+            <!-- Cabeçalho azul -->
+            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="85">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Label text="Gerenciador de Estudos" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Circle radius="12" fill="#C0C3E5"/>
+            </HBox>
 
-            <Label fx:id="disciplinasLabel"
-                text="Disciplinas" 
-                style="-fx-text-fill: #395BC7;"
-                StackPane.alignment="CENTER">
-                <font>
-                    <Font size="24"/>
-                </font>
-            </Label>
-        </StackPane>
+            <!-- Área da seta com posição fixa -->
+            <AnchorPane prefHeight="50">
+                <Button styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="20">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-arrow-left" iconSize="40" iconColor="#87A5EF"/>
+                    </graphic>
+                </Button>
+            </AnchorPane>
+
+            <StackPane prefHeight="30">
+                <Label text="Disciplinas"
+                    style="-fx-font-weight: bold; -fx-font-size: 40px; -fx-text-fill: #395BC7;"/>
+            </StackPane>
+
+        </VBox>
     </top>
 
+    <!-- CENTRO: Scroll com disciplinas + botões -->
     <center>
         <VBox spacing="10" alignment="CENTER">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-            
-            <ListView fx:id="listaDisciplinas" prefHeight="580"  />
 
+            <!-- SCROLL com as disciplinas -->
+            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" prefHeight="520">
+                <StackPane alignment="TOP_CENTER"> <!-- Wrapper centralizador -->
+                    <VBox fx:id="disciplinasContainer" spacing="10" maxWidth="600">
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10"/>
+                        </padding>
+                    </VBox>
+                </StackPane>
+            </ScrollPane>
+
+            <!-- BOTÕES abaixo -->
             <Button text="Lançar Nota" styleClass="botao-personalizado" onAction="#handleLancarNota"/>
             <Button text="+ Cadastrar Disciplina" styleClass="botao-personalizado" onAction="#handleCadastrarDisciplina"/>
         </VBox>
     </center>
+
 </BorderPane>

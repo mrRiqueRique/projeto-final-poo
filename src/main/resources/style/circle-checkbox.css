@@ -1,0 +1,31 @@
+.circle-checkbox {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.circle-checkbox .box {
+    -fx-background-color: rgb(216, 225, 255);
+    -fx-border-color: #6A7FC1;
+    -fx-border-width: 2;
+    -fx-border-radius: 10em;
+    -fx-background-radius: 10em;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+    -fx-max-width: 20px;
+    -fx-max-height: 20px;
+}
+
+.circle-checkbox:selected .box {
+    -fx-background-color: #4faf57;
+    -fx-border-color: #459247;
+}
+
+.circle-checkbox .mark {
+    -fx-shape: "";
+    -fx-background-color: transparent;
+}
+
+.circle-checkbox .label {
+    -fx-text-fill: transparent;
+    -fx-font-size: 0;
+}

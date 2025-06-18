@@ -13,7 +13,7 @@ public class Main extends Application {
         Scene scene = new Scene(loader.load(), 1440, 810);
         scene.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
         scene.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
-
+        scene.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setTitle("Trabalho Final");
         primaryStage.show();

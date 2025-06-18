@@ -11,11 +11,10 @@
 
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="projetofinal.ui.TarefasController">
 
-    <!-- Cabeçalho azul -->
     <top>
         <VBox spacing="0">
             <!-- Cabeçalho azul -->
-            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="60">
+            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="85">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
@@ -26,39 +25,41 @@
 
             <!-- Área da seta com posição fixa -->
             <AnchorPane prefHeight="50">
-                <Button styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="30">
+                <Button styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="20">
                     <graphic>
-                        <FontIcon iconLiteral="fas-arrow-left" iconSize="30" iconColor="#87A5EF"/>
+                        <FontIcon iconLiteral="fas-arrow-left" iconSize="40" iconColor="#87A5EF"/>
                     </graphic>
                 </Button>
             </AnchorPane>
 
-             <!-- Título fixo -->
-            <Label text="Tarefas" style="-fx-font-weight: bold; -fx-font-size: 40px; -fx-text-fill: #395BC7;" />
+            <AnchorPane prefHeight="50">
+                 <!-- Título fixo -->
+                <Label text="Tarefas" style="-fx-font-weight: bold; -fx-font-size: 40px; -fx-text-fill: #395BC7;" layoutX="600" layoutY="0" />
+            </AnchorPane>
+
 
         </VBox>
     </top>
 
 
-    <center>
-        <VBox alignment="TOP_CENTER" spacing="15">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
 
-            <!-- ScrollPane apenas para a lista -->
-            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" maxHeight="400">
+    <center>
+        <HBox alignment="CENTER">
+            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" maxHeight="500" prefWidth="700">
                 <VBox alignment="TOP_CENTER" spacing="10" maxWidth="600" fx:id="tarefasContainer">
                     <padding>
                         <Insets top="10" right="10" bottom="10" left="10"/>
                     </padding>
                 </VBox>
             </ScrollPane>
-
-        </VBox>
+        </HBox>
     </center>
 
      <bottom>
-       <Button text="+ Novo item" styleClass="botao-personalizado" maxWidth="150" onAction="#handleNovoItem" />
-    </bottom>
+    <AnchorPane prefHeight="80">
+        <Button text="+ Novo item" styleClass="botao-personalizado" maxWidth="150" onAction="#handleNovoItem" 
+                layoutX="640"
+                AnchorPane.bottomAnchor="20"/>
+    </AnchorPane>
+</bottom>
 </BorderPane>

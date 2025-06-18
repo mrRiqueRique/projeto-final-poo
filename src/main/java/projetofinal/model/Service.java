@@ -168,12 +168,14 @@ public class Service {
         }
     }
 
+    // TO DO: ERRO!!!! NÃO CONSEGUE CRIAR O TRABALHO
+
     public Trabalho getTrabalho(String nomeTrabalho, String codigoDisciplina) {
         try {
             List<List<Object>> dataTrabalho = sheetsFacade.lerDados("Trabalho", "A", "F");
             for (List<Object> linha : dataTrabalho) {
                 if (linha.get(0).toString().equals(nomeTrabalho) && linha.get(4).toString().equals(codigoDisciplina)) {
-                    return new Trabalho(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Boolean.parseBoolean(linha.get(3).toString()));
+                    return new Trabalho(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), false);
                 }
             }
             return null; // Retorna null se não encontrar o trabalho
@@ -250,15 +252,21 @@ public class Service {
                     if (prova != null) {
                         prova.setNota(Integer.parseInt(linha.get(3).toString()));
                         avaliacoes.add(prova);
-                    }else {
-                        Trabalho trabalho = getTrabalho(linha.get(1).toString(), linha.get(2).toString());
-                        if (trabalho != null) {
-                            trabalho.setNota(Integer.parseInt(linha.get(3).toString()));
-                            avaliacoes.add(trabalho);
-                        }
                     }
                 }
             }
+
+            List<List<Object>> dataAlunoTrabalho = sheetsFacade.lerDados("AlunoTrabalho", "A", "D");
+            for (List<Object> linha : dataAlunoTrabalho) {
+                if (linha.get(0).toString().equals(raAluno)) {
+                    Trabalho trabalho = getTrabalho(linha.get(1).toString(), linha.get(2).toString());
+                    if (trabalho != null) {
+                        trabalho.setNota(Integer.parseInt(linha.get(3).toString()));
+                        avaliacoes.add(trabalho);
+                    }
+                }
+            }
+            
         } catch (Exception e) {
             System.err.println("Erro ao obter avaliações do aluno: " + e.getMessage());
         }

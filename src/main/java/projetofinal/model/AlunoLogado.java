@@ -69,6 +69,7 @@ public class AlunoLogado {
     public void concluirTodoItem(TodoItem item) {
         if (aluno != null) {
             this.aluno.getTodoList().concluirTarefa(item); // Delegate to Aluno's TodoList
+            service.deletarTodoItem(item, this.getAluno().getRa());
         } else {
             System.out.println("Nenhum aluno logado.");
         }
