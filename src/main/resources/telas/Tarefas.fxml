@@ -32,6 +32,10 @@
                     </graphic>
                 </Button>
             </AnchorPane>
+
+             <!-- Título fixo -->
+            <Label text="Tarefas" style="-fx-font-weight: bold; -fx-font-size: 40px; -fx-text-fill: #395BC7;" />
+
         </VBox>
     </top>
 
@@ -42,13 +46,19 @@
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
 
-            <Label text="Tarefas" style="-fx-font-weight: bold; -fx-font-size: 40px; -fx-text-fill: #395BC7;" />
-
-            <VBox fx:id="tarefasContainer" spacing="10" maxWidth="600" />
-
-            <Button text="+ Novo item" styleClass="botao-personalizado" maxWidth="150" onAction="#handleNovoItem" />
+            <!-- ScrollPane apenas para a lista -->
+            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" maxHeight="400">
+                <VBox alignment="TOP_CENTER" spacing="10" maxWidth="600" fx:id="tarefasContainer">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                </VBox>
+            </ScrollPane>
 
         </VBox>
     </center>
 
+     <bottom>
+       <Button text="+ Novo item" styleClass="botao-personalizado" maxWidth="150" onAction="#handleNovoItem" />
+    </bottom>
 </BorderPane>

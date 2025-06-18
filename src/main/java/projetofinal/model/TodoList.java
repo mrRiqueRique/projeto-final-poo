@@ -19,5 +19,9 @@ public class TodoList {
         item.concluir();
         todoList.remove(item);
     }
+
+    public List<TodoItem> listarItems(){
+        return todoList;
+    }
     
 }
