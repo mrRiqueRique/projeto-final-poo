@@ -15,7 +15,6 @@ public class Service {
     }
 
     // CRUD
-
     public List<Aluno> getAlunos() {
         try {
             List<List<Object>> dataAluno = sheetsFacade.lerDados("Aluno", "A", "D");
@@ -273,7 +272,35 @@ public class Service {
         return avaliacoes;
     }
 
+    public List<Aula> getAulasDiscipla(String codigoDisciplina) {
+        try {
+            List<List<Object>> dataAula = sheetsFacade.lerDados("Aula", "A", "E");
+            List<Aula> aulas = new ArrayList<>();
+            for (List<Object> linha : dataAula) {
+                if (linha.get(0).toString().equals(codigoDisciplina)) {
+                    aulas.add(new Aula(linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(0).toString(), linha.get(4).toString()));
+                }
+            }
+            return aulas;
+        } catch (Exception e) {
+            System.err.println("Erro ao obter aulas da disciplina: " + e.getMessage());
+            return List.of(); // Retorna uma lista vazia em caso de erro
+        }
+    }
+
     // add s
+
+    public void adicionarAulasDisciplina(String codigoDisciplina, List<Aula> aulas) {
+        try {
+            List<List<Object>> novasAulas = new ArrayList<>();
+            for (Aula aula : aulas) {
+                novasAulas.add(List.of(codigoDisciplina, aula.getHorarioInicio(), aula.getHorarioFim(), aula.getDiaSemana()));
+            }
+            sheetsFacade.escreverDados("Aula", "A", "D", novasAulas);
+        } catch (Exception e) {
+            System.err.println("Erro ao adicionar aulas à disciplina: " + e.getMessage());
+        }
+    }
 
     public void adicionarAluno(Aluno aluno) {
         try {
