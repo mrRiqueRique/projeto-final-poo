@@ -9,7 +9,7 @@ public class ComparatorPrioridade implements Comparator<TodoItem> {
         switch (prioridade.toLowerCase().trim()) {
             case "alta":
                 return 1;
-            case "media":
+            case "média":
                 return 2;
             case "baixa":
                 return 3;

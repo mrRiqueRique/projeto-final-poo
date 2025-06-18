@@ -25,11 +25,11 @@
 
             <!-- Área da seta com posição fixa -->
             <AnchorPane prefHeight="50">
-                <Button styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="20">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-arrow-left" iconSize="40" iconColor="#87A5EF"/>
-                    </graphic>
-                </Button>
+                <Button text="Sair"
+                style="-fx-background-color: #E53935; -fx-text-fill: white; -fx-font-weight: bold;"
+                onAction="#handleSair"
+                layoutX="50" layoutY="20"
+                prefWidth="80" prefHeight="40"/>
             </AnchorPane>
 
             <StackPane prefHeight="0">
@@ -40,7 +40,9 @@
 
     <center>
         <VBox alignment="TOP_CENTER" spacing="0">
-            <padding><Insets top="40" right="10" bottom="10" left="10"/></padding>
+            <padding>
+                <Insets top="40" right="10" bottom="10" left="10"/>
+            </padding>
 
             <!-- Conteúdo principal -->
             <HBox alignment="TOP_CENTER" spacing="40">
@@ -48,22 +50,39 @@
                 <!-- Tarefas -->
                 <VBox alignment="TOP_CENTER" spacing="10">
                     <Label text="Tarefas urgentes"
-                           style="-fx-font-weight: bold; -fx-font-size: 28px;"/>
+                        style="-fx-font-weight: bold; -fx-font-size: 28px;"/>
+
                     <ScrollPane fitToWidth="true" prefHeight="420" prefWidth="450"
                                 style="-fx-background-color: transparent;">
-                        <VBox fx:id="tarefasUrgentesContainer" spacing="10" alignment="TOP_CENTER" maxWidth="400"/>
+                        <VBox fx:id="tarefasUrgentesContainer" spacing="10"
+                            alignment="TOP_CENTER" maxWidth="400"/>
                     </ScrollPane>
+
+                    <!-- Botão agora direto sob o quadro de tarefas -->
+                    <Button text="Lista Completa  ➔"
+                            styleClass="botao-personalizado"
+                            onAction="#handleAbrirTarefas"
+                            prefWidth="210"/>
                 </VBox>
 
                 <!-- Aulas -->
                 <VBox alignment="TOP_CENTER" spacing="10">
                     <Label text="Aulas de hoje"
-                           style="-fx-font-weight: bold; -fx-font-size: 28px;"/>
+                        style="-fx-font-weight: bold; -fx-font-size: 28px;"/>
+
                     <ScrollPane fitToWidth="true" prefHeight="420" prefWidth="450"
                                 style="-fx-background-color: transparent;">
-                        <VBox fx:id="aulasHojeContainer" spacing="10" alignment="TOP_CENTER" maxWidth="400"/>
+                        <VBox fx:id="aulasHojeContainer" spacing="10"
+                            alignment="TOP_CENTER" maxWidth="400"/>
                     </ScrollPane>
+
+                    <!-- Botão agora direto sob o quadro de aulas -->
+                    <Button text="Horário Completo  ➔"
+                            styleClass="botao-personalizado"
+                            onAction="#handleAbrirHorario"
+                            prefWidth="210"/>
                 </VBox>
+
             </HBox>
         </VBox>
     </center>
@@ -73,20 +92,6 @@
             <padding>
                     <Insets top="10" right="10" bottom="20" left="10"/>
             </padding>
-            <HBox spacing="300" alignment="CENTER">
-                <padding>
-                    <Insets top="10" right="10" bottom="30" left="10"/>
-                </padding>
-            
-                <Button text="Lista Completa  ➔"
-                        styleClass="botao-personalizado"
-                        onAction="#handleAbrirTarefas"
-                        prefWidth="210"/>
-                <Button text="Horário Completo  ➔"
-                        styleClass="botao-personalizado"
-                        onAction="#handleAbrirHorario"
-                        prefWidth="210"/>
-            </HBox>
 
             <Button text="Disciplinas  ➔"
                     styleClass="botao-personalizado"

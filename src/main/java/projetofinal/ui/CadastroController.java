@@ -50,19 +50,21 @@ public class CadastroController {
         }
     }
 
-    @FXML
-    private void handleVoltar(ActionEvent event) {
+     @FXML private void handleVoltar(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Login.fxml"));
-            Scene scene = new Scene(loader.load(), 1440, 810);
-            scene.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
-            scene.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            Scene novaCena = new Scene(loader.load(), 1440, 810);
 
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
+
+            // Obtém o Stage atual a partir do botão que disparou o evento
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
+            stage.setScene(novaCena);
             stage.setTitle("Trabalho Final");
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
