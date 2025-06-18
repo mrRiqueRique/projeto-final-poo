@@ -39,4 +39,5 @@ public class DisciplinaRepository {
             System.err.println("Erro ao adicionar disciplina: " + e.getMessage());
         }
     }
+
 }

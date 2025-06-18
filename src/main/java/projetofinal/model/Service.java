@@ -274,11 +274,11 @@ public class Service {
 
     public List<Aula> getAulasDiscipla(String codigoDisciplina) {
         try {
-            List<List<Object>> dataAula = sheetsFacade.lerDados("Aula", "A", "D");
+            List<List<Object>> dataAula = sheetsFacade.lerDados("Aula", "A", "E");
             List<Aula> aulas = new ArrayList<>();
             for (List<Object> linha : dataAula) {
                 if (linha.get(0).toString().equals(codigoDisciplina)) {
-                    aulas.add(new Aula(linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(0).toString()));
+                    aulas.add(new Aula(linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(0).toString(), linha.get(4).toString()));
                 }
             }
             return aulas;

@@ -7,17 +7,12 @@ public class Aula {
     private String local;
     private String codigoDisciplina;
 
-    public Aula(String horarioInicio, String horarioFim, String diaSemana) {
-        this.horarioInicio = horarioInicio;
-        this.horarioFim = horarioFim;
-        this.diaSemana = diaSemana;
-    }
-
-    public Aula(String horarioInicio, String horarioFim, String diaSemana, String codigoDisciplina) {
+    public Aula(String horarioInicio, String horarioFim, String diaSemana, String codigoDisciplina, String local) {
         this.horarioInicio = horarioInicio;
         this.horarioFim = horarioFim;
         this.diaSemana = diaSemana;
         this.codigoDisciplina = codigoDisciplina;
+        this.local = local;
     }
 
     public String getHorarioInicio(){
