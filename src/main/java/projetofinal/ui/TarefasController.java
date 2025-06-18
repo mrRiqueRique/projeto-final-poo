@@ -110,6 +110,7 @@ public class TarefasController {
             HBox linha = new HBox(5);
             Label titulo = new Label("Disciplina:");
             titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
+            titulo.setTextFill(Color.web("#A9A9A9")); // cinza claro só no título
             Label valor = criarTag(item.getDisciplina().getCodigo(), "#E1BEE7", "#6A1B9A"); // roxo
             linha.getChildren().addAll(titulo, valor);
             textos.getChildren().add(linha);
@@ -120,6 +121,7 @@ public class TarefasController {
             HBox linha = new HBox(5);
             Label titulo = new Label("Prova:");
             titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
+            titulo.setTextFill(Color.web("#A9A9A9")); // cinza claro só no título
             Label valor = criarTag(prova.getNome(), "rgb(169, 233, 219)", "#006064"); // rosa
             linha.getChildren().addAll(titulo, valor);
             textos.getChildren().add(linha);
@@ -130,6 +132,7 @@ public class TarefasController {
             HBox linha = new HBox(5);
             Label titulo = new Label("Trabalho:");
             titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
+            titulo.setTextFill(Color.web("#A9A9A9")); // cinza claro só no título
             Label valor = criarTag(trab.getNome(), "#B2EBF2", "#0097A7"); // ciano
             linha.getChildren().addAll(titulo, valor);
             textos.getChildren().add(linha);
@@ -140,6 +143,7 @@ public class TarefasController {
             HBox linha = new HBox(5);
             Label titulo = new Label("Prioridade:");
             titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
+            titulo.setTextFill(Color.web("#A9A9A9")); // cinza claro só no título
 
             String prioridade = item.getPrioridade().toLowerCase();
             String corFundo = "#FFCDD2"; // default red
@@ -161,6 +165,7 @@ public class TarefasController {
             HBox linha = new HBox(5);
             Label titulo = new Label("Data:");
             titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
+            titulo.setTextFill(Color.web("#A9A9A9")); // cinza claro só no título
             Label valor = criarTag(item.getData().toString(), "#BBDEFB", "#1565C0"); // azul
             linha.getChildren().addAll(titulo, valor);
             textos.getChildren().add(linha);
@@ -183,6 +188,7 @@ public class TarefasController {
         box.getChildren().addAll(chk, textos, spacer);
         return box;
     }
+
 
     @FXML
     private void handleNovoItem() {
