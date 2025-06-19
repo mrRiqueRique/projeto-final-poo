@@ -1,5 +1,10 @@
 package projetofinal.model;
 
+import javafx.concurrent.Task;
+import projetofinal.filters.ComparatorPrioridade;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +14,12 @@ public class AlunoLogado {
     private List<MetodoDeAvaliacao> avaliacoes;
     private AlunoRepository alunoRepository;
     private Service service;
+    private AulasRepository aulasRepository;
+    private List<Aula> aulasALuno;
 
     private AlunoLogado() {
         try {
+            this.aulasRepository = AulasRepository.getInstancia();
             this.alunoRepository = AlunoRepository.getInstancia(); // Use AlunoRepository
             this.service = new Service();
         } catch (Exception e) {
@@ -43,6 +51,7 @@ public class AlunoLogado {
 
         this.avaliacoes = new ArrayList<>(service.getAvaliacoesAluno(ra));
         this.avaliacoes.addAll(service.getTrabalhos());
+        this.aulasALuno = carregarAulas();
 
         if (this.aluno == null) {
             System.out.println("Aluno não encontrado.");
@@ -92,11 +101,11 @@ public class AlunoLogado {
         }
     }
 
-    public List<Aula> getAulas() {
+    public List<Aula> carregarAulas() {
         if (aluno != null) {
             List<Aula> aulas = new ArrayList<>();
             for (Disciplina disciplina : aluno.getDisciplinas()) {
-                List<Aula> aulasDaDisciplina = AulasRepository.getInstancia().listarAulasPorDisciplina(disciplina.getCodigo());
+                List<Aula> aulasDaDisciplina = this.aulasRepository.listarAulasPorDisciplina(disciplina.getCodigo());
                 if (aulasDaDisciplina != null) {
                     aulas.addAll(aulasDaDisciplina);
                 }
@@ -106,5 +115,26 @@ public class AlunoLogado {
             System.out.println("Nenhum aluno logado.");
             return new ArrayList<>();
         }
+    }
+
+    public List<Aula> getAulas() {
+        return this.aulasALuno;
+    }
+
+    public Task<List<TodoItem>> getTodoItensUrgentes() {
+        return new Task<>() {
+            @Override
+            protected List<TodoItem> call() {
+                return alunoLogado.getTodoList().listarItems().stream().sorted(new ComparatorPrioridade()).toList();
+            }
+        };
+    }
+
+    public List<Aula> getAulasHoje() {
+        DayOfWeek hoje = LocalDate.now().getDayOfWeek();
+        List<Aula> aulas = alunoLogado.getAulas();
+        if (aulas == null) return new ArrayList<>();
+
+        return aulas.stream().filter(aula -> DiaSemanaRepository.traduzir(aula.getDiaSemana()) == hoje).toList();
     }
 }

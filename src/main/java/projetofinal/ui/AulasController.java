@@ -39,7 +39,6 @@ public class AulasController {
     @FXML
     private void carregarAulas() {
         calendarioGrid.getChildren().clear();
-        alunoLogado.logarAluno("281773");
         List<Aula> aulas = alunoLogado.getAulas();
 
         // Array de cores para disciplinas
@@ -172,48 +171,6 @@ public class AulasController {
             }
             calendarioGrid.getColumnConstraints().add(cc);
         }
-    }
-
-    private HBox criarItemTarefa(Aula item) {
-        HBox box = new HBox();
-        box.setStyle("-fx-border-color: #6A7FC1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-background-color: #E8EBF9;");
-        box.setSpacing(10);
-        box.setPadding(new javafx.geometry.Insets(10));
-        box.setMaxWidth(600);
-
-//        RadioButton rb = new RadioButton();
-//        rb.setFocusTraversable(false);
-//        rb.setSelected(item.getConcluido());
-
-        VBox textos = new VBox();
-        textos.setSpacing(5);
-
-//        Label nomeLabel = new Label(item.getNome());
-//        nomeLabel.setFont(Font.font("Raleway", 14));
-
-//        String mat = item.getDisciplina() != null ? item.getDisciplina().getNome() : "Sem disciplina";
-//        Label matLabel = new Label(mat);
-//        matLabel.setFont(Font.font("Raleway", 12));
-//        matLabel.setTextFill(Color.GRAY);
-
-//        Label infoLabel = new Label("Prioridade: " + item.getPrioridade() + " | Data: " + item.getData());
-//        infoLabel.setFont(Font.font("Raleway", 12));
-//        infoLabel.setTextFill(Color.GRAY);
-
-//        textos.getChildren().addAll(nomeLabel, matLabel, infoLabel);
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-
-
-        box.getChildren().addAll(textos, spacer);
-
-        return box;
-    }
-
-    @FXML
-    private void handleNovoItem() {
-        //Implementar ainda
     }
 
     @FXML private void handleVoltar(ActionEvent event) {
