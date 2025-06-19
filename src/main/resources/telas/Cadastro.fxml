@@ -48,7 +48,6 @@
                 style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;"
             />
            
-            <Button text="Subir Foto"  styleClass="botao-personalizado" maxWidth="200" onAction="#handleSubirFoto"/>
             <Button text="Criar Conta" styleClass="botao-personalizado" maxWidth="200" onAction="#handleCriarConta"/>
             <Label fx:id="messageLabel" textFill="red"/>
         </VBox>
