@@ -1,0 +1,55 @@
+/* Estilo geral para o painel do diálogo */
+.dialog-pane {
+   -fx-background-color: #F4F6F8;
+   -fx-border-color: #6A7FC1;
+   -fx-border-width: 2px;
+   -fx-border-radius: 10px;
+   -fx-background-radius: 10px;
+   -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);
+}
+
+
+/* Painel do cabeçalho (onde fica o título) */
+.dialog-pane .header-panel {
+   -fx-background-color: #6A7FC1;
+   -fx-background-radius: 8px 8px 0 0;
+}
+
+
+/* Texto do cabeçalho */
+.dialog-pane .header-panel .label {
+   -fx-font-size: 16px;
+   -fx-font-weight: bold;
+   -fx-text-fill: white;
+   -fx-padding: 10px;
+}
+
+
+/* Texto do conteúdo principal */
+.dialog-pane > .content.label {
+   -fx-font-size: 14px;
+   -fx-text-fill: #333333;
+}
+
+
+/* Estilo dos botões (OK, Cancel) */
+.dialog-pane .button {
+   -fx-background-color: #6A7FC1;
+   -fx-text-fill: white;
+   -fx-font-weight: bold;
+   -fx-background-radius: 15px;
+   -fx-padding: 5px 20px;
+}
+
+
+/* Efeito ao passar o mouse por cima dos botões */
+.dialog-pane .button:hover {
+   -fx-background-color: #395BC7; /* Cor mais escura ao passar o mouse */
+   -fx-cursor: hand;
+}
+
+
+/* Remove o ícone padrão de interrogação azul */
+.dialog-pane .header-panel .graphic {
+   -fx-background-image: null;
+}
