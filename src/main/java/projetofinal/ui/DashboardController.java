@@ -35,13 +35,16 @@ import projetofinal.model.*;
 
 public class DashboardController {
 
-    @FXML private Label bemVindoLabel;
-    @FXML private VBox tarefasUrgentesContainer;
-    @FXML private VBox aulasHojeContainer;
+    @FXML
+    private Label bemVindoLabel;
+    @FXML
+    private VBox tarefasUrgentesContainer;
+    @FXML
+    private VBox aulasHojeContainer;
 
     private AlunoLogado alunoLogado = AlunoLogado.getInstance();
 
-    
+
     @FXML
     public void initialize() {
         bemVindoLabel.setText("Bem‑vindo, " + alunoLogado.getAluno().getNome() + "!");
@@ -52,20 +55,11 @@ public class DashboardController {
             carregarAulasHoje();
         });
     }
+
     private void carregarTarefasUrgentes() {
         tarefasUrgentesContainer.getChildren().clear();
 
-        Task<List<TodoItem>> task = new Task<>() {
-            @Override
-            protected List<TodoItem> call() {
-                return alunoLogado.getTodoList()
-                    .listarItems()
-                    .stream()
-                    .sorted(new ComparatorPrioridade())
-                    .toList();
-            }
-        };
-
+        Task<List<TodoItem>> task = alunoLogado.getTodoItensUrgentes();
         task.setOnSucceeded(event -> {
             for (TodoItem item : task.getValue()) {
                 tarefasUrgentesContainer.getChildren().add(criarItemTarefa(item));
@@ -82,11 +76,11 @@ public class DashboardController {
         box.setPadding(new Insets(10));
         box.setMaxWidth(600);
         box.setStyle("""
-            -fx-border-color: #6A7FC1;
-            -fx-border-radius: 8;
-            -fx-background-radius: 8;
-            -fx-background-color: #E8EBF9;
-        """);
+                    -fx-border-color: #6A7FC1;
+                    -fx-border-radius: 8;
+                    -fx-background-radius: 8;
+                    -fx-background-color: #E8EBF9;
+                """);
 
         CheckBox chk = new CheckBox();
         chk.setFocusTraversable(false);
@@ -203,15 +197,9 @@ public class DashboardController {
 
     private void carregarAulasHoje() {
         aulasHojeContainer.getChildren().clear();
+        List<Aula> aulasHoje = alunoLogado.getAulasHoje();
 
-        DayOfWeek hoje = LocalDate.now().getDayOfWeek();
-        List<Aula> aulas = alunoLogado.getAulas();
-        if (aulas == null) return;
-
-        aulas.stream()
-            .filter(aula -> DiaSemanaRepository.traduzir(aula.getDiaSemana()) == hoje)
-            .map(this::criarItemAula)
-            .forEach(aulasHojeContainer.getChildren()::add);
+        aulasHoje.stream().map(this::criarItemAula).forEach(aulasHojeContainer.getChildren()::add);
     }
 
 
@@ -220,11 +208,11 @@ public class DashboardController {
         box.setPadding(new Insets(10));
         box.setMaxWidth(400);
         box.setStyle("""
-            -fx-border-color: #6A7FC1;
-            -fx-border-radius: 8;
-            -fx-background-radius: 8;
-            -fx-background-color: #E8EBF9;
-        """);
+                    -fx-border-color: #6A7FC1;
+                    -fx-border-radius: 8;
+                    -fx-background-radius: 8;
+                    -fx-background-color: #E8EBF9;
+                """);
 
         VBox textos = new VBox(5);
 
@@ -257,18 +245,16 @@ public class DashboardController {
     }
 
 
-
-
     /* ---------- Utilidades ---------- */
     private Label criarTag(String texto, String corFundo, String corTexto) {
         Label tag = new Label(texto);
         tag.setFont(Font.font("Raleway", FontWeight.BOLD, 11));
         tag.setStyle(String.format("""
-            -fx-background-color: %s;
-            -fx-background-radius: 12;
-            -fx-padding: 4 10 4 10;
-            -fx-text-fill: %s;
-        """, corFundo, corTexto));
+                    -fx-background-color: %s;
+                    -fx-background-radius: 12;
+                    -fx-padding: 4 10 4 10;
+                    -fx-text-fill: %s;
+                """, corFundo, corTexto));
         return tag;
     }
 
@@ -280,7 +266,8 @@ public class DashboardController {
     }
 
     /* ---------- Navegação ---------- */
-    @FXML private void handleAbrirTarefas(ActionEvent event){ 
+    @FXML
+    private void handleAbrirTarefas(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Tarefas.fxml"));
             Scene novaCena = new Scene(loader.load(), 1440, 810);
@@ -299,8 +286,10 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
-    @FXML private void handleAbrirHorario(ActionEvent event){
-         try {
+
+    @FXML
+    private void handleAbrirHorario(ActionEvent event) {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Aulas.fxml"));
             Scene novaCena = new Scene(loader.load(), 1440, 810);
 
@@ -318,7 +307,9 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
-    @FXML private void handleAbrirDisciplinas(ActionEvent event) {
+
+    @FXML
+    private void handleAbrirDisciplinas(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Disciplinas.fxml"));
             Scene novaCena = new Scene(loader.load(), 1440, 810);
@@ -338,7 +329,8 @@ public class DashboardController {
         }
     }
 
-    @FXML private void handleSair(ActionEvent event) {
+    @FXML
+    private void handleSair(ActionEvent event) {
         try {
             alunoLogado.logout();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Login.fxml"));
@@ -358,7 +350,6 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
-
 
 
 }
