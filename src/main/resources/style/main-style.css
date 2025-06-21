@@ -6,7 +6,6 @@
    -fx-min-height: 30px;
 }
 
-
 /* Efeito ao passar o mouse por cima do botão */
 .botao-sair:hover {
    -fx-cursor: hand;

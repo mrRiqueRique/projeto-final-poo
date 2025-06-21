@@ -1,6 +1,7 @@
 package projetofinal.ui;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import javafx.event.ActionEvent;
@@ -14,9 +15,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton; 
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+
+import projetofinal.model.Aluno;
+import projetofinal.model.AlunoLogado;
+import projetofinal.model.Disciplina;
 
 /**
  * Controlador da interface gráfica da tela de perfil.
@@ -24,48 +30,80 @@ import javafx.stage.Stage;
  */
 public class PerfilController {
 
-    @FXML
-    private Button voltarButton;
+    @FXML private Button voltarButton;
+    @FXML private Button sairButton;
+    @FXML private Circle perfilImage;
+    @FXML private Label nomeText;
+    @FXML private Label cursoText;
+    @FXML private Label crText;
+    @FXML private VBox disciplinasAtuaisVBox;
+    @FXML private Button editarPerfilButton;
+    @FXML private MenuButton menuButton; 
 
-    @FXML
-    private Button sairButton;
-
-    @FXML
-    private Circle perfilImage;
-
-    @FXML
-    private Label nomeText;
-
-    @FXML
-    private Label cursoText;
-
-    @FXML
-    private Label crText;
-
-    @FXML
-    private VBox disciplinasAtuaisVBox;
-
-    @FXML
-    private Button editarPerfilButton;
+    private Aluno alunoLogado;
 
     /**
-     * Manipula a ação do botão "Voltar".
-     * Exibe uma mensagem no console e contém um comentário indicando implementação futura.
-     *
-     * @param event o evento de clique do botão
+     * Método de inicialização do JavaFX.
+     * Busca os dados do aluno logado e preenche todos os campos da tela,
+     * incluindo a lista de disciplinas.
+     */
+    @FXML
+    public void initialize() {
+
+        this.alunoLogado = AlunoLogado.getInstance().getAluno();
+
+        if (alunoLogado != null) {
+
+            nomeText.setText(alunoLogado.getNome());
+            cursoText.setText(alunoLogado.getCurso());
+            crText.setText("CR: " + String.format("%.2f", alunoLogado.getCR()));
+
+            // Limpa o VBox para garantir que não haja itens de uma execução anterior.
+            disciplinasAtuaisVBox.getChildren().clear();
+
+            List<Disciplina> disciplinas = alunoLogado.getDisciplinas();
+
+            if (disciplinas != null && !disciplinas.isEmpty()) {
+                // Itera sobre a lista e cria um Label para cada disciplina.
+                for (Disciplina disciplina : disciplinas) {
+                    // Cria um novo Label com o nome da disciplina
+                    Label disciplinaLabel = new Label("• " + disciplina.getNome());
+
+                    disciplinaLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333333;");
+                    disciplinaLabel.setWrapText(true); // Permite que o texto quebre a linha se for muito longo
+
+                    disciplinasAtuaisVBox.getChildren().add(disciplinaLabel);
+                }
+            } else {
+                // Caso o aluno não tenha disciplinas
+                Label nenhumaDisciplinaLabel = new Label("Nenhuma disciplina cadastrada.");
+                nenhumaDisciplinaLabel.setStyle("-fx-text-fill: #888888; -fx-font-style: italic;");
+                disciplinasAtuaisVBox.getChildren().add(nenhumaDisciplinaLabel);
+            }
+
+        } else {
+            // Caso nenhum aluno seja encontrado (ou ninguém tenha feito login)
+            nomeText.setText("[Aluno não logado]");
+            cursoText.setText("[N/A]");
+            crText.setText("[N/A]");
+            editarPerfilButton.setDisable(true);
+            System.err.println("Nenhum aluno logado no sistema. A tela de perfil não pode ser carregada corretamente.");
+        }
+    }
+
+    /**
+     * Manipula a ação do botão "Voltar", retornando para a tela de perfil.
+     * @param event O evento do clique.
      */
     @FXML
     void handleVoltar(ActionEvent event) {
         System.out.println("Botão Voltar foi clicado!");
-        // todo - lógica para voltar para a tela anterior.
+        irParaDashboard(event);
     }
 
     /**
-     * Manipula a ação do botão "Sair".
-     * Exibe uma caixa de diálogo de confirmação para o usuário. Se confirmado,
-     * redireciona para a tela de login. Caso contrário, permanece na tela atual.
-     *
-     * @param event o evento de clique do botão
+     * Manipula o evento de clique do botão "Sair".
+     * @param event O evento de ação que acionou este método.
      */
     @FXML
     void handleSair(ActionEvent event) {
@@ -78,9 +116,7 @@ public class PerfilController {
 
         try {
             DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.getStylesheets().add(
-                    getClass().getResource("/style/dialog-style.css").toExternalForm());
-            dialogPane.getStyleClass().add("my-dialog");
+            dialogPane.getStylesheets().add(getClass().getResource("/style/dialog-style.css").toExternalForm());
         } catch (Exception e) {
             System.err.println("Erro ao carregar o CSS do diálogo: " + e.getMessage());
         }
@@ -88,25 +124,41 @@ public class PerfilController {
         Optional<ButtonType> resultado = alert.showAndWait();
 
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-            System.out.println("Usuário confirmou a saída. Voltando para a tela de login...");
+            AlunoLogado.getInstance().logout();
             carregarTela(event, "/telas/Login.fxml", "Login - Gerenciador de Estudos");
-        } else {
-            System.out.println("Usuário cancelou a saída.");
         }
     }
 
     /**
-     * Manipula a ação do botão "Editar Perfil".
-     * Exibe uma mensagem no console e contém um comentário indicando implementação futura.
-     *
-     * @param event o evento de clique do botão
+     * Manipula o evento de clique do botão "Editar Perfil".
+     * @param event O evento de ação que acionou este método.
      */
     @FXML
     void handleEditarPerfil(ActionEvent event) {
-        System.out.println("Botão Editar Perfil foi clicado!");
-        // todo - editar perfil
-    }
+        if (alunoLogado == null) {
+            showAlert(AlertType.ERROR, "Erro", "Não foi possível editar o perfil.", "Nenhum aluno está carregado no sistema.");
+            return;
+        }
 
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/EditarPerfil.fxml"));
+
+            Scene scene = new Scene(loader.load(), 1440, 810);
+            scene.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+
+            EditarPerfilController editarController = loader.getController();
+            editarController.initData(alunoLogado);
+
+            stage.setScene(scene);
+            stage.setTitle("Editar Perfil - Gerenciador de Estudos");
+            stage.show();
+
+        } catch (IOException e) {
+            System.err.println("Falha ao carregar a tela de edição de perfil: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void irParaDashboard(ActionEvent event) {
@@ -141,7 +193,7 @@ public class PerfilController {
      */
     private void carregarTela(ActionEvent event, String fxmlPath, String title) {
         try {
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage stage = (Stage) menuButton.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Scene scene = new Scene(loader.load(), 1440, 810);
             scene.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
@@ -152,5 +204,29 @@ public class PerfilController {
             System.err.println("Falha ao carregar a tela: " + fxmlPath);
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Cria e exibe um alerta modal com um estilo CSS personalizado.
+     * @param alertType O tipo de alerta (INFORMATION, WARNING, etc.).
+     * @param title O título da janela do alerta.
+     * @param message A mensagem principal a ser exibida.
+     */
+    private void showAlert(AlertType alertType, String title, String header, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null); // Remove o cabeçalho secundário
+        alert.setContentText(message);
+        alert.setGraphic(null); // Remove o ícone padrão
+
+         try {
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.getStylesheets().add(
+                getClass().getResource("/style/dialog-style.css").toExternalForm());
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar o CSS do diálogo: " + e.getMessage());
+        }
+
+        alert.showAndWait();
     }
 }

@@ -41,6 +41,14 @@ public class Aluno {
         return this.todoList;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setCurso(String curso) {
+        this.curso = curso;
+    }
+
     public void setCR(double CR) {
         this.CR = CR;
     }

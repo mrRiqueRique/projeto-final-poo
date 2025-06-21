@@ -63,7 +63,8 @@
 
             <!-- Botão de voltar posicionado -->
             <AnchorPane prefHeight="50">
-                <Button fx:id="voltarButton" styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="15">
+                <Button fx:id="voltarButton" styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="15" 
+        style="-fx-background-color: transparent;">
                     <graphic>
                         <FontIcon iconLiteral="fas-arrow-left" iconSize="35" iconColor="#87A5EF" />
                     </graphic>
@@ -111,7 +112,7 @@
     <!-- Rodapé com botão de edição do perfil -->
     <bottom>
         <HBox alignment="CENTER" style="-fx-padding: 20;">
-            <Button text="Editar Perfil" styleClass="botao-personalizado" onAction="#handleEditarPerfil"/>
+            <Button fx:id="editarPerfilButton" text="Editar Perfil" styleClass="botao-personalizado" onAction="#handleEditarPerfil"/>
         </HBox>
     </bottom>
 
