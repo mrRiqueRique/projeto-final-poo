@@ -12,7 +12,7 @@
         </HBox>
         <VBox alignment="CENTER" spacing="20">
             <Label text="Cadastro de Disciplina" style="-fx-font-size: 45px; -fx-font-weight: bold;"></Label>
-            
+
             <VBox alignment="CENTER" spacing="10" maxWidth="586">
                 <TextField
                     fx:id="nomeInput"

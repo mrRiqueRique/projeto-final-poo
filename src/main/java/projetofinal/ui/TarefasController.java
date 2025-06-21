@@ -2,6 +2,7 @@ package projetofinal.ui;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javafx.animation.FadeTransition;
@@ -40,18 +41,22 @@ import javafx.util.Duration;
 
 public class TarefasController {
 
-    @FXML
     private AlunoLogado alunoLogado;
 
     @FXML
     private VBox tarefasContainer;
 
-    @FXML private Region fundoModal;
+    @FXML
+    private Region fundoModal;
 
-    @FXML private VBox modalContainer;
-    @FXML private TextField campoNome, campoDisciplina, campoAvaliacao;
-    @FXML private DatePicker campoData;
-    @FXML private ToggleGroup prioridadeGroup;
+    @FXML
+    private VBox modalContainer;
+    @FXML
+    private TextField campoNome, campoDisciplina, campoAvaliacao;
+    @FXML
+    private DatePicker campoData;
+    @FXML
+    private ToggleGroup prioridadeGroup;
 
     @FXML
     public void initialize() {
@@ -73,11 +78,11 @@ public class TarefasController {
         Label tag = new Label(texto);
         tag.setFont(Font.font("Raleway", FontWeight.BOLD, 11));
         tag.setStyle(String.format("""
-            -fx-background-color: %s;
-            -fx-background-radius: 12;
-            -fx-padding: 4 10 4 10;
-            -fx-text-fill: %s;
-        """, corFundo, corTexto));
+                    -fx-background-color: %s;
+                    -fx-background-radius: 12;
+                    -fx-padding: 4 10 4 10;
+                    -fx-text-fill: %s;
+                """, corFundo, corTexto));
         return tag;
     }
 
@@ -86,11 +91,11 @@ public class TarefasController {
         box.setPadding(new Insets(10));
         box.setMaxWidth(600);
         box.setStyle("""
-            -fx-border-color: #6A7FC1;
-            -fx-border-radius: 8;
-            -fx-background-radius: 8;
-            -fx-background-color: #E8EBF9;
-        """);
+                    -fx-border-color: #6A7FC1;
+                    -fx-border-radius: 8;
+                    -fx-background-radius: 8;
+                    -fx-background-color: #E8EBF9;
+                """);
 
         CheckBox chk = new CheckBox();
         chk.setFocusTraversable(false);
@@ -155,9 +160,11 @@ public class TarefasController {
             String corTexto = "#C62828";
 
             if (prioridade.contains("média") || prioridade.contains("media")) {
-                corFundo = "#ffec82"; corTexto = "#d48f28"; // amarelo
+                corFundo = "#ffec82";
+                corTexto = "#d48f28"; // amarelo
             } else if (prioridade.contains("baixa")) {
-                corFundo = "#C8E6C9"; corTexto = "#2E7D32"; // verde
+                corFundo = "#C8E6C9";
+                corTexto = "#2E7D32"; // verde
             }
 
             Label valor = criarTag(item.getPrioridade(), corFundo, corTexto);
@@ -210,25 +217,28 @@ public class TarefasController {
     @FXML
     private void handleSalvarTarefa() {
         String nome = campoNome.getText();
-        String disciplina = campoDisciplina.getText();
-        String avaliacao = campoAvaliacao.getText();
+        String disciplinaCodigo = campoDisciplina.getText();
+        String avaliacaoNome = campoAvaliacao.getText();
         LocalDate data = campoData.getValue();
 
         ToggleButton selecionado = (ToggleButton) prioridadeGroup.getSelectedToggle();
-        if (selecionado != null) {
-            String prioridade = selecionado.getText(); // "Baixa", "Média" ou "Alta"
+        String prioridade = selecionado != null ? selecionado.getText() : null;
+
+        if (nome.isEmpty() || disciplinaCodigo.isEmpty() || avaliacaoNome.isEmpty() || data == null || prioridade == null) {
+            System.err.println("Erro: Todos os campos devem ser preenchidos.");
+            return;
         }
-        // Aqui você cria a tarefa (ajuste conforme suas classes)
-        // Exemplo:
-        // TodoItem item = new TodoItem(nome, ..., data, prioridade);
-        // alunoLogado.getTodoList().adicionarItem(item);
-        // carregarTodoList();
+
+        String dataFormatada = data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        alunoLogado.cadastrarTodoItem(nome, disciplinaCodigo, avaliacaoNome, dataFormatada, prioridade);
+        carregarTodoList();
 
         modalContainer.setVisible(false);
+        fundoModal.setVisible(false);
     }
 
-
-    @FXML private void handleVoltar(ActionEvent event) {
+    @FXML
+    private void handleVoltar(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Dashboard.fxml"));
             Scene novaCena = new Scene(loader.load(), 1440, 810);

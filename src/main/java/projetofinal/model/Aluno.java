@@ -14,12 +14,18 @@ public class Aluno {
     private String caminhoFoto;
     private List<Disciplina> disciplinas;
     private TodoList todoList;
+    private String senha;
 
-    public Aluno(String ra, String nome, String curso) {
+    public Aluno(String ra, String nome, String curso,String senha) {
         this.nome = nome;
         this.ra = ra;
         this.curso = curso;
         this.disciplinas = new ArrayList<>();
+        this.senha = senha;
+    }
+
+    public String getSenha(){
+        return this.senha;
     }
 
     public String getNome() {
@@ -56,6 +62,10 @@ public class Aluno {
 
     public void setCR(double CR) {
         this.CR = CR;
+    }
+
+    public void setDisciplinas(List<Disciplina> disciplinas) {
+        this.disciplinas = disciplinas;
     }
 
     public void setTodoList(TodoList todoList) {

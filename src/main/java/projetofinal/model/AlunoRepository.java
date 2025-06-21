@@ -28,6 +28,13 @@ public class AlunoRepository {
         return this.alunos;
     }
 
+    public Aluno getAlunoPorRa(String ra) {
+        return alunos.stream()
+                .filter(a -> a.getRa().equals(ra))
+                .findFirst()
+                .orElse(null);
+    }
+
     private void carregarAlunosDoSheets() {
         try {
             alunos = service.getAlunos(); // Use the Service method to load students

@@ -47,7 +47,9 @@ public class DashboardController {
 
     @FXML
     public void initialize() {
-        bemVindoLabel.setText("Bem‑vindo, " + alunoLogado.getAluno().getNome() + "!");
+        String nome = alunoLogado.getAluno().getNome().trim();
+        String spacesToCenter = " ".repeat(nome.length()+ 3);
+        bemVindoLabel.setText("Bem‑vindo, " + alunoLogado.getAluno().getNome().trim() + "!" + spacesToCenter);
 
         // Executa o carregamento dos dados após renderizar o cabeçalho
         Platform.runLater(() -> {

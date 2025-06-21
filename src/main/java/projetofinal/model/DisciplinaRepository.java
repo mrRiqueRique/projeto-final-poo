@@ -19,6 +19,14 @@ public class DisciplinaRepository {
         return instancia;
     }
 
+    public List<Disciplina> getDisciplinasPorAluno(String raAluno) {
+        return service.getDiciplinasDoAluno(raAluno);
+    }
+
+    public Disciplina getDisciplina(String codigoDisciplina) {
+        return this.disciplinas.stream().filter(s -> s.getCodigo().equals(codigoDisciplina)).findFirst().orElse(null);
+    }
+
     public List<Disciplina> getDisciplinas() {
         return this.disciplinas;
     }

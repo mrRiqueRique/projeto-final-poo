@@ -10,17 +10,27 @@ import java.util.List;
 
 public class AlunoLogado {
     private static AlunoLogado alunoLogado;
+    private AlunoRepository alunoRepository;
+    private DisciplinaRepository disciplinaRepository;
+    private AulasRepository aulasRepository;
+    private ProvaRepository provaRepository;
+    private TodoItemRepository todoItemRepository;
+    private TrabalhoRepository trabalhoRepository;
+
     private Aluno aluno;
     private List<MetodoDeAvaliacao> avaliacoes;
-    private AlunoRepository alunoRepository;
     private Service service;
-    private AulasRepository aulasRepository;
-    private List<Aula> aulasALuno;
+    private TodoList todoList;
+    private List<Aula> aulas;
 
     private AlunoLogado() {
         try {
             this.aulasRepository = AulasRepository.getInstancia();
-            this.alunoRepository = AlunoRepository.getInstancia(); // Use AlunoRepository
+            this.alunoRepository = AlunoRepository.getInstancia();
+            this.disciplinaRepository = DisciplinaRepository.getInstancia();
+            this.provaRepository = ProvaRepository.getInstancia();
+            this.trabalhoRepository = TrabalhoRepository.getInstancia();
+            this.todoItemRepository = TodoItemRepository.getInstancia();
             this.service = new Service();
         } catch (Exception e) {
             System.err.println("Erro ao inicializar AlunoRepository: " + e.getMessage());
@@ -42,20 +52,25 @@ public class AlunoLogado {
         alunoLogado = null;
     }
 
-    public void logarAluno(String ra) {
-        this.aluno = alunoRepository.getAlunos().stream().filter(a -> a.getRa().equals(ra)).findFirst().orElse(null); // Fetch the student from AlunoRepository
-        this.aluno.setTodoList(service.getTodoListAluno(ra));
-        List<Disciplina> disciplinas = service.getDiciplinasDoAluno(ra);
-        for (Disciplina disciplina : disciplinas)
-            this.aluno.cadastrarDisciplina(disciplina);
-
-        this.avaliacoes = new ArrayList<>(service.getAvaliacoesAluno(ra));
-        this.avaliacoes.addAll(service.getTrabalhos());
-        this.aulasALuno = carregarAulas();
-
-        if (this.aluno == null) {
-            System.out.println("Aluno não encontrado.");
+    public Boolean logarAluno(String ra, String senha) {
+        this.aluno = alunoRepository.getAlunoPorRa(ra);
+        if (this.aluno == null) return false;
+        if (!this.aluno.getSenha().equals(senha.trim())) {
+            System.out.println("Senha incorreta. " + this.aluno.getSenha() + " " + senha);
+            return false;
         }
+
+
+        this.aluno.setTodoList(todoItemRepository.getTodoListPorAluno(ra));
+        this.aluno.setDisciplinas(this.disciplinaRepository.getDisciplinasPorAluno(ra));
+        this.avaliacoes = new ArrayList<>();
+        for (Disciplina disciplina : this.aluno.getDisciplinas()) {
+            this.aulas = aulasRepository.listarAulasPorDisciplina(disciplina.getCodigo());
+            this.avaliacoes.addAll(provaRepository.getProvasPorDisciplina(disciplina.getCodigo()));
+            this.avaliacoes.addAll(trabalhoRepository.getTrabalhosPorDisciplina(disciplina.getCodigo()));
+        }
+
+        return true;
     }
 
     public List<MetodoDeAvaliacao> getAvaliacoes() {
@@ -118,7 +133,7 @@ public class AlunoLogado {
     }
 
     public List<Aula> getAulas() {
-        return this.aulasALuno;
+        return this.aulas;
     }
 
     public Task<List<TodoItem>> getTodoItensUrgentes() {
@@ -136,5 +151,15 @@ public class AlunoLogado {
         if (aulas == null) return new ArrayList<>();
 
         return aulas.stream().filter(aula -> DiaSemanaRepository.traduzir(aula.getDiaSemana()) == hoje).toList();
+    }
+
+    public void cadastrarTodoItem(String nome, String codigoDisciplina, String nomeAvaliacao, String data, String prioridade) {
+        Disciplina disciplina = disciplinaRepository.getDisciplina(codigoDisciplina);
+        Prova prova = provaRepository.getProva(codigoDisciplina, nomeAvaliacao);
+        Trabalho trabalho = trabalhoRepository.getTrabalho(codigoDisciplina, nomeAvaliacao);
+        MetodoDeAvaliacao metodoDeAvaliacao = (prova != null) ? prova : trabalho;
+        TodoItem todoItem = new TodoItem(this.aluno.getRa(), nome, disciplina, metodoDeAvaliacao, prioridade, data);
+        this.aluno.getTodoList().adicionarItem(todoItem);
+        service.adicionarTodoItem(this.getAluno().getRa(), todoItem);
     }
 }
