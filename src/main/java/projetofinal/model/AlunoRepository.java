@@ -1,16 +1,11 @@
 package projetofinal.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class AlunoRepository {
+public class AlunoRepository extends Repository<Aluno> {
     private static AlunoRepository instancia;
-    private List<Aluno> alunos = new ArrayList<>();
-    private Service service;
 
     private AlunoRepository() {
+        super();
         try {
-            this.service = new Service();
             carregarAlunosDoSheets();
         } catch (Exception e) {
             System.err.println("Erro ao inicializar AlunoRepository: " + e.getMessage());
@@ -24,12 +19,8 @@ public class AlunoRepository {
         return instancia;
     }
 
-    public List<Aluno> getAlunos() {
-        return this.alunos;
-    }
-
     public Aluno getAlunoPorRa(String ra) {
-        return alunos.stream()
+        return getItems().stream()
                 .filter(a -> a.getRa().equals(ra))
                 .findFirst()
                 .orElse(null);
@@ -37,7 +28,7 @@ public class AlunoRepository {
 
     private void carregarAlunosDoSheets() {
         try {
-            alunos = service.getAlunos(); // Use the Service method to load students
+            setItems(service.getAlunos()); // Use the Service method to load students
         } catch (Exception e) {
             System.err.println("Erro ao carregar alunos do Sheets: " + e.getMessage());
         }
@@ -45,25 +36,17 @@ public class AlunoRepository {
 
     public void adicionarAluno(Aluno aluno) {
         try {
-            alunos.add(aluno);
+            addItem(aluno);
             service.adicionarAluno(aluno); // Use a Service method to add a student
         } catch (Exception e) {
             System.err.println("Erro ao adicionar aluno: " + e.getMessage());
         }
     }
 
-
-    public Aluno buscarAlunoPorRa(String ra) {
-        return alunos.stream()
-                .filter(a -> a.getRa().equals(ra))
-                .findFirst()
-                .orElse(null);
-    }
-
     public void removerAluno(String ra) {
-        Aluno aluno = buscarAlunoPorRa(ra);
+        Aluno aluno = getAlunoPorRa(ra);
         if (aluno != null) {
-            alunos.remove(aluno);
+            removeItem(aluno);
             service.deletarAluno(aluno); // Use a Service method to remove a student
         } else {
             System.out.println("Aluno não encontrado.");
@@ -71,10 +54,10 @@ public class AlunoRepository {
     }
 
     public void atualizarAluno(Aluno alunoVelho, Aluno alunoNovo) {
-        if (alunoVelho == null)
+        if (alunoVelho == null) {
             System.out.println("Aluno não encontrado.");
-
-        service.atualizarAluno(alunoVelho, alunoNovo);
-
+        } else {
+            service.atualizarAluno(alunoVelho, alunoNovo);
+        }
     }
 }

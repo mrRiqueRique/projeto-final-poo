@@ -183,12 +183,13 @@ public class DashboardController {
         box.getChildren().addAll(chk, textos, spacer);
 
         /* animação quando concluir */
-        chk.selectedProperty().addListener((obs, o, marcado) -> {
+        chk.selectedProperty().addListener((obs, oldVal, marcado) -> {
             item.setConcluido(marcado);
             if (marcado) {
+                alunoLogado.concluirTodoItem(item);
                 FadeTransition ft = new FadeTransition(Duration.millis(250), box);
-                ft.setFromValue(1);
-                ft.setToValue(0);
+                ft.setFromValue(1.0);
+                ft.setToValue(0.0);
                 ft.setOnFinished(e -> tarefasUrgentesContainer.getChildren().remove(box));
                 ft.play();
             }

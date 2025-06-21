@@ -2,13 +2,11 @@ package projetofinal.model;
 
 import java.util.List;
 
-public class ProvaRepository {
+public class ProvaRepository extends Repository<Prova> {
     private static ProvaRepository instancia;
-    private List<Prova> provas;
-    private Service service;
 
     private ProvaRepository() {
-        service = new Service();
+        super();
         carregarProvas();
     }
 
@@ -19,26 +17,22 @@ public class ProvaRepository {
         return instancia;
     }
 
-    public List<Prova> getProvas() {
-        return this.provas;
-    }
-
     public Prova getProva(String codigoDisciplina, String nomeAvaliacao) {
-        return this.provas.stream()
+        return getItems().stream()
                 .filter(prova -> prova.getCodigoDisciplina().equals(codigoDisciplina) && prova.getNome().equals(nomeAvaliacao))
                 .findFirst()
                 .orElse(null);
     }
 
     public List<Prova> getProvasPorDisciplina(String codigoDisciplina) {
-        return this.provas.stream()
+        return getItems().stream()
                 .filter(prova -> prova.getCodigoDisciplina().equals(codigoDisciplina))
                 .toList();
     }
 
     private void carregarProvas() {
         try {
-            provas = service.getProvas();
+            setItems(service.getProvas());
         } catch (Exception e) {
             System.err.println("Erro ao carregar provas: " + e.getMessage());
         }
@@ -47,7 +41,7 @@ public class ProvaRepository {
     public void adicionarProva(Prova prova, String codigoDisciplina) {
         try {
             service.adicionarProva(prova, codigoDisciplina);
-            provas.add(prova);
+            addItem(prova);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar prova: " + e.getMessage());
         }

@@ -2,13 +2,11 @@ package projetofinal.model;
 
 import java.util.List;
 
-public class TrabalhoRepository {
+public class TrabalhoRepository extends Repository<Trabalho> {
     private static TrabalhoRepository instancia;
-    private Service service;
-    private List<Trabalho> trabalhos;
 
     private TrabalhoRepository() {
-        service = new Service();
+        super();
         carregarTrabalhos();
     }
 
@@ -20,22 +18,26 @@ public class TrabalhoRepository {
     }
 
     private void carregarTrabalhos() {
-        this.trabalhos = service.getTrabalhos();
+        try {
+            setItems(service.getTrabalhos());
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar trabalhos: " + e.getMessage());
+        }
     }
 
     public List<Trabalho> getTrabalhos() {
-        return this.trabalhos;
+        return getItems();
     }
 
     public Trabalho getTrabalho(String codigoDisciplina, String nomeTrabalho) {
-        return this.trabalhos.stream()
+        return getItems().stream()
                 .filter(trabalho -> trabalho.getCodigoDisciplina().equals(codigoDisciplina) && trabalho.getNome().equals(nomeTrabalho))
                 .findFirst()
                 .orElse(null);
     }
 
     public List<Trabalho> getTrabalhosPorDisciplina(String codigoDisciplina) {
-        return this.trabalhos.stream()
+        return getItems().stream()
                 .filter(trabalho -> trabalho.getCodigoDisciplina().equals(codigoDisciplina))
                 .toList();
     }
@@ -43,12 +45,4 @@ public class TrabalhoRepository {
     public List<Trabalho> getTrabalhoPorDisciplina(String codigoDisciplina) {
         return service.getTrabalhosPorDisciplina(codigoDisciplina);
     }
-
-//    public void adicionarTrabalhoDisciplina(String codigoDisciplina, Trabalho trabalho) {
-//        service.adicionarTrabalhoDisciplina(codigoDisciplina, trabalho);
-//    }
-//
-//    public void lancarNotaTrabalho(String codigoDisciplina, String codigoTrabalho, double nota) {
-//        service.lancarNotaTrabalho(codigoDisciplina, codigoTrabalho, nota);
-//    }
 }
