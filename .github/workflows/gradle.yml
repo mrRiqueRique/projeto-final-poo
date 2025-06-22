@@ -37,11 +37,11 @@ jobs:
       - name: Set installer type
         run: |
           if [[ "${{ runner.os }}" == "Windows" ]]; then
-            echo "INSTALLER_TYPE=exe" >> $GITHUB_ENV
+          echo "INSTALLER_TYPE=exe" >> $GITHUB_ENV
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
-            echo "INSTALLER_TYPE=pkg" >> $GITHUB_ENV
+          echo "INSTALLER_TYPE=pkg" >> $GITHUB_ENV
           else
-            echo "INSTALLER_TYPE=app-image" >> $GITHUB_ENV
+          echo "INSTALLER_TYPE=deb" >> $GITHUB_ENV  # usar 'deb' para Ubuntu/Linux
           fi
         shell: bash
 
