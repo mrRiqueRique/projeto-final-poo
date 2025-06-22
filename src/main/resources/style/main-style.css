@@ -1,0 +1,13 @@
+/* Estilo para o botão de sair circular */
+.botao-sair {
+   -fx-background-radius: 50;
+   -fx-background-color: #C0C3E5;
+   -fx-min-width: 30px;
+   -fx-min-height: 30px;
+}
+
+/* Efeito ao passar o mouse por cima do botão */
+.botao-sair:hover {
+   -fx-cursor: hand;
+   -fx-background-color: #A8ACC4; /* Um pouco mais escuro */
+}

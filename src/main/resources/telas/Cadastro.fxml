@@ -1,55 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import javafx.scene.control.Button?>
 
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="projetofinal.ui.CadastroController">
-<top>
-    <StackPane>
-        <padding>
-            <Insets top="200" right="0" bottom="10" left="0"/>
-        </padding>
-        <Button fx:id="voltarButton" styleClass="botao-voltar" onAction="#handleVoltar"
-                StackPane.alignment="TOP_LEFT" translateX="400">
-            <graphic>
-                <FontIcon iconLiteral="fas-arrow-left" iconSize="40" iconColor="#87A5EF"/>
-            </graphic>
-        </Button>
-
-        <Label fx:id="cadastroLabel" text="Cadastro" StackPane.alignment="CENTER" style="-fx-text-fill: #395BC7;">
-            <font>
-                <Font size="24"/>
-            </font>
-        </Label>
-    </StackPane>
-</top>
-
-    <center>
-        <VBox spacing="20" alignment="TOP_CENTER">
+<!-- Tela de Cadastro do Usuário -->
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="projetofinal.ui.CadastroController">
+    
+    <!-- Topo da tela com botão de voltar e título -->
+    <top>
+        <StackPane>
             <padding>
-                <Insets top="20" right="0" bottom="0" left="0"/>
+                <Insets top="100" right="0" bottom="10" left="0" />
             </padding>
 
-            <TextField
-                fx:id="nomeField"
-                promptText="Inserir usuário"
-                maxWidth="300"
-                style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;"
-            />
+            <!-- Botão de voltar posicionado -->
+            <AnchorPane prefHeight="50">
+                <Button fx:id="voltarButton" styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="15" 
+        style="-fx-background-color: transparent;">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-arrow-left" iconSize="35" iconColor="#87A5EF" />
+                    </graphic>
+                </Button>
+            </AnchorPane>
 
-            <PasswordField
-                fx:id="senhaField"
-                promptText="Inserir senha"
-                maxWidth="300"
-                style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;"
-            />
+            <!-- Título "Cadastro" centralizado -->
+            <Label fx:id="cadastroLabel" style="-fx-text-fill: #395BC7;" text="Cadastro" StackPane.alignment="CENTER">
+                <font>
+                    <Font size="24" />
+                </font>
+            </Label>
+        </StackPane>
+    </top>
+
+    <!-- Conteúdo central da tela de cadastro -->
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="15">
+            <padding>
+                <Insets bottom="0" left="0" right="0" top="10" />
+            </padding>
+
+            <!-- Visualização da foto de perfil -->
+            <ImageView fx:id="fotoPreview" fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true" />
+            
+            <!-- Botão para fazer upload da foto -->
+            <Button onAction="#handleSubirFoto" text="Subir Foto" styleClass="botao-personalizado" maxWidth="150"/>
+            
+            <!-- Campo de texto para o RA do aluno -->    
+            <TextField fx:id="raField" maxWidth="300" promptText="Inserir RA (Usuário)" style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;" />
            
-            <Button text="Criar Conta" styleClass="botao-personalizado" maxWidth="200" onAction="#handleCriarConta"/>
-            <Label fx:id="messageLabel" textFill="red"/>
+            <!-- Campo de texto para o nome completo do aluno -->          
+            <TextField fx:id="nomeCompletoField" maxWidth="300" promptText="Inserir nome completo" style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;" />
+            
+            <!-- Espaço para colocar o curso e CR do aluno -->  
+            <HBox alignment="CENTER" spacing="10" maxWidth="300">
+
+                 <!-- Campo para o curso do aluno -->
+                 <TextField fx:id="cursoField" promptText="Inserir curso" style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;" HBox.hgrow="ALWAYS" />
+                 <!-- Campo para o CR (Coeficiente de Rendimento) -->
+                 <TextField fx:id="crField" promptText="CR" style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;" prefWidth="80" />
+            </HBox>
+
+            <!-- Campo para a senha do aluno -->
+            <PasswordField fx:id="senhaField" maxWidth="300" promptText="Inserir senha" style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;" />
+            
+            <!-- Botão para criar conta -->  
+            <Button onAction="#handleCriarConta" text="Criar Conta" styleClass="botao-personalizado" maxWidth="200" VBox.vgrow="NEVER">
+                <VBox.margin>
+                    <Insets top="10.0" />
+                </VBox.margin>
+            </Button>
+
+            <!-- Rótulo para exibir mensagens de erro ou confirmação -->
+            <Label fx:id="messageLabel" textFill="red" />
         </VBox>
     </center>
 

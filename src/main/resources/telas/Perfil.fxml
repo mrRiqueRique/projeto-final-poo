@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<!-- Tela de Perfil do Usuário -->
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="projetofinal.ui.PerfilController"
+            style="-fx-background-color: white;">
+
+    <!-- Cabeçalho superior com título, menu e botão de sair -->
+    <top>
+        <VBox spacing="0">
+
+            <!-- Barra azul com título e ações de menu/sair -->
+            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="85">
+                <padding>
+                    <Insets top="10" right="20" bottom="10" left="20" />
+                </padding>
+
+                <!-- Título do sistema -->
+                <Label text="Gerenciador de Estudos"
+                       style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;" />
+
+                <!-- Espaço expansível entre os elementos -->
+                <Region HBox.hgrow="ALWAYS" />
+
+                <!-- Menu de navegação com opções de tela -->
+                <MenuButton fx:id="menuButton"
+                            style="-fx-background-radius: 50; -fx-background-color: #C0C3E5; -fx-min-width: 30px; -fx-min-height: 30px;">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-bars" iconSize="15" iconColor="#6A7FC1"/>
+                    </graphic>
+                    <items>
+                        <MenuItem text="Dashboard" onAction="#irParaDashboard" />
+                        <MenuItem text="Disciplinas" onAction="#irParaDisciplinas" />
+                        <MenuItem text="Aulas" onAction="#irParaAulas" />
+                        <MenuItem text="Tarefas" onAction="#irParaTarefas" />
+                        <MenuItem text="Cadastrar Disciplina" onAction="#irParaCadastrarDisciplina" />
+                    </items>
+                </MenuButton>
+
+                <!-- Botão de sair com ícone -->
+                <Button fx:id="sairButton" onAction="#handleSair"
+                        style="-fx-background-radius: 50; -fx-background-color: #C0C3E5; -fx-min-width: 30px; -fx-min-height: 30px;">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-sign-out-alt" iconSize="15" iconColor="#6A7FC1"/>
+                    </graphic>
+                </Button>
+            </HBox>
+
+            <!-- Botão de voltar posicionado -->
+            <AnchorPane prefHeight="50">
+                <Button fx:id="voltarButton" styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="15" 
+        style="-fx-background-color: transparent;">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-arrow-left" iconSize="35" iconColor="#87A5EF" />
+                    </graphic>
+                </Button>
+            </AnchorPane>
+
+            <!-- Título central "Perfil" -->
+            <StackPane prefHeight="30">
+                <Label text="Perfil"
+                       style="-fx-font-weight: bold; -fx-font-size: 40px; -fx-text-fill: #395BC7;" />
+            </StackPane>
+        </VBox>
+    </top>
+
+    <!-- Conteúdo central do perfil do usuário -->
+    <center>
+        <VBox spacing="20" alignment="TOP_CENTER">
+            <padding>
+                <Insets top="20" right="50" bottom="20" left="50" />
+            </padding>
+
+            <!-- Círculo representando imagem do perfil -->
+            <Circle fx:id="perfilImage" fill="transparent" radius="60" stroke="#D3D3D3" strokeWidth="2" />
+
+            <!-- Informações do usuário: nome, curso e CR -->
+            <VBox alignment="CENTER" spacing="5">
+                <Label fx:id="nomeText" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="[Nome]" />
+                <Label fx:id="cursoText" style="-fx-font-size: 16px;" text="[Curso]" />
+                <Label fx:id="crText" style="-fx-font-size: 16px;" text="[CR]" />
+            </VBox>
+
+            <!-- Título da seção de disciplinas atuais -->
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Disciplinas Atuais" />
+
+            <!-- Scroll contendo as disciplinas atuais -->
+            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" prefHeight="250">
+                <StackPane alignment="TOP_CENTER">
+                    <VBox fx:id="disciplinasAtuaisVBox" alignment="CENTER_LEFT" spacing="8" maxWidth="500"
+                          style="-fx-border-color: #D3D3D3; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-color: white; -fx-padding: 10;" />
+                </StackPane>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+    <!-- Rodapé com botão de edição do perfil -->
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-padding: 20;">
+            <Button fx:id="editarPerfilButton" text="Editar Perfil" styleClass="botao-personalizado" onAction="#handleEditarPerfil"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

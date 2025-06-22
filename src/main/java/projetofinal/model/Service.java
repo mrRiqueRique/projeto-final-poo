@@ -17,10 +17,26 @@ public class Service {
     // CRUD
     public List<Aluno> getAlunos() {
         try {
-            List<List<Object>> dataAluno = sheetsFacade.lerDados("Aluno", "A", "D");
+            // --> Alterado para "E" para incluir a coluna da foto. (Lari)
+            List<List<Object>> dataAluno = sheetsFacade.lerDados("Aluno", "A", "E");
             List<Aluno> alunos = new ArrayList<>();
             for (List<Object> linha : dataAluno) {
-                alunos.add(new Aluno(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString()));
+                if (linha.isEmpty()) continue; // Pula linhas vazias
+                
+                // Lógica de criação do aluno para incluir CR e Foto.
+                Aluno aluno = new Aluno(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString());
+
+                // Adiciona o CR se a coluna existir
+                if (linha.size() > 3 && linha.get(3) != null && !linha.get(3).toString().isEmpty()) {
+                    aluno.setCR(Double.parseDouble(linha.get(3).toString()));
+                }
+                
+                // Adiciona o caminho da foto se a coluna existir
+                if (linha.size() > 4 && linha.get(4) != null) {
+                    aluno.setCaminhoFoto(linha.get(4).toString());
+                }
+
+                alunos.add(aluno);
             }
             return alunos;
         } catch (Exception e) {
@@ -31,9 +47,21 @@ public class Service {
 
     public Aluno getAluno(String ra) {
         try {
-            List<Object> dataAluno = sheetsFacade.lerDadosLinhaPorId("Aluno", "A", "D", ra);
+            // --> Alterado para "E" para incluir a coluna da foto. (Lari)
+            List<Object> dataAluno = sheetsFacade.lerDadosLinhaPorId("Aluno", "A", "E", ra);
             if (dataAluno.isEmpty()) return null;
+            
+            // --> Lógica de criação do aluno melhorada para incluir CR e Foto. (Lari)
             Aluno aluno = new Aluno(dataAluno.get(0).toString(), dataAluno.get(1).toString(), dataAluno.get(2).toString());
+
+            if (dataAluno.size() > 3 && dataAluno.get(3) != null && !dataAluno.get(3).toString().isEmpty()) {
+                aluno.setCR(Double.parseDouble(dataAluno.get(3).toString()));
+            }
+            
+            if (dataAluno.size() > 4 && dataAluno.get(4) != null) {
+                aluno.setCaminhoFoto(dataAluno.get(4).toString());
+            }
+
             return aluno;
         } catch (Exception e) {
             System.err.println("Erro ao obter aluno: " + e.getMessage());
@@ -186,9 +214,14 @@ public class Service {
 
     public List<Trabalho> getTrabalhosPorDisciplina(String codigoDisciplina) {
         try {
+            // Aqui estava lendo até a coluna E (olhar comentário da linha 224)
+            // Correção da linha abaixo pdoe ser:
+            // List<List<Object>> dataTrabalho = sheetsFacade.lerDados("Trabalho", "A", "F");
             List<List<Object>> dataTrabalho = sheetsFacade.lerDados("Trabalho", "A", "E");
             List<Trabalho> trabalhos = new ArrayList<>();
             for (List<Object> linha : dataTrabalho) {
+
+                // Mas aqui estamos tentando acessar a coluna F (índice 5)
                 if (linha.get(5).toString().equals(codigoDisciplina)) { // Filtra pelo código da disciplina
                     trabalhos.add(new Trabalho(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Boolean.parseBoolean(linha.get(3).toString())));
                 }
@@ -304,8 +337,18 @@ public class Service {
 
     public void adicionarAluno(Aluno aluno) {
         try {
-            List<List<Object>> novoAluno = List.of(List.of(aluno.getRa(), aluno.getNome(), aluno.getCurso(), aluno.getCR()));
-            sheetsFacade.escreverDados("Aluno", "A", "D", novoAluno);
+            // --> Adicionado o 'getCaminhoFoto' na lista de dados a serem escritos. (Lari)
+            List<List<Object>> novoAluno = List.of(
+                List.of(
+                    aluno.getRa(), 
+                    aluno.getNome(), 
+                    aluno.getCurso(), 
+                    aluno.getCR(), 
+                    aluno.getCaminhoFoto() != null ? aluno.getCaminhoFoto() : "" // Garante que não seja nulo
+                )
+            );
+            // --> Alterado para "E" para incluir a nova coluna. (Lari)
+            sheetsFacade.escreverDados("Aluno", "A", "E", novoAluno);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar aluno: " + e.getMessage());
         }
@@ -378,11 +421,24 @@ public class Service {
 
     public void atualizarAluno(Aluno alunoVelho, Aluno alunoNovo) {
         try {
-            List<List<Object>> dadosAluno = sheetsFacade.lerDados("Aluno", "A", "D");
-            List<Object> linhaNova = new ArrayList<>(List.of(alunoNovo.getRa(), alunoNovo.getNome(), alunoNovo.getCurso(), alunoNovo.getCR()));
+            // --> Alterado para "E" para ler todas as colunas do aluno. (Lari)
+            List<List<Object>> dadosAluno = sheetsFacade.lerDados("Aluno", "A", "E");
+
+            // --> Adicionado o 'getCaminhoFoto' na nova linha de dados. (Lari)
+            List<Object> linhaNova = new ArrayList<>(
+                List.of(
+                    alunoNovo.getRa(), 
+                    alunoNovo.getNome(), 
+                    alunoNovo.getCurso(), 
+                    alunoNovo.getCR(),
+                    alunoNovo.getCaminhoFoto() != null ? alunoNovo.getCaminhoFoto() : ""
+                )
+            );
+
             for (List<Object> linha : dadosAluno) {
                 if (linha.get(0).toString().equals(alunoVelho.getRa())) {
-                    sheetsFacade.atualizarDados("Aluno", "A", "D", List.of(linha), List.of(linhaNova));
+                    // --> Alterado para "E" para atualizar o intervalo correto. (Lari)
+                    sheetsFacade.atualizarDados("Aluno", "A", "E", List.of(linha), List.of(linhaNova));
                     return;
                 }
             }
@@ -511,7 +567,8 @@ public class Service {
             for (int index = 0; index < dadosAluno.size(); index++) {
                 Aluno alunoAtual = dadosAluno.get(index);
                 if (alunoAtual.getRa().equals(aluno.getRa())) {
-                    sheetsFacade.deletarDados("Aluno", "A", "D", index + 2); // +2 para pular o cabeçalho e ajustar o índice
+                    // --> Alterado para "E" para garantir que a linha inteira seja considerada (Lari)
+                    sheetsFacade.deletarDados("Aluno", "A", "E", index + 2); // +2 para pular o cabeçalho e ajustar o índice
                     return;
                 }
             }
