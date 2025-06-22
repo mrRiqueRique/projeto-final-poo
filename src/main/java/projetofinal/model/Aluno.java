@@ -11,6 +11,7 @@ public class Aluno {
     private String ra;
     private String curso;
     private double CR;
+    private String caminhoFoto;
     private List<Disciplina> disciplinas;
     private TodoList todoList;
 
@@ -41,6 +42,10 @@ public class Aluno {
         return this.todoList;
     }
 
+    public String getCaminhoFoto() {
+        return this.caminhoFoto;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -56,6 +61,10 @@ public class Aluno {
     public void setTodoList(TodoList todoList) {
         this.todoList = todoList;
     }
+
+    public void setCaminhoFoto(String caminhoFoto) {
+        this.caminhoFoto = caminhoFoto;
+    }    
 
     public void cadastrarDisciplina(Disciplina disciplina) {
         this.disciplinas.add(disciplina);

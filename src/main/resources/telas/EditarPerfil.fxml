@@ -4,20 +4,22 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<!-- Tela de Perfil do Usuário -->
+<!-- Tela de Editar Perfil do Usuário -->
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="projetofinal.ui.EditarPerfilController"
             style="-fx-background-color: white;">
 
-    <!-- Cabeçalho superior com título -->
+ <!-- Cabeçalho superior com título -->
     <top>
         <VBox spacing="0">
 
@@ -33,12 +35,13 @@
                 
                 <!-- Espaço expansível entre os elementos -->
                 <Region HBox.hgrow="ALWAYS" />
-                </HBox>
+
+            </HBox>
 
             <!-- Botão de voltar posicionado -->
             <AnchorPane prefHeight="50">
-                <Button fx:id="voltarButton" styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="15" 
-        style="-fx-background-color: transparent;">
+                <Button fx:id="voltarButton" styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="15"
+                        style="-fx-background-color: transparent;">
                     <graphic>
                         <FontIcon iconLiteral="fas-arrow-left" iconSize="35" iconColor="#87A5EF" />
                     </graphic>
@@ -47,42 +50,48 @@
 
             <!-- Título central "Editar Perfil" -->
             <StackPane prefHeight="30">
-                <Label text="Editar Perfil"
+                <Label fx:id="editarPerfilLabel" text="Editar Perfil"
                        style="-fx-font-weight: bold; -fx-font-size: 40px; -fx-text-fill: #395BC7;" />
             </StackPane>
         </VBox>
     </top>
 
-    <!-- Conteúdo central para editar perfil do usuário -->
+    <!-- Conteúdo central do editar perfil do usuário -->
     <center>
-        <VBox spacing="20" alignment="TOP_CENTER" maxWidth="500">
+        <VBox alignment="TOP_CENTER" spacing="15" maxWidth="500">
             <padding>
-                <Insets top="40" right="50" bottom="20" left="50" />
+                <Insets top="10" right="50" bottom="20" left="50" />
             </padding>
 
-            <!-- Espaço para editar o nome do aluno-->
-            <Label text="Nome Completo" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
-            <TextField fx:id="nomeTextField" promptText="Insira seu nome completo" prefHeight="50"
-                style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8; -fx-font-size: 16px; -fx-border-color: #d3d3d3;"/>
+            <!-- Visualização da foto de perfil -->
+            <ImageView fx:id="fotoPreview" fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true" />
+            
+            <!-- Botão para alterar a foto -->
+            <Button fx:id="alterarFotoButton" onAction="#handleAlterarFoto" text="Alterar Foto" styleClass="botao-personalizado" maxWidth="150"/>
+            
+            <!-- Campo de texto para o nome do usuário -->
+            <TextField fx:id="nomeTextField" maxWidth="300" promptText="Nome completo" 
+                       style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;" />
 
-            <!-- Espaço para editar o curso do aluno-->
-            <Label text="Curso" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
-            <TextField fx:id="cursoTextField" promptText="Insira seu curso" prefHeight="50"
-                style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8; -fx-font-size: 16px; -fx-border-color: #d3d3d3;"/>
+            <!-- Linha com campos para curso e CR -->
+            <HBox alignment="CENTER" spacing="10" maxWidth="300">
+                <!-- Campo para o curso -->
+                <TextField fx:id="cursoTextField" promptText="Curso" 
+                           style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;" HBox.hgrow="ALWAYS" />
+                <!-- Campo para o CR (Coeficiente de Rendimento) -->
+                <TextField fx:id="crTextField" promptText="CR" 
+                           style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8;" prefWidth="80" />
+            </HBox>
 
-            <!-- Espaço para editar o CR do aluno-->
-            <Label text="CR (Coeficiente de Rendimento)" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
-            <TextField fx:id="crTextField" promptText="Insira seu CR" prefHeight="50"
-                style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-padding: 8; -fx-font-size: 16px; -fx-border-color: #d3d3d3;"/>
-
+            <!-- Botão para salvar alterações feitas no perfil -->
+            <Button fx:id="salvarButton" onAction="#handleSalvar" text="Salvar Alterações" styleClass="botao-personalizado" maxWidth="200">
+                <VBox.margin>
+                    <Insets top="10.0" />
+                </VBox.margin>
+            </Button>
+            
+            <!-- Rótulo para exibir mensagens de erro ou confirmação -->
+            <Label fx:id="messageLabel" textFill="RED" />
         </VBox>
     </center>
-
-    <!-- Rodapé com botão de salvar alterações -->
-    <bottom>
-        <HBox alignment="CENTER" style="-fx-padding: 20;">
-            <Button fx:id="salvarButton" text="Salvar Alterações" styleClass="botao-personalizado" onAction="#handleSalvar"/>
-        </HBox>
-    </bottom>
-
 </BorderPane>

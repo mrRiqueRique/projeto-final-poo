@@ -16,6 +16,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton; 
+
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
+
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -49,47 +53,75 @@ public class PerfilController {
      */
     @FXML
     public void initialize() {
+    this.alunoLogado = AlunoLogado.getInstance().getAluno();
 
-        this.alunoLogado = AlunoLogado.getInstance().getAluno();
+    if (alunoLogado != null) {
+        
+        // 1. Preenche as informações de texto do aluno
+        nomeText.setText(alunoLogado.getNome());
+        cursoText.setText(alunoLogado.getCurso());
+        crText.setText("CR: " + String.format("%.2f", alunoLogado.getCR()));
 
-        if (alunoLogado != null) {
+        // 2. Inicia a variável 'imagem' com a imagem PADRÃO.
+        // Garantimos que ela nunca será nula.
+        Image imagem = new Image(getClass().getResourceAsStream("/images/unicamp.png"));
 
-            nomeText.setText(alunoLogado.getNome());
-            cursoText.setText(alunoLogado.getCurso());
-            crText.setText("CR: " + String.format("%.2f", alunoLogado.getCR()));
-
-            // Limpa o VBox para garantir que não haja itens de uma execução anterior.
-            disciplinasAtuaisVBox.getChildren().clear();
-
-            List<Disciplina> disciplinas = alunoLogado.getDisciplinas();
-
-            if (disciplinas != null && !disciplinas.isEmpty()) {
-                // Itera sobre a lista e cria um Label para cada disciplina.
-                for (Disciplina disciplina : disciplinas) {
-                    // Cria um novo Label com o nome da disciplina
-                    Label disciplinaLabel = new Label("• " + disciplina.getNome());
-
-                    disciplinaLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333333;");
-                    disciplinaLabel.setWrapText(true); // Permite que o texto quebre a linha se for muito longo
-
-                    disciplinasAtuaisVBox.getChildren().add(disciplinaLabel);
+        // 3. Tenta carregar a foto específica do aluno para sobrescrever a padrão
+        String caminhoFoto = alunoLogado.getCaminhoFoto();
+        if (caminhoFoto != null && !caminhoFoto.isEmpty()) {
+            try {
+                Image fotoAluno = new Image(getClass().getResourceAsStream("/" + caminhoFoto));
+                // Se a imagem do aluno foi carregada sem erros, ela se torna a imagem principal
+                if (!fotoAluno.isError()) {
+                    imagem = fotoAluno;
                 }
-            } else {
-                // Caso o aluno não tenha disciplinas
-                Label nenhumaDisciplinaLabel = new Label("Nenhuma disciplina cadastrada.");
-                nenhumaDisciplinaLabel.setStyle("-fx-text-fill: #888888; -fx-font-style: italic;");
-                disciplinasAtuaisVBox.getChildren().add(nenhumaDisciplinaLabel);
+            } catch (Exception e) {
+                // Se der erro ao carregar a foto do aluno, não fazemos nada,
+                // pois a 'imagem' padrão já está carregada. Apenas registramos o erro.
+                System.err.println("Falha ao carregar imagem de perfil do aluno. Usando imagem padrão. Erro: " + e.getMessage());
             }
+        }
+        
+        // 4. Aplica a imagem final.
+        perfilImage.setFill(new ImagePattern(imagem, 0, 0, 1, 1, true));
 
+        // Limpa o VBox para garantir que não haja itens de uma execução anterior.
+        disciplinasAtuaisVBox.getChildren().clear();
+
+        List<Disciplina> disciplinas = alunoLogado.getDisciplinas();
+
+        if (disciplinas != null && !disciplinas.isEmpty()) {
+            for (Disciplina disciplina : disciplinas) {
+                Label disciplinaLabel = new Label("• " + disciplina.getNome());
+                disciplinaLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333333;");
+                disciplinaLabel.setWrapText(true);
+                disciplinasAtuaisVBox.getChildren().add(disciplinaLabel);
+            }
         } else {
-            // Caso nenhum aluno seja encontrado (ou ninguém tenha feito login)
-            nomeText.setText("[Aluno não logado]");
-            cursoText.setText("[N/A]");
-            crText.setText("[N/A]");
-            editarPerfilButton.setDisable(true);
-            System.err.println("Nenhum aluno logado no sistema. A tela de perfil não pode ser carregada corretamente.");
+            Label nenhumaDisciplinaLabel = new Label("Nenhuma disciplina cadastrada.");
+            nenhumaDisciplinaLabel.setStyle("-fx-text-fill: #888888; -fx-font-style: italic;");
+            disciplinasAtuaisVBox.getChildren().add(nenhumaDisciplinaLabel);
+        }
+
+    } else {
+        // Caso nenhum aluno seja encontrado (ou ninguém tenha feito login)
+        nomeText.setText("[Aluno não logado]");
+        cursoText.setText("[N/A]");
+        crText.setText("[N/A]");
+        editarPerfilButton.setDisable(true);
+        System.err.println("Nenhum aluno logado no sistema. A tela de perfil não pode ser carregada corretamente.");
+
+        // Carrega e exibe a imagem padrão quando não há ninguém logado.
+        try {
+            Image imagemPadrao = new Image(getClass().getResourceAsStream("/images/unicamp.png"));
+            if (!imagemPadrao.isError()) {
+                perfilImage.setFill(new ImagePattern(imagemPadrao, 0, 0, 1, 1, true));
+            }
+        } catch (Exception e) {
+            System.err.println("Falha ao carregar a imagem padrão: " + e.getMessage());
         }
     }
+}
 
     /**
      * Manipula a ação do botão "Voltar", retornando para a tela de perfil.
@@ -220,12 +252,12 @@ public class PerfilController {
         alert.setGraphic(null); // Remove o ícone padrão
 
          try {
-            DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.getStylesheets().add(
-                getClass().getResource("/style/dialog-style.css").toExternalForm());
-        } catch (Exception e) {
-            System.err.println("Erro ao carregar o CSS do diálogo: " + e.getMessage());
-        }
+             DialogPane dialogPane = alert.getDialogPane();
+             dialogPane.getStylesheets().add(
+                 getClass().getResource("/style/dialog-style.css").toExternalForm());
+         } catch (Exception e) {
+             System.err.println("Erro ao carregar o CSS do diálogo: " + e.getMessage());
+         }
 
         alert.showAndWait();
     }
