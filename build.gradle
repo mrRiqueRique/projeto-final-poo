@@ -9,7 +9,7 @@ javafx {
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
-application{
+application {
     mainClass = 'projetofinal.model.Main'
 }
 
@@ -45,4 +45,39 @@ tasks.named('test')  {
     useJUnitPlatform()
 }
 
+task createInstaller(type: Exec) {
+    dependsOn build
 
+    def osName = System.getProperty("os.name").toLowerCase()
+    def installerType = "deb" // padrão Linux
+    if (osName.contains("windows")) {
+        installerType = "exe"
+    }
+
+    def jarTask = tasks.getByName('jar')
+    def fatJarName = jarTask.archiveFileName.get() // ou archiveName
+
+    def outputDir = "$buildDir/installer"
+
+    commandLine 'jpackage',
+            '--input', "$buildDir/libs",
+            '--name', 'MeuApp',
+            '--main-jar', fatJarName,
+            '--main-class', application.mainClass.get(),
+            '--type', installerType,
+            '--dest', outputDir,
+            '--app-version', version,
+            '--icon', 'src/main/resources/icon.png'
+}
+
+jar {
+    manifest {
+        attributes('Main-Class': application.mainClass)
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
