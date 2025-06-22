@@ -34,8 +34,8 @@ jobs:
           echo "${{ secrets.GOOGLE_CREDENTIALS }}" > credentials.json
         shell: bash
 
-      - name: Build Project
-        run: ./gradlew clean build
+      - name: Build Project and Create Installer
+        run: ./gradlew clean build createInstaller -PinstallerType=${{ matrix.os == 'windows-latest' && 'exe' || matrix.os == 'ubuntu-latest' && 'deb' || 'pkg' }}
         shell: bash
 
       - name: Package with jpackage on Linux/macOS
