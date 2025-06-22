@@ -48,32 +48,27 @@ tasks.named('test')  {
 task createInstaller(type: Exec) {
     dependsOn build
 
+    def osName = System.getProperty("os.name").toLowerCase()
     def installerType = project.hasProperty("installerType") ? project.getProperty("installerType") : "app-image"
 
+    if (osName.contains("windows")) {
+        installerType = "exe"
+    }
+
     def jarTask = tasks.getByName('jar')
-    def fatJarName = jarTask.archiveFileName.get()
+    def fatJarName = jarTask.archiveFileName.get() // ou archiveName
 
     def outputDir = "$buildDir/installer"
 
-    def javafxSdkPath = System.getenv("JAVAFX_SDK") ?: ""
-
-    def commandArgs = [
-            'jpackage',
+    commandLine 'jpackage',
             '--input', "$buildDir/libs",
-            '--name', 'Gerenciador Academico',
+            '--name', 'MeuApp',
             '--main-jar', fatJarName,
             '--main-class', application.mainClass.get(),
             '--type', installerType,
             '--dest', outputDir,
             '--app-version', version,
             '--icon', 'src/main/resources/icon.png'
-    ]
-
-    if (javafxSdkPath) {
-        commandArgs += ['--module-path', javafxSdkPath, '--add-modules', 'javafx.controls,javafx.fxml']
-    }
-
-    commandLine commandArgs
 }
 
 jar {
