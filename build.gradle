@@ -44,7 +44,6 @@ tasks.named('test')  {
     useJUnitPlatform()
 }
 
-// Criar fat jar (uber jar) com todas dependências
 jar {
     manifest {
         attributes('Main-Class': application.mainClass)
@@ -55,7 +54,6 @@ jar {
     }
 }
 
-// Task para criar instalador com jpackage
 task createInstaller(type: Exec) {
     dependsOn build
 
@@ -85,11 +83,8 @@ task createInstaller(type: Exec) {
             '--icon', 'src/main/resources/icon.png'
     ]
 
-    // Só adiciona dependências no .deb
-    if (installerType == 'deb') {
-        command += ['--linux-deb-dependencies', 'libasound2,libpng16-16']
-    }
+    // OBS: Dependências do .deb devem ser instaladas manualmente no sistema
+    // Exemplo para Ubuntu/Debian: sudo apt-get install libasound2 libpng16-16
 
     commandLine command
 }
-
