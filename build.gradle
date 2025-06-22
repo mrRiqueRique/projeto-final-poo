@@ -73,7 +73,8 @@ task createInstaller(type: Exec) {
     def fatJarName = jar.archiveFileName.get()
     def outputDir = "$buildDir/installer"
 
-    commandLine 'jpackage',
+    def command = [
+            'jpackage',
             '--input', "$buildDir/libs",
             '--name', 'Gerenciador Academico',
             '--main-jar', fatJarName,
@@ -82,4 +83,13 @@ task createInstaller(type: Exec) {
             '--dest', outputDir,
             '--app-version', version,
             '--icon', 'src/main/resources/icon.png'
+    ]
+
+    // Só adiciona dependências no .deb
+    if (installerType == 'deb') {
+        command += ['--linux-deb-dependencies', 'libasound2,libpng16-16']
+    }
+
+    commandLine command
 }
+
