@@ -88,7 +88,7 @@
                     <TextField fx:id="campoFiltro" promptText="Digite o nome da tarefa..." prefWidth="454"
                                style=" -fx-cursor: hand;-fx-background-radius: 10; -fx-border-radius: 10; -fx-background-color: #f9f9f9; -fx-border-color: #cccccc; -fx-border-width: 1.2; -fx-padding: 4 10; -fx-font-family: 'Raleway'; -fx-font-size: 13px; -fx-text-fill: #2c3e50; -fx-prompt-text-fill: #a0a0a0;"/>
 
-                    <Button text="Pesquisar" onAction="#aplicarFiltro"
+                    <Button text="Filtrar" onAction="#aplicarFiltro"
                             style=" -fx-cursor: hand;-fx-background-color: #6A7FC1; -fx-text-fill: white; -fx-background-radius: 8; -fx-border-radius: 8; -fx-font-weight: bold; -fx-padding: 6 20; -fx-font-size: 13px;"/>
 
                     <Button text="Resetar" onAction="#handleResetFiltro"

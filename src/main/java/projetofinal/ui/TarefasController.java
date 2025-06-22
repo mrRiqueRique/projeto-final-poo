@@ -31,19 +31,30 @@ public class TarefasController {
 
     private AlunoLogado alunoLogado;
 
-    @FXML private VBox tarefasContainer;
-    @FXML private Region fundoModal;
-    @FXML private VBox modalContainer;
+    @FXML
+    private VBox tarefasContainer;
+    @FXML
+    private Region fundoModal;
+    @FXML
+    private VBox modalContainer;
 
-    @FXML private TextField campoNome, campoDisciplina, campoAvaliacao;
-    @FXML private DatePicker campoData;
-    @FXML private ToggleGroup prioridadeGroup;
+    @FXML
+    private TextField campoNome, campoDisciplina, campoAvaliacao;
+    @FXML
+    private DatePicker campoData;
+    @FXML
+    private ToggleGroup prioridadeGroup;
 
-    @FXML private TextField campoFiltro;
-    @FXML private ComboBox<String> filtroDisciplinas;
-    @FXML private ComboBox<String> filtroPrioridades;
-    @FXML private ComboBox<String> filtroOrdem;
-    @FXML private DatePicker filtroData;
+    @FXML
+    private TextField campoFiltro;
+    @FXML
+    private ComboBox<String> filtroDisciplinas;
+    @FXML
+    private ComboBox<String> filtroPrioridades;
+    @FXML
+    private ComboBox<String> filtroOrdem;
+    @FXML
+    private DatePicker filtroData;
 
     @FXML
     public void initialize() {
