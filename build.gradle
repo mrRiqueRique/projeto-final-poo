@@ -49,7 +49,8 @@ task createInstaller(type: Exec) {
     dependsOn build
 
     def osName = System.getProperty("os.name").toLowerCase()
-    def installerType = "deb" // padrão Linux
+    def installerType = project.hasProperty("installerType") ? project.getProperty("installerType") : "app-image"
+
     if (osName.contains("windows")) {
         installerType = "exe"
     }
