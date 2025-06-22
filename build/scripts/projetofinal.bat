@@ -13,6 +13,8 @@
 @rem See the License for the specific language governing permissions and
 @rem limitations under the License.
 @rem
+@rem SPDX-License-Identifier: Apache-2.0
+@rem
 
 @if "%DEBUG%"=="" @echo off
 @rem ##########################################################################
@@ -43,11 +45,11 @@ set JAVA_EXE=java.exe
 %JAVA_EXE% -version >NUL 2>&1
 if %ERRORLEVEL% equ 0 goto execute
 
-echo.
-echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
-echo.
-echo Please set the JAVA_HOME variable in your environment to match the
-echo location of your Java installation.
+echo. 1>&2
+echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH. 1>&2
+echo. 1>&2
+echo Please set the JAVA_HOME variable in your environment to match the 1>&2
+echo location of your Java installation. 1>&2
 
 goto fail
 
@@ -57,18 +59,18 @@ set JAVA_EXE=%JAVA_HOME%/bin/java.exe
 
 if exist "%JAVA_EXE%" goto execute
 
-echo.
-echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
-echo.
-echo Please set the JAVA_HOME variable in your environment to match the
-echo location of your Java installation.
+echo. 1>&2
+echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME% 1>&2
+echo. 1>&2
+echo Please set the JAVA_HOME variable in your environment to match the 1>&2
+echo location of your Java installation. 1>&2
 
 goto fail
 
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\projetofinal-1.0.0.jar;%APP_HOME%\lib\javafx-fxml-20-linux.jar;%APP_HOME%\lib\javafx-controls-20-linux.jar;%APP_HOME%\lib\javafx-controls-20.jar;%APP_HOME%\lib\javafx-graphics-20-linux.jar;%APP_HOME%\lib\javafx-graphics-20.jar;%APP_HOME%\lib\javafx-base-20-linux.jar;%APP_HOME%\lib\javafx-base-20.jar;%APP_HOME%\lib\ikonli-javafx-12.3.1.jar;%APP_HOME%\lib\ikonli-fontawesome5-pack-12.3.1.jar;%APP_HOME%\lib\google-http-client-jackson2-1.42.3.jar;%APP_HOME%\lib\google-auth-library-oauth2-http-1.17.0.jar;%APP_HOME%\lib\google-api-services-sheets-v4-rev20220927-2.0.0.jar;%APP_HOME%\lib\google-api-client-2.0.0.jar;%APP_HOME%\lib\google-oauth-client-jetty-1.34.1.jar;%APP_HOME%\lib\ikonli-core-12.3.1.jar;%APP_HOME%\lib\google-oauth-client-java6-1.34.1.jar;%APP_HOME%\lib\google-oauth-client-1.34.1.jar;%APP_HOME%\lib\google-http-client-gson-1.42.3.jar;%APP_HOME%\lib\google-http-client-apache-v2-1.42.1.jar;%APP_HOME%\lib\google-http-client-1.42.3.jar;%APP_HOME%\lib\jackson-core-2.13.4.jar;%APP_HOME%\lib\auto-value-annotations-1.10.1.jar;%APP_HOME%\lib\opencensus-contrib-http-util-0.31.1.jar;%APP_HOME%\lib\guava-31.1-jre.jar;%APP_HOME%\lib\jsr305-3.0.2.jar;%APP_HOME%\lib\google-auth-library-credentials-1.17.0.jar;%APP_HOME%\lib\httpclient-4.5.13.jar;%APP_HOME%\lib\httpcore-4.4.15.jar;%APP_HOME%\lib\error_prone_annotations-2.16.jar;%APP_HOME%\lib\j2objc-annotations-1.3.jar;%APP_HOME%\lib\opencensus-api-0.31.1.jar;%APP_HOME%\lib\gson-2.10.jar;%APP_HOME%\lib\failureaccess-1.0.1.jar;%APP_HOME%\lib\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;%APP_HOME%\lib\checker-qual-3.12.0.jar;%APP_HOME%\lib\commons-logging-1.2.jar;%APP_HOME%\lib\commons-codec-1.11.jar;%APP_HOME%\lib\grpc-context-1.27.2.jar
+set CLASSPATH=%APP_HOME%\lib\projetofinal-1.0-SNAPSHOT.jar;%APP_HOME%\lib\javafx-fxml-20-linux.jar;%APP_HOME%\lib\javafx-controls-20-linux.jar;%APP_HOME%\lib\javafx-controls-20.jar;%APP_HOME%\lib\javafx-graphics-20-linux.jar;%APP_HOME%\lib\javafx-graphics-20.jar;%APP_HOME%\lib\javafx-base-20-linux.jar;%APP_HOME%\lib\javafx-base-20.jar;%APP_HOME%\lib\ikonli-javafx-12.3.1.jar;%APP_HOME%\lib\ikonli-fontawesome5-pack-12.3.1.jar;%APP_HOME%\lib\google-http-client-jackson2-1.42.3.jar;%APP_HOME%\lib\google-auth-library-oauth2-http-1.17.0.jar;%APP_HOME%\lib\google-api-services-sheets-v4-rev20220927-2.0.0.jar;%APP_HOME%\lib\google-api-client-2.0.0.jar;%APP_HOME%\lib\google-oauth-client-jetty-1.34.1.jar;%APP_HOME%\lib\ikonli-core-12.3.1.jar;%APP_HOME%\lib\google-oauth-client-java6-1.34.1.jar;%APP_HOME%\lib\google-oauth-client-1.34.1.jar;%APP_HOME%\lib\google-http-client-gson-1.42.3.jar;%APP_HOME%\lib\google-http-client-apache-v2-1.42.1.jar;%APP_HOME%\lib\google-http-client-1.42.3.jar;%APP_HOME%\lib\jackson-core-2.13.4.jar;%APP_HOME%\lib\auto-value-annotations-1.10.1.jar;%APP_HOME%\lib\opencensus-contrib-http-util-0.31.1.jar;%APP_HOME%\lib\guava-31.1-jre.jar;%APP_HOME%\lib\jsr305-3.0.2.jar;%APP_HOME%\lib\google-auth-library-credentials-1.17.0.jar;%APP_HOME%\lib\httpclient-4.5.13.jar;%APP_HOME%\lib\httpcore-4.4.15.jar;%APP_HOME%\lib\error_prone_annotations-2.16.jar;%APP_HOME%\lib\j2objc-annotations-1.3.jar;%APP_HOME%\lib\opencensus-api-0.31.1.jar;%APP_HOME%\lib\gson-2.10.jar;%APP_HOME%\lib\failureaccess-1.0.1.jar;%APP_HOME%\lib\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;%APP_HOME%\lib\checker-qual-3.12.0.jar;%APP_HOME%\lib\commons-logging-1.2.jar;%APP_HOME%\lib\commons-codec-1.11.jar;%APP_HOME%\lib\grpc-context-1.27.2.jar
 
 
 @rem Execute projetofinal
