@@ -31,57 +31,26 @@ jobs:
 
       - name: Create credentials.json
         run: |
-          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > credentials.json
+          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > src/main/resources/credentials.json
         shell: bash
 
-      - name: Build Project and Create Installer
-        run: ./gradlew clean build createInstaller -PinstallerType=${{ matrix.os == 'windows-latest' && 'exe' || matrix.os == 'ubuntu-latest' && 'deb' || 'pkg' }}
-        shell: bash
-
-      - name: Package with jpackage on Linux/macOS
-        if: runner.os != 'Windows'
+      - name: Set installer type
         run: |
-          mkdir -p dist
-          JAR_NAME=$(ls build/libs/*.jar | head -n 1)
-          echo "Using jar: $JAR_NAME"
-
-          TYPE="deb"
-          if [[ "$RUNNER_OS" == "macOS" ]]; then
-            TYPE="pkg"
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            echo "INSTALLER_TYPE=exe" >> $GITHUB_ENV
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            echo "INSTALLER_TYPE=pkg" >> $GITHUB_ENV
+          else
+            echo "INSTALLER_TYPE=app-image" >> $GITHUB_ENV
           fi
-
-          jpackage \
-            --type $TYPE \
-            --input build/libs \
-            --dest dist \
-            --name MeuApp \
-            --main-jar $(basename $JAR_NAME) \
-            --main-class projetofinal.model.Main \
-            --java-options "--enable-preview" \
-            --verbose
         shell: bash
 
-      - name: Package with jpackage on Windows
-        if: runner.os == 'Windows'
-        run: |
-          mkdir dist
-          for /f "delims=" %%i in ('dir /b build\libs\*.jar') do set JAR_NAME=%%i & goto afterloop
-          :afterloop
-          echo Using jar: %JAR_NAME%
+      - name: Build and Package App
+        run: ./gradlew clean build createInstaller -PinstallerType=${{ env.INSTALLER_TYPE }}
+        shell: bash
 
-          jpackage.exe ^
-            --type exe ^
-            --input build\libs ^
-            --dest dist ^
-            --name MeuApp ^
-            --main-jar %JAR_NAME% ^
-            --main-class projetofinal.model.Main ^
-            --java-options "--enable-preview" ^
-            --verbose
-        shell: cmd
-
-      - name: Upload artifact
+      - name: Upload Installer
         uses: actions/upload-artifact@v4
         with:
           name: MeuApp-${{ matrix.os }}
-          path: dist/*
+          path: build/installer/*
