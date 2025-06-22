@@ -32,25 +32,53 @@ jobs:
       - name: Create credentials.json
         run: |
           echo "${{ secrets.GOOGLE_CREDENTIALS }}" > credentials.json
+        shell: bash
 
       - name: Build Project
         run: ./gradlew clean build
+        shell: bash
 
-      - name: Package with jpackage
+      - name: Package with jpackage on Linux/macOS
+        if: runner.os != 'Windows'
         run: |
           mkdir -p dist
+          JAR_NAME=$(ls build/libs/*.jar | head -n 1)
+          echo "Using jar: $JAR_NAME"
+
+          TYPE="deb"
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            TYPE="pkg"
+          fi
 
           jpackage \
-            --type ${{ matrix.os == 'windows-latest' && 'exe' || matrix.os == 'ubuntu-latest' && 'deb' || 'pkg' }} \
+            --type $TYPE \
             --input build/libs \
             --dest dist \
             --name MeuApp \
-            --main-jar nome-do-seu-jar.jar \
+            --main-jar $(basename $JAR_NAME) \
             --main-class projetofinal.model.Main \
             --java-options "--enable-preview" \
             --verbose
-
         shell: bash
+
+      - name: Package with jpackage on Windows
+        if: runner.os == 'Windows'
+        run: |
+          mkdir dist
+          for /f "delims=" %%i in ('dir /b build\libs\*.jar') do set JAR_NAME=%%i & goto afterloop
+          :afterloop
+          echo Using jar: %JAR_NAME%
+
+          jpackage.exe ^
+            --type exe ^
+            --input build\libs ^
+            --dest dist ^
+            --name MeuApp ^
+            --main-jar %JAR_NAME% ^
+            --main-class projetofinal.model.Main ^
+            --java-options "--enable-preview" ^
+            --verbose
+        shell: cmd
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
