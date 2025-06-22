@@ -34,23 +34,35 @@ jobs:
           echo "${{ secrets.GOOGLE_CREDENTIALS }}" > src/main/resources/credentials.json
         shell: bash
 
-      - name: Set installer type
+      - name: Build and Package App on Windows/macOS
+        if: runner.os != 'Linux'
+        run: ./gradlew clean build createInstaller -PinstallerType=${{ runner.os == 'Windows' && 'exe' || runner.os == 'macOS' && 'pkg' || 'app-image' }}
+        shell: bash
+
+      - name: Setup snapcraft on Linux
+        if: runner.os == 'Linux'
+        run: sudo snap install snapcraft --classic
+
+      - name: Create Snap launch script
+        if: runner.os == 'Linux'
         run: |
-          if [[ "${{ runner.os }}" == "Windows" ]]; then
-          echo "INSTALLER_TYPE=exe" >> $GITHUB_ENV
-          elif [[ "${{ runner.os }}" == "macOS" ]]; then
-          echo "INSTALLER_TYPE=pkg" >> $GITHUB_ENV
-          else
-          echo "INSTALLER_TYPE=deb" >> $GITHUB_ENV  # usar 'deb' para Ubuntu/Linux
-          fi
+          mkdir -p build/libs
+          cat << 'EOF' > build/libs/launch-gerenciador-academico
+          #!/bin/sh
+          exec java --module-path $SNAP/lib --add-modules javafx.controls,javafx.fxml -jar $SNAP/bin/projetofinal-1.0.0.jar
+          EOF
+          chmod +x build/libs/launch-gerenciador-academico
         shell: bash
 
-      - name: Build and Package App
-        run: ./gradlew clean build createInstaller -PinstallerType=${{ env.INSTALLER_TYPE }}
+      - name: Build Snap Package on Linux
+        if: runner.os == 'Linux'
+        run: |
+          ./gradlew clean build
+          snapcraft
         shell: bash
 
-      - name: Upload Installer
+      - name: Upload Installer or Snap Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Gerenciador-Academico-${{ matrix.os }}
-          path: build/installer/*
+          path: ${{ runner.os == 'Linux' && '*.snap' || 'build/installer/*' }}
