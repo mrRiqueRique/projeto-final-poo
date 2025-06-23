@@ -411,8 +411,8 @@ public class CadastrarDisciplinaController {
             }
 
         } catch (NumberFormatException e) {
-            //EXCEÇÕES: CAIXA VAZIA, CREDITOS NÃO É UM NÚMERO, FÓRMULA INVÁLIDA (parentesis aberto, operação inaproppriada)
-            //typeError.setText("Insira um número inteiro");
+            String styleOriginal = creditosInput.getStyle();
+            creditosInput.setStyle(styleOriginal + "; -fx-border-color: red; -fx-border-width: 3px;");
         }
     }
 

@@ -87,9 +87,7 @@ public class DisciplinasController {
 
             
             mostrarDetalhesDisciplina(d);
-            // Você pode chamar método para abrir detalhes da disciplina
-            System.out.println("Selecionada disciplina: " + d.getNome());
-            // abrirDetalhesDisciplina(d); // ex
+
         });
 
         return box;
@@ -140,12 +138,7 @@ public class DisciplinasController {
         }
         catch(IOException e){
             e.printStackTrace();
-            System.out.println("Tela de cadastrar disciplina não carregou");
         }
-                     
-
-        System.out.println("Botão 'Cadastrar Disciplina' clicado.");
-            // todo - implementar abertura de tela para cadastrar nova disciplina
     }
 
 
