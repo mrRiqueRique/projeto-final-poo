@@ -3,6 +3,7 @@ package projetofinal.model;
 public abstract class MetodoDeAvaliacao {
     private double nota;
     private String nome;
+    private String codigoDisciplina;
 
     public MetodoDeAvaliacao(String nome){
         this.nome = nome;
@@ -13,8 +14,8 @@ public abstract class MetodoDeAvaliacao {
         this.nota = nota;
     }
 
-    public void setNome() {
-        this.nome = nome;
+    public void setCodigo(String codigo){
+        this.codigoDisciplina = codigo;
     }
 
     public void setNota(double nota) {
@@ -32,4 +33,9 @@ public abstract class MetodoDeAvaliacao {
     public void lancarNota(double nota){
         this.nota = nota;
     }
+
+    public String getCodigoDisciplina(){
+        return this.codigoDisciplina;
+    }
+
 }

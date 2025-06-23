@@ -3,16 +3,42 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="projetofinal.ui.CadastrarDisciplinaController">
     <VBox>
-        <HBox prefHeight="87" style="-fx-background-color:#87A5EF;">
+        <VBox spacing="0">
+            <!-- Cabeçalho azul -->
+            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="70">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Label text=" Gerenciador de Estudos"
+                       style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
 
-            <Label text="Gerenciador de Estudos"></Label>
-        </HBox>
-        <VBox alignment="CENTER" spacing="20">
-            <Label text="Cadastro de Disciplina" style="-fx-font-size: 45px; -fx-font-weight: bold;"></Label>
+            <!-- Área da seta e título na mesma linha -->
+            <HBox alignment="CENTER" spacing="0" prefHeight="50">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <Button styleClass="botao-voltar">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-arrow-left" iconSize="30" iconColor="#87A5EF"/>
+                    </graphic>
+                </Button>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Cadastro de Disciplina" style="-fx-font-weight: bold; -fx-font-size: 40px; -fx-text-fill: #395BC7;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
 
+        <VBox alignment="CENTER" prefHeight="723" spacing="20">            
             <VBox alignment="CENTER" spacing="10" maxWidth="586">
                 <TextField
                     fx:id="nomeInput"
@@ -57,76 +83,370 @@
             <VBox alignment="CENTER" spacing="20">
                 <Label text="Aulas" style="-fx-font-size: 20px; -fx-font-weight: bold;"></Label>
                 
-                <HBox maxWidth="840" alignment="CENTER" spacing="5" prefHeight="100">
-                    <Button 
-                        prefWidth="83"
-                        prefHeight="100"
+                <HBox maxWidth="840" alignment="CENTER" spacing="5" prefHeight="140" fx:id="botoesAulas">
+                    <StackPane
+                        prefWidth="100"
+                        prefHeight="140"
                         styleClass="botao-aula"
-                        text="Segunda"
-                        onAction="#handleBotaoDia">
-                    </Button>
+                        onMouseClicked="#handleBotaoDia"
+                        fx:id="Segunda">
+                        
+                        <Label text="Segunda" fx:id="label"></Label>
+
+                        <VBox StackPane.alignment="CENTER" alignment="CENTER" spacing="10">
+                            <TextField
+                                promptText="Início"
+                                fx:id="inicio"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>
+                                
+                            <TextField
+                                promptText="Fim"
+                                fx:id="fim"
+                                maxWidth="80"
+                                visible="false"
+                                alignment="CENTER"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>                        
+                            
+                            <TextField
+                                promptText="Local"
+                                fx:id="local"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>    
+                            </VBox>
+
+                    </StackPane>
+
+                    <StackPane
+                        prefWidth="100"
+                        prefHeight="140"
+                        styleClass="botao-aula"
+                        onMouseClicked="#handleBotaoDia"
+                        fx:id="Terça">
+                        
+                        <Label text="Terça" fx:id="label"></Label>
+
+                        <VBox StackPane.alignment="CENTER" alignment="CENTER" spacing="10">
+                            <TextField
+                                promptText="Início"
+                                fx:id="inicio"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>
+                                
+                            <TextField
+                                promptText="Fim"
+                                fx:id="fim"
+                                maxWidth="80"
+                                visible="false"
+                                alignment="CENTER"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>                        
+                            
+                            <TextField
+                                promptText="Local"
+                                fx:id="local"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>    
+                            </VBox>
+
+                    </StackPane>
+
+                    <StackPane
+                        prefWidth="100"
+                        prefHeight="140"
+                        styleClass="botao-aula"
+                        onMouseClicked="#handleBotaoDia"
+                        fx:id="Quarta">
+                        
+                        <Label text="Quarta" fx:id="label"></Label>
+
+                        <VBox StackPane.alignment="CENTER" alignment="CENTER" spacing="10">
+                            <TextField
+                                promptText="Início"
+                                fx:id="inicio"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>
+                                
+                            <TextField
+                                promptText="Fim"
+                                fx:id="fim"
+                                maxWidth="80"
+                                visible="false"
+                                alignment="CENTER"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>                        
+                            
+                            <TextField
+                                promptText="Local"
+                                fx:id="local"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>    
+                            </VBox>
+
+                    </StackPane>
+
+                    <StackPane
+                        prefWidth="100"
+                        prefHeight="140"
+                        styleClass="botao-aula"
+                        onMouseClicked="#handleBotaoDia"
+                        fx:id="Quinta">
+                        
+                        <Label text="Quinta" fx:id="label"></Label>
+
+                        <VBox StackPane.alignment="CENTER" alignment="CENTER" spacing="10">
+                            <TextField
+                                promptText="Início"
+                                fx:id="inicio"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>
+                                
+                            <TextField
+                                promptText="Fim"
+                                fx:id="fim"
+                                maxWidth="80"
+                                visible="false"
+                                alignment="CENTER"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>                        
+                            
+                            <TextField
+                                promptText="Local"
+                                fx:id="local"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>    
+                            </VBox>
+
+                    </StackPane>
+
+                    <StackPane
+                        prefWidth="100"
+                        prefHeight="140"
+                        styleClass="botao-aula"
+                        onMouseClicked="#handleBotaoDia"
+                        fx:id="Sexta">
+                        
+                        <Label text="Sexta" fx:id="label"></Label>
+
+                        <VBox StackPane.alignment="CENTER" alignment="CENTER" spacing="10">
+                            <TextField
+                                promptText="Início"
+                                fx:id="inicio"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>
+                                
+                            <TextField
+                                promptText="Fim"
+                                fx:id="fim"
+                                maxWidth="80"
+                                visible="false"
+                                alignment="CENTER"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>                        
+                            
+                            <TextField
+                                promptText="Local"
+                                fx:id="local"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>    
+                            </VBox>
+
+                    </StackPane>
+
+                    <StackPane
+                        prefWidth="100"
+                        prefHeight="140"
+                        styleClass="botao-aula"
+                        onMouseClicked="#handleBotaoDia"
+                        fx:id="Sábado">
+                        
+                        <Label text="Sábado" fx:id="label"></Label>
+
+                        <VBox StackPane.alignment="CENTER" alignment="CENTER" spacing="10">
+                            <TextField
+                                promptText="Início"
+                                fx:id="inicio"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>
+                                
+                            <TextField
+                                promptText="Fim"
+                                fx:id="fim"
+                                maxWidth="80"
+                                visible="false"
+                                alignment="CENTER"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>                        
+                            
+                            <TextField
+                                promptText="Local"
+                                fx:id="local"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>    
+                            </VBox>
+
+                    </StackPane>
+
+                    <StackPane
+                        prefWidth="100"
+                        prefHeight="140"
+                        styleClass="botao-aula"
+                        onMouseClicked="#handleBotaoDia"
+                        fx:id="Domingo">
+                        
+                        <Label text="Domingo" fx:id="label"></Label>
+
+                        <VBox StackPane.alignment="CENTER" alignment="CENTER" spacing="10">
+                            <TextField
+                                promptText="Início"
+                                fx:id="inicio"
+                                visible="false"
+                                alignment="CENTER"
+                                maxWidth="80"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>
+                                
+                            <TextField
+                                promptText="Fim"
+                                fx:id="fim"
+                                maxWidth="80"
+                                visible="false"
+                                alignment="CENTER"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/>      
+                            
+                            <TextField
+                                promptText="Local"
+                                fx:id="local"
+                                maxWidth="80"
+                                visible="false"
+                                alignment="CENTER"
+                                style="-fx-background-radius: 15; -fx-border-radius: 15;"/> 
+                        </VBox>
+
+                    </StackPane>
+
                     
-                    <Button 
-                        prefWidth="83"
-                        prefHeight="100"
-                        styleClass="botao-aula"
-                        text="Terça"
-                        onAction="#handleBotaoDia">
-                    </Button>   
-
-                    <Button 
-                        prefWidth="83"
-                        prefHeight="100"
-                        styleClass="botao-aula"
-                        text="Quarta"
-                        onAction="#handleBotaoDia">
-                    </Button>  
-                    
-                    <Button 
-                        prefWidth="83"
-                        prefHeight="100"
-                        styleClass="botao-aula"
-                        text="Quinta"
-                        onAction="#handleBotaoDia">
-                    </Button> 
-
-                    <Button 
-                        prefWidth="83"
-                        prefHeight="100"
-                        styleClass="botao-aula"
-                        text="Sexta"
-                        onAction="#handleBotaoDia">
-                    </Button> 
-
-                    <Button 
-                        prefWidth="83"
-                        prefHeight="100"
-                        styleClass="botao-aula"
-                        text="Sábado"
-                        onAction="#handleBotaoDia">
-                    </Button> 
-
-                    <Button 
-                        prefWidth="83"
-                        prefHeight="100"
-                        styleClass="botao-aula"
-                        text="Domingo"
-                        onAction="#handleBotaoDia">
-                    </Button> 
-
                 </HBox>
             </VBox>
 
-            <Button text="Inserir avaliações e média" onAction="#handleInserirMedia"></Button>
+            <Button text="Inserir avaliações e média" styleClass="botao-personalizado" onAction="#handleInserirMedia"></Button>
 
             <Button text="+ Cadastrar Disciplina" prefHeight="50" styleClass="botao-personalizado" onAction="#handleCadastrarDisciplina"/>
         </VBox>
     </VBox>
 
-    <Rectangle fx:id="fundoCalculadora" fill="black" opacity="0.8" width="1280" height="832" visible="false"/>
+    <Rectangle onMouseClicked="#handleVoltarRect" fx:id="fundoCalculadora" fill="black" opacity="0.8" width="1440" height="810" visible="false"/>
     
-    <VBox fx:id="calculadora" maxWidth="486" maxHeight="608" style="-fx-background-color: white;" visible="false">
-        <Button text="Voltar" onAction="#handleVoltar"></Button>
+    <VBox fx:id="calculadora" maxWidth="1080" maxHeight="600" style="-fx-background-color: rgb(205, 218, 248); -fx-background-radius: 20" alignment="CENTER" visible="false">
+        <HBox alignment="CENTER_RIGHT" maxWidth="1000">
+            <Button text="❌" onAction="#handleVoltarBtn" style="-fx-background-color: transparent; -fx-text-fill: #395BC7; -fx-font-size:30px; -fx-cursor: hand"></Button>
+        </HBox>
+        <VBox alignment="CENTER" prefHeight="150" spacing="10">
+            <TextField fx:id="resultado" prefHeight="60" alignment="CENTER" style="-fx-font-size: 22px; -fx-border-radius: 20; -fx-background-radius: 20; -fx-border-width: 4px; -fx-border-color: #395BC7" promptText="Monte a fórmula da Média" editable="false" maxWidth="800"/>
+            
+            <HBox alignment="CENTER" spacing="10">
+                <Button text="←" style="-fx-background-color: #395BC7; -fx-background-radius: 10; -fx-font-size: 22; -fx-text-fill: white; -fx-cursor: hand;" onAction="#handleBack"></Button>
+                <Button text="→" style="-fx-background-color: #395BC7; -fx-background-radius: 10; -fx-font-size: 22; -fx-text-fill: white; -fx-cursor: hand;" onAction="#handleForward"></Button>
+                <Button text="⌫" style="-fx-background-color: #395BC7; -fx-background-radius: 10; -fx-font-size: 18; -fx-text-fill: white; -fx-cursor: hand;" onAction="#handleBackspace"></Button>
+            </HBox>
+        </VBox>
+        
+        <HBox prefHeight="363">
+            <VBox prefWidth="540"> 
+                <StackPane prefHeight="242">
+                    <HBox fx:id="addMetodoAvaliacao" alignment="CENTER" spacing="30">
+                        <Button text="Adicionar Prova" onAction="#handleAddProva" styleClass="botao-personalizado"></Button>
+                        <Button text="Adicionar Trabalho" onAction="#handleAddTrabalho" styleClass="botao-personalizado"></Button>
+                    </HBox>
+
+                    <VBox fx:id="inputsProva" alignment="CENTER" spacing="5" visible="false">
+                        <Label Text="Adicionar prova" style="-fx-font-weight: bold; -fx-font-size:20px"></Label>
+                        <TextField fx:id="nome" style="-fx-background-radius: 15; -fx-border-radius: 15;" promptText="Nome" MaxWidth="300"></TextField>
+                        <TextField fx:id="local" style="-fx-background-radius: 15; -fx-border-radius: 15;" promptText="Local" MaxWidth="300"></TextField>
+                        <DatePicker fx:id="data" promptText="Data"></DatePicker>
+                        <TextField fx:id="horarioInicio" style="-fx-background-radius: 15; -fx-border-radius: 15;" promptText="Horário de Início" maxWidth="150"></TextField>
+                        <TextField fx:id="duracao" style="-fx-background-radius: 15; -fx-border-radius: 15;" promptText="Duração" maxWidth="150"></TextField>
+
+                        <HBox alignment="CENTER" spacing="30">
+                            <Button text="Voltar" onAction="#handleProvaToMetodo"  style="-fx-background-color: #395BC7; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 20; -fx-font-size: 15"></Button>
+                            <Button text="Salvar" onAction="#handleSaveProva" style="-fx-background-color: #395BC7; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 20; -fx-font-size: 15"></Button>
+                        </HBox>
+                    </VBox>
+
+                    <VBox fx:id="inputsTrabalho" alignment="CENTER" spacing="11" visible="false">
+                        <Label text="Adicionar Trabalho" style="-fx-font-weight: bold; -fx-font-size:20px"></Label>
+                        <TextField fx:id="nome" style="-fx-background-radius: 15; -fx-border-radius: 15;" promptText="Nome" maxWidth="300"></TextField>
+                        <DatePicker fx:id="inicio" promptText="Data de Início"></DatePicker>
+                        <DatePicker fx:id="entrega" promptText="Data de Entrega"></DatePicker>
+
+                        <StackPane>
+                            <Button fx:id="grupo" text="Em grupo?" onAction="#handleGroup" style="-fx-background-color: #395BC7; -fx-cursor: hand; -fx-font-weight: bold; -fx-text-fill: white;"></Button>
+                            <TextField fx:id="integrantes" style="-fx-background-radius: 15; -fx-border-radius: 15;" promptText="Integrantes" maxWidth="300" visible="false"></TextField>
+                        </StackPane>
+                        
+                        <HBox alignment="CENTER" spacing="30">
+                            <Button text="Voltar" onAction="#handleTrabalhoToMetodo" style="-fx-background-color: #395BC7; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 20; -fx-font-size: 15"></Button>
+                            <Button text="Adicionar" onAction="#handleSaveTrabalho" style="-fx-background-color: #395BC7; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 20; -fx-font-size: 15"></Button>
+                        </HBox>
+                    </VBox>
+                </StackPane>
+            
+                <VBox prefHeight="121" spacing="10" alignment="center">
+                    <FlowPane 
+                        prefHeight="60" maxHeight="70" maxWidth="450" hgap="5" vgap="5" alignment="CENTER"
+                        style="-fx-border-radius: 20; -fx-background-radius:20; -fx-border-width: 5px; -fx-background-color: white; -fx-border-color: #395BC7; -fx-padding: 10;"
+                        fx:id="avaliacoesCadastradas">
+                    </FlowPane>
+                    <Label text="Para remover avaliação, clique com botão direito do mouse" style="-fx-font-weight: bold;"></Label>
+                </VBox>
+            </VBox>
+            
+            <VBox alignment="CENTER" prefWidth="540" prefHeight="363">
+                <GridPane hgap="5" vgap="5" alignment="CENTER" style="-fx-border-radius: 20; -fx-border-width: 5px; -fx-border-color: #395BC7;" maxWidth="400" prefHeight="300">
+                    <Button text="7" prefHeight="60" prefWidth="85" GridPane.rowIndex="0" GridPane.columnIndex="0" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                    <Button text="8" prefHeight="60" prefWidth="85" GridPane.rowIndex="0" GridPane.columnIndex="1" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                    <Button text="9" prefHeight="60" prefWidth="85" GridPane.rowIndex="0" GridPane.columnIndex="2" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                    <Button text="/" prefHeight="60" prefWidth="85" GridPane.rowIndex="0" GridPane.columnIndex="3" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+    
+                    <Button text="4" prefHeight="60" prefWidth="85" GridPane.rowIndex="1" GridPane.columnIndex="0" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                    <Button text="5" prefHeight="60" prefWidth="85" GridPane.rowIndex="1" GridPane.columnIndex="1" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                    <Button text="6" prefHeight="60" prefWidth="85" GridPane.rowIndex="1" GridPane.columnIndex="2" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                    <Button text="*" prefHeight="60" prefWidth="85" GridPane.rowIndex="1" GridPane.columnIndex="3" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+    
+                    <Button text="1" prefHeight="60" prefWidth="85" GridPane.rowIndex="2" GridPane.columnIndex="0" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                    <Button text="2" prefHeight="60" prefWidth="85" GridPane.rowIndex="2" GridPane.columnIndex="1" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                    <Button text="3" prefHeight="60" prefWidth="85" GridPane.rowIndex="2" GridPane.columnIndex="2" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                    <Button text="+" prefHeight="60" prefWidth="85" GridPane.rowIndex="2" GridPane.columnIndex="3" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+    
+                    <Button text="0" prefHeight="60" prefWidth="85" GridPane.rowIndex="3" GridPane.columnIndex="0" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                    <Button text="," prefHeight="60" prefWidth="85" GridPane.rowIndex="3" GridPane.columnIndex="1" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                    <Button text="(" prefHeight="60" prefWidth="85" GridPane.rowIndex="3" GridPane.columnIndex="2" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                    <Button text=")" prefHeight="60" prefWidth="85" GridPane.rowIndex="3" GridPane.columnIndex="3" onAction="#handleCalculadora" styleClass="botao-calc"></Button>
+                </GridPane>
+            </VBox>
+        </HBox>
+
+        <HBox prefHeight="121" spacing="100" alignment="CENTER">
+            <Button text="Salvar" styleClass="botao-personalizado" onAction="#handleVoltarBtn"/>
+        </HBox>
     </VBox>
     
 </StackPane>

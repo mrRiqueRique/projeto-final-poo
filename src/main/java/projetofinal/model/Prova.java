@@ -9,15 +9,13 @@ public class Prova extends MetodoDeAvaliacao{
     private String duracao;
     private String data;
     private String horarioInicio;
-    private String codigoDisciplina;
 
-    public Prova(String nome, String local, String duracao, String data, String horarioInicio, String codigoDisciplina){
+    public Prova(String nome, String local, String duracao, String data, String horarioInicio){
         super(nome);
         this.local = local;
         this.duracao = duracao;
         this.data = data;
         this.horarioInicio = horarioInicio;
-        this.codigoDisciplina = codigoDisciplina;
     }
 
     public String getLocal() {
@@ -34,10 +32,6 @@ public class Prova extends MetodoDeAvaliacao{
 
     public String getHorarioInicio(){
         return horarioInicio;
-    }
-
-    public String getCodigoDisciplina() {
-        return codigoDisciplina;
     }
 
     public void alterarData(String data){

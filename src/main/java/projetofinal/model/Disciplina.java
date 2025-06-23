@@ -7,19 +7,20 @@ public class Disciplina {
     private String nome;
     private String codigo;
     private int creditos;
-    //private media
+    private String media;
     private int faltas;
     private String professor;
     private String PED;
     private List<Aula> aulas;
     private List<MetodoDeAvaliacao> avaliacoes;
 
-    public Disciplina(String codigo, String nome, String PED,  int creditos, int faltas, String professor){
+    public Disciplina(String codigo, String nome, String PED,  int creditos, String media, String professor){
         this.nome=nome;
         this.codigo = codigo;
         this.creditos = creditos;
         this.PED = PED;
-        this.faltas = faltas;
+        this.faltas = 0;
+        this.media = media;
         this.professor = professor;
         this.aulas = new ArrayList<>();
         this.avaliacoes = new ArrayList<>();
@@ -56,11 +57,18 @@ public class Disciplina {
     public List<MetodoDeAvaliacao> getAvaliacoes(){
         return this.avaliacoes;
     }
+    
+    public void setAvaliacoes(List<MetodoDeAvaliacao> avaliacoes){
+        this.avaliacoes = avaliacoes;
+    }
 
     public List<Aula> getAulas(){
         return this.aulas;
     }
 
+    public void setAulas(List<Aula> aulas){
+        this.aulas = aulas;
+    }
     // ver como quer tratar quando ultrapassar as faltas restantes, se vai mandar mensagem, etc
 
     public int consultarFaltasRestantes(){
@@ -78,9 +86,4 @@ public class Disciplina {
     public void adicionarAvaliacao(MetodoDeAvaliacao avaliacao){
         this.avaliacoes.add(avaliacao);
     }
-
-
-
-
-    
 }

@@ -73,7 +73,7 @@ public class Service {
             List<Disciplina> disciplinas = new ArrayList<>();
             for (List<Object> linha : dataDisciplina) {
                 // todo - arrumar tratamento do ultimo parametro de [avaliações]
-                disciplinas.add(new Disciplina(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Integer.parseInt(linha.get(3).toString()), 0, linha.get(4).toString()));
+                disciplinas.add(new Disciplina(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Integer.parseInt(linha.get(3).toString()), linha.get(5).toString(), linha.get(4).toString()));
             }
 
             return disciplinas;
@@ -87,7 +87,7 @@ public class Service {
         try {
             List<Object> dataDisciplina = sheetsFacade.lerDadosLinhaPorId("Disciplina", "A", "E", codigo);
             if (dataDisciplina.isEmpty()) return null;
-            Disciplina disciplina = new Disciplina(dataDisciplina.get(0).toString(), dataDisciplina.get(1).toString(), dataDisciplina.get(2).toString(), Integer.parseInt(dataDisciplina.get(3).toString()), 0, dataDisciplina.get(4).toString());
+            Disciplina disciplina = new Disciplina(dataDisciplina.get(0).toString(), dataDisciplina.get(1).toString(), dataDisciplina.get(2).toString(), Integer.parseInt(dataDisciplina.get(3).toString()), dataDisciplina.get(5).toString(), dataDisciplina.get(4).toString());
             return disciplina;
         } catch (Exception e) {
             System.err.println("Erro ao obter disciplina: " + e.getMessage());
@@ -120,8 +120,9 @@ public class Service {
             List<List<Object>> dataProva = sheetsFacade.lerDados("Prova", "A", "F");
             List<Prova> provas = new ArrayList<>();
             for (List<Object> linha : dataProva) {
-
-                provas.add(new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString(), linha.get(4).toString()));
+                Prova novaProva = new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString());
+                novaProva.setCodigo(linha.get(3).toString());
+                provas.add(novaProva);
             }
             return provas;
         } catch (Exception e) {
@@ -135,8 +136,10 @@ public class Service {
             List<List<Object>> dataProva = sheetsFacade.lerDados("Prova", "A", "F");
             for (List<Object> linha : dataProva) {
                 if (linha.get(0).toString().equals(nomeProva) && linha.get(4).toString().equals(codigoDisciplina)) {
-                    return new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString(), linha.get(4).toString());
-                }
+                    Prova novaProva = new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString());
+                    novaProva.setCodigo(linha.get(3).toString());
+                    return novaProva;
+                }              
             }
             return null; // Retorna null se não encontrar a prova
         } catch (Exception e) {
@@ -151,8 +154,9 @@ public class Service {
             List<Prova> provas = new ArrayList<>();
             for (List<Object> linha : dataProva) {
                 if (linha.get(4).toString().equals(codigoDisciplina)) { // Filtra pelo código da disciplina
-                    provas.add(new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString(), linha.get(4).toString()));
-                }
+                    Prova novaProva = new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString());
+                    novaProva.setCodigo(linha.get(3).toString());
+                    provas.add(novaProva);                }
             }
             return provas;
         } catch (Exception e) {
