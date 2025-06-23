@@ -1,8 +1,7 @@
 name: gerenciador-academico
 version: '1.0.0'
-summary: Aplicativo JavaFX de Gerenciamento Acadêmico
-description: |
-  Projeto final de POO usando JavaFX e integração com Google Sheets.
+summary: Aplicativo de gerenciamento acadêmico
+description: Aplicação JavaFX integrada ao Google Sheets.
 
 grade: stable
 confinement: strict
@@ -11,12 +10,12 @@ base: core22
 apps:
   gerenciador-academico:
     command: launch-gerenciador-academico
-    plugs: [ network, desktop, desktop-legacy, wayland, x11 ]
+    plugs: [network, desktop, desktop-legacy, wayland, x11]
 
 parts:
   gerenciador-academico:
     plugin: dump
-    source: snap/
+    source: snap/local/
     stage:
-      - launch-gerenciador-academico
       - bin/projetofinal-1.0.0.jar
+      - launch-gerenciador-academico
