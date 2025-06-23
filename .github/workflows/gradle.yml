@@ -20,7 +20,12 @@ jobs:
 
       - name: Create credentials.json from secret
         run: |
-          echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > src/main/resources/credentials.json
+          mkdir -p src/main/resources
+          printf "%s" "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > src/main/resources/credentials.json
+
+      - name: Check JSON output (debug)
+        run: |
+          head -n 10 src/main/resources/credentials.json
 
       - name: Install fpm
         run: |
