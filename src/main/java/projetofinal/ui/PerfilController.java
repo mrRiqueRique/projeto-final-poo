@@ -212,6 +212,9 @@ public class PerfilController {
 
             Scene scene = new Scene(loader.load(), 1440, 810);
             scene.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
 
             EditarPerfilController editarController = loader.getController();
             editarController.initData(alunoLogado);
@@ -263,6 +266,9 @@ public class PerfilController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Scene scene = new Scene(loader.load(), 1440, 810);
             scene.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
             stage.setScene(scene);
             stage.setTitle(title);
             stage.show();

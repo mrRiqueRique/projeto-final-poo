@@ -233,7 +233,7 @@ public class TarefasController {
                 filtrada = new FiltroPorOrdemAlfabetica().meetCriteria(filtrada);
             } else if (ordemSelecionada.equals("Prioridade Crescente")) {
                 filtrada = new FiltroPorOrdemPrioridadeCrescente().meetCriteria(filtrada);
-            } else if (ordemSelecionada.equals("Prioridade Descrscente")) {
+            } else if (ordemSelecionada.equals("Prioridade Decrescente")) {
                 filtrada = new FiltroPorOrdemPrioridadeDecrescente().meetCriteria(filtrada);
             }
         }

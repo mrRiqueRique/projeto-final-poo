@@ -165,11 +165,11 @@
             </fx:define>
 
             <HBox spacing="10" alignment="CENTER">
-                <ToggleButton text="Baixa" fx:id="botaoBaixa" toggleGroup="$prioridadeGroup"
+                <ToggleButton text="baixa" fx:id="botaoBaixa" toggleGroup="$prioridadeGroup"
                               styleClass="botao-prioridade"/>
-                <ToggleButton text="Média" fx:id="botaoMedia" toggleGroup="$prioridadeGroup"
+                <ToggleButton text="média" fx:id="botaoMedia" toggleGroup="$prioridadeGroup"
                               styleClass="botao-prioridade"/>
-                <ToggleButton text="Alta" fx:id="botaoAlta" toggleGroup="$prioridadeGroup"
+                <ToggleButton text="alta" fx:id="botaoAlta" toggleGroup="$prioridadeGroup"
                               styleClass="botao-prioridade"/>
             </HBox>
         </VBox>
