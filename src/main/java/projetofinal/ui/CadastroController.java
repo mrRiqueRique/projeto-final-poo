@@ -132,22 +132,31 @@ public class CadastroController {
         // 3. Lógica para salvar a foto e armazenar seu caminho
         if (fotoSelecionada != null) {
             try {
-                Path destFolder = Paths.get("src/main/resources/images/profiles");
+                // Define a pasta de destino fora do projeto, na pasta do usuário
+                String userHome = System.getProperty("user.home");
+                Path destFolder = Paths.get(userHome, ".gerenciador-de-estudos", "profiles");
+
+                // Cria as pastas se elas não existirem
                 if (!Files.exists(destFolder)) {
                     Files.createDirectories(destFolder);
                 }
+
+                // Define o nome do arquivo e o caminho de destino final
                 String extensao = fotoSelecionada.getName().substring(fotoSelecionada.getName().lastIndexOf("."));
                 String nomeArquivo = ra + extensao;
                 Path destPath = destFolder.resolve(nomeArquivo);
-                Files.copy(fotoSelecionada.toPath(), destPath, StandardCopyOption.REPLACE_EXISTING);
-                
-                // Salva o caminho relativo para ser encontrado depois
-                novoAluno.setCaminhoFoto("images/profiles/" + nomeArquivo); 
+
+                // Copia o arquivo selecionado para o destino
+                 Files.copy(fotoSelecionada.toPath(), destPath, StandardCopyOption.REPLACE_EXISTING);
+ 
+                // Salva o caminho ABSOLUTO do arquivo no objeto Aluno
+                novoAluno.setCaminhoFoto(destPath.toAbsolutePath().toString()); 
 
             } catch (IOException e) {
                 e.printStackTrace();
                 messageLabel.setText("Erro ao salvar a foto.");
                 messageLabel.setTextFill(Color.RED);
+                return; // Impede o cadastro se a foto não puder ser salva  
             }
         }
         

@@ -21,7 +21,6 @@
                 </padding>
                 <Label text="Gerenciador de Estudos" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Circle radius="12" fill="#C0C3E5"/>
             </HBox>
 
             <!-- Área da seta com posição fixa -->
