@@ -18,7 +18,7 @@
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
-                <Label text="Gerenciador de Estudos" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
+                <Label text=" Gerenciador de Estudos" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
                 <Region HBox.hgrow="ALWAYS"/>
 
                 <!-- Botão do Perfil -->
@@ -29,18 +29,20 @@
 
             </HBox>
 
-            <!-- Área da seta com posição fixa -->
-            <AnchorPane prefHeight="50">
+            <!-- Área da seta e título na mesma linha -->
+            <HBox alignment="CENTER" spacing="0" prefHeight="50">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
                 <Button text="Sair"
-                style="-fx-background-color: #E53935; -fx-text-fill: white; -fx-font-weight: bold;"
-                onAction="#handleSair"
-                layoutX="50" layoutY="20"
-                prefWidth="80" prefHeight="40"/>
-            </AnchorPane>
-
-            <StackPane prefHeight="0">
-                    <Label fx:id="bemVindoLabel" style="-fx-font-weight: bold; -fx-font-size: 30px;-fx-text-fill: #395BC7;"/>
-            </StackPane>
+                        style="-fx-background-color: #E53935; -fx-text-fill: white; -fx-font-weight: bold;"
+                        onAction="#handleSair"
+                        layoutX="50" layoutY="20"
+                        prefWidth="80" prefHeight="40"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="bemVindoLabel" style="-fx-font-weight: bold; -fx-font-size: 30px;-fx-text-fill: #395BC7;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
         </VBox>
     </top>
 

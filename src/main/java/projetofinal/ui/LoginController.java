@@ -56,8 +56,13 @@ public class LoginController {
                 messageLabel.setText("Preencha usuário e senha");
                 return;
             }
-    
-            alunoLogado.logarAluno(username);
+
+            Boolean loginStatus = alunoLogado.logarAluno(username, password);
+            if (!loginStatus) {
+                messageLabel.setText("Usuário ou senha inválidos");
+                return;
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Dashboard.fxml"));
             Scene novaCena = new Scene(loader.load(), 1440, 810);
 

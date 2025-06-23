@@ -110,7 +110,7 @@ public class CadastroController {
             return;
         }
 
-        if (alunoRepository.buscarAlunoPorRa(ra) != null) {
+        if (alunoRepository.getAlunoPorRa(ra) != null) {
             messageLabel.setText("O RA '" + ra + "' já está cadastrado.");
             messageLabel.setTextFill(Color.RED);
             return;
@@ -126,7 +126,7 @@ public class CadastroController {
         }
 
         // 2. Criação do Aluno
-        Aluno novoAluno = new Aluno(ra, nome, curso);
+        Aluno novoAluno = new Aluno(ra, nome, curso, senhaField.getText());
         novoAluno.setCR(crValor);
         
         // 3. Lógica para salvar a foto e armazenar seu caminho

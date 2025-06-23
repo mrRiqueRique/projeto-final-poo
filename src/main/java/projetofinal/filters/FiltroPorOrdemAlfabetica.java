@@ -11,7 +11,7 @@ public class FiltroPorOrdemAlfabetica implements Filter<TodoItem> {
     
     @Override
     public List<TodoItem> meetCriteria(List<TodoItem> TodoItens){
-        List<TodoItem> TodoItensOrdenados = new ArrayList<TodoItem>();
+        List<TodoItem> TodoItensOrdenados = new ArrayList<TodoItem>(TodoItens);
 
         
         Collections.sort(TodoItensOrdenados, new Comparator<TodoItem>(){

@@ -27,12 +27,10 @@ public class AulasController {
     private GridPane calendarioGrid;
 
     AlunoLogado alunoLogado;
-    DisciplinaRepository disciplinaRepository;
 
     @FXML
     public void initialize() {
         alunoLogado = AlunoLogado.getInstance();
-        disciplinaRepository = DisciplinaRepository.getInstancia();
         carregarAulas();
     }
 
@@ -61,7 +59,7 @@ public class AulasController {
 
         for (int coluna = 1; coluna <= 5; coluna++) {
             StackPane diaCelula = new StackPane();
-            diaCelula.setPrefSize(100, 40);
+//            diaCelula.setPrefSize(100, 40);
             Label diaLabel = new Label(diasSemana.get(coluna - 1));
             diaLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-font-size: 14px;");
             diaCelula.getChildren().add(diaLabel);
@@ -80,7 +78,6 @@ public class AulasController {
 
             // Coluna de horários
             StackPane horarioCelula = new StackPane();
-            horarioCelula.setPrefSize(100, 40);
             Label horarioLabel = new Label(textoHora);
             horarioLabel.setStyle("-fx-font-weight: bold;");
             horarioCelula.getChildren().add(horarioLabel);
@@ -106,7 +103,7 @@ public class AulasController {
                         }
 
                         StackPane celula = new StackPane();
-                        celula.setPrefSize(100, 40);
+                        celula.setPrefSize(100, 35);
 
                         String codigo = aula.getDisciplina();
                         String cor = mapaCores.getOrDefault(codigo, "#CCCCCC");
@@ -116,9 +113,9 @@ public class AulasController {
                         vbox.setAlignment(Pos.CENTER);
 
                         Label label = new Label(codigo);
-                        label.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
+                        label.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px;");
                         Label localLabel = new Label(aula.getLocal());
-                        localLabel.setStyle("-fx-text-fill: white; -fx-font-size: 12px;");
+                        localLabel.setStyle("-fx-text-fill: white; -fx-font-size: 10px;");
 
                         vbox.getChildren().addAll(label, localLabel);
                         celula.getChildren().add(vbox);
@@ -132,13 +129,13 @@ public class AulasController {
 
                 if (!celulaPreenchida) {
                     StackPane celula = new StackPane();
-                    celula.setPrefSize(100, 40);
+                    celula.setPrefSize(100, 35);
                     celula.setStyle("-fx-border-color: lightgray; -fx-background-color: white;");
                     calendarioGrid.add(celula, coluna, linha + 1);
                 }
             }
 
-//            // LEGENDAS
+//          LEGENDAS
             legendaDisciplinas.getChildren().clear();
 
             for (Disciplina d : alunoLogado.getDisciplinas()) {

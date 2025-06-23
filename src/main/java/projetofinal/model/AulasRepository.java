@@ -2,12 +2,11 @@ package projetofinal.model;
 
 import java.util.List;
 
-public class AulasRepository {
+public class AulasRepository extends Repository<Aula> {
     private static AulasRepository instancia;
-    private Service service;
 
     private AulasRepository() {
-        service = new Service();
+        super();
     }
 
     public static AulasRepository getInstancia() {

@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import projetofinal.exceptions.DataInvalidaException;
 
 public class TodoItem {
-    private String id;
+    private String raAluno;
     private String nome;
     private Disciplina disciplina;
     private MetodoDeAvaliacao avaliacao;
@@ -14,7 +14,8 @@ public class TodoItem {
     private boolean concluido;
     private String data;
 
-    public TodoItem(String nome, Disciplina disciplina, MetodoDeAvaliacao avaliacao, String prioridade, String data){
+    public TodoItem(String raAluno, String nome, Disciplina disciplina, MetodoDeAvaliacao avaliacao, String prioridade, String data){
+        this.raAluno = raAluno;
         this.nome = nome;
         this.disciplina = disciplina;
         this.avaliacao = avaliacao;
@@ -23,6 +24,9 @@ public class TodoItem {
         this.concluido = false;
     }
 
+    public String getRaAluno() {
+        return this.raAluno;
+    }
 
     public String getNome(){
         return this.nome;

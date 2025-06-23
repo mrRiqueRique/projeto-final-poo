@@ -19,7 +19,7 @@ public class FiltroPorNome implements Filter<TodoItem> {
         List<TodoItem> TodoItensFiltrados = new ArrayList<TodoItem>();
 
         for(TodoItem item: TodoItens){
-            if(item.getData().equals(nome)){
+            if(item.getNome().toLowerCase().contains(nome.toLowerCase())){
                 TodoItensFiltrados.add(item);
             }
         }

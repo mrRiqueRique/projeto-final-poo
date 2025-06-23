@@ -8,10 +8,10 @@ import projetofinal.model.TodoItem;
 
 public class FiltroPorDisciplina implements Filter<TodoItem> {
     
-    private Disciplina disciplina;
+    private String codigoDisciplina;
 
-    public FiltroPorDisciplina(Disciplina disciplina){
-        this.disciplina = disciplina;
+    public FiltroPorDisciplina(String codigoDisciplina){
+        this.codigoDisciplina = codigoDisciplina;
     }
 
 
@@ -20,7 +20,7 @@ public class FiltroPorDisciplina implements Filter<TodoItem> {
         List<TodoItem> TodoItensFiltrados = new ArrayList<TodoItem>();
 
         for(TodoItem item: TodoItens){
-            if(item.getDisciplina().equals(disciplina)){
+            if(item.getDisciplina().getCodigo().equals(codigoDisciplina)){
                 TodoItensFiltrados.add(item);
             }
         }
