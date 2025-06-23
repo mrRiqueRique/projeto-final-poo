@@ -1,22 +1,22 @@
 name: gerenciador-academico
-base: core22
 version: '1.0.0'
-summary: Gerenciador Acadêmico
+summary: Aplicativo JavaFX de Gerenciamento Acadêmico
 description: |
-  Aplicativo JavaFX de gerenciamento de tarefas acadêmicas.
+  Projeto final de POO usando JavaFX e integração com Google Sheets.
 
 grade: stable
 confinement: strict
+base: core22
 
 apps:
   gerenciador-academico:
-    command: bin/launch-gerenciador-academico
-    plugs: [desktop, desktop-legacy, x11, wayland, unity7]
+    command: launch-gerenciador-academico
+    plugs: [ network, desktop, desktop-legacy, wayland, x11 ]
 
 parts:
   gerenciador-academico:
     plugin: dump
-    source: build/libs/
-    organize:
-      projetofinal-1.0.0.jar: bin/projetofinal-1.0.0.jar
-      launch-gerenciador-academico: bin/launch-gerenciador-academico
+    source: snap/
+    stage:
+      - launch-gerenciador-academico
+      - bin/projetofinal-1.0.0.jar
