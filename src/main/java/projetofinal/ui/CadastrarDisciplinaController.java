@@ -368,7 +368,7 @@ public class CadastrarDisciplinaController {
             String codigo = codigoInput.getText();
             int creditos = Integer.parseInt(creditosInput.getText());
 
-            Disciplina disciplina = new Disciplina(codigo, nome, PED, creditos, professor, formula);
+            Disciplina disciplina = new Disciplina(codigo, nome, PED, creditos, formula, professor);
 
             List<Aula> aulas = new ArrayList<>();
             for (var item : diasAulas.entrySet()) {
@@ -391,6 +391,25 @@ public class CadastrarDisciplinaController {
             disciplina.setAvaliacoes(avaliacoes);
 
             alunoLogado.getAluno().cadastrarDisciplina(disciplina);
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Disciplinas.fxml"));
+                Scene novaCena = new Scene(loader.load(), 1440, 810);
+    
+                novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+                novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+                novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+                novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
+    
+                // Obtém o Stage atual a partir do botão que disparou o evento
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(novaCena);
+                stage.setTitle("Trabalho Final");
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         } catch (NumberFormatException e) {
             //EXCEÇÕES: CAIXA VAZIA, CREDITOS NÃO É UM NÚMERO, FÓRMULA INVÁLIDA (parentesis aberto, operação inaproppriada)
             //typeError.setText("Insira um número inteiro");

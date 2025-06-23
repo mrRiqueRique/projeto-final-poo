@@ -30,6 +30,9 @@ public class DisciplinasController {
     private AlunoLogado alunoLogado = AlunoLogado.getInstance();
 
     @FXML
+    private VBox editar;
+
+    @FXML
     public void initialize() {
         carregarDisciplinas();
     }
@@ -81,6 +84,8 @@ public class DisciplinasController {
                 -fx-background-color: #C7D1FF;
             """);
 
+            
+            mostrarDetalhesDisciplina(d);
             // Você pode chamar método para abrir detalhes da disciplina
             System.out.println("Selecionada disciplina: " + d.getNome());
             // abrirDetalhesDisciplina(d); // ex
@@ -169,4 +174,55 @@ public class DisciplinasController {
         }
     }
 
+
+    private void mostrarDetalhesDisciplina(Disciplina d) {
+        editar.getChildren().clear(); // Limpa o que já tinha
+    
+        // Título
+        Label titulo = new Label("Detalhes da Disciplina");
+        titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 24));
+        titulo.setStyle("-fx-text-fill: #395BC7;");
+    
+        // Nome
+        Label nome = new Label("Nome: " + d.getNome());
+        nome.setFont(Font.font(16));
+    
+        // Código
+        Label codigo = new Label("Código: " + d.getCodigo());
+        codigo.setFont(Font.font(16));
+    
+        // Professor
+        Label professor = new Label("Professor: " + d.getProfessor());
+        professor.setFont(Font.font(16));
+    
+        // Créditos
+        Label creditos = new Label("Créditos: " + d.getCreditos());
+        creditos.setFont(Font.font(16));
+    
+        // PED
+        Label ped = new Label("PED: " + d.getPED());
+        ped.setFont(Font.font(16));
+    
+        // Faltas
+        Label faltas = new Label("Faltas: " + d.getFaltas());
+        faltas.setFont(Font.font(16));
+    
+        // Faltas Restantes
+        Label faltasRestantes = new Label("Faltas restantes: " + d.consultarFaltasRestantes());
+        faltasRestantes.setFont(Font.font(16));
+    
+        // Botão de fechar o modal
+        Button fechar = new Button("Fechar");
+        fechar.getStyleClass().add("botao-personalizado");
+        fechar.setOnAction(e -> editar.setVisible(false));
+    
+        // Espaçamento
+        editar.setSpacing(10);
+        editar.setPadding(new Insets(20));
+    
+        // Adiciona tudo
+        editar.getChildren().addAll(titulo, nome, codigo, professor, creditos, ped, faltas, faltasRestantes, fechar);
+        
+        editar.setVisible(true); // Torna visível
+    }
 }
