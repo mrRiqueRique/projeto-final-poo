@@ -1,5 +1,6 @@
 package projetofinal.ui;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +9,10 @@ import java.util.Map;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -22,6 +25,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import projetofinal.model.AlunoLogado;
 import projetofinal.model.Aula;
 import projetofinal.model.Disciplina;
@@ -61,6 +65,27 @@ public class CadastrarDisciplinaController {
     private VBox calculadora;
 
     private Map<String, Boolean> diasAulas;
+
+    @FXML private void handleVoltar(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Disciplinas.fxml"));
+            Scene novaCena = new Scene(loader.load(), 1440, 810);
+
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
+
+            // Obtém o Stage atual a partir do botão que disparou o evento
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(novaCena);
+            stage.setTitle("Trabalho Final");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private String formula = "";
     private int traco = 0;

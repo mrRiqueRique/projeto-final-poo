@@ -27,7 +27,7 @@
                 <padding>
                     <Insets top="20" right="20" bottom="20" left="20"/>
                 </padding>
-                <Button styleClass="botao-voltar">
+                <Button styleClass="botao-voltar" onAction="#handleVoltar">
                     <graphic>
                         <FontIcon iconLiteral="fas-arrow-left" iconSize="30" iconColor="#87A5EF"/>
                     </graphic>
