@@ -43,22 +43,22 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo snap install snapcraft --classic
 
-      - name: Create Snap launch script
+      - name: Create Snap launch script and prepare files
         if: runner.os == 'Linux'
         run: |
-          mkdir -p build/libs
-          cat << 'EOF' > build/libs/launch-gerenciador-academico
+          ./gradlew clean build
+          mkdir -p snap/bin
+          cp build/libs/projetofinal-1.0.0.jar snap/bin/
+          cat << 'EOF' > snap/launch-gerenciador-academico
           #!/bin/sh
-          exec java --module-path $SNAP/lib --add-modules javafx.controls,javafx.fxml -jar $SNAP/bin/projetofinal-1.0.0.jar
+          exec java --module-path \$SNAP/lib --add-modules javafx.controls,javafx.fxml -jar \$SNAP/bin/projetofinal-1.0.0.jar
           EOF
-          chmod +x build/libs/launch-gerenciador-academico
+          chmod +x snap/launch-gerenciador-academico
         shell: bash
 
       - name: Build Snap Package on Linux
         if: runner.os == 'Linux'
-        run: |
-          ./gradlew clean build
-          snapcraft
+        run: snapcraft
         shell: bash
 
       - name: Upload Installer or Snap Artifact
