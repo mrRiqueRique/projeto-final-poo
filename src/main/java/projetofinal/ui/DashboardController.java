@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
@@ -19,8 +20,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -410,24 +415,42 @@ public class DashboardController {
     }
 
     @FXML
-    private void handleSair(ActionEvent event) {
+    void handleSair(ActionEvent event) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmação de Saída");
+        alert.setHeaderText("Tem certeza que deseja sair?");
+        alert.setContentText("Você será redirecionado para a tela de login.");
+
+        alert.setGraphic(null);
+
         try {
-            alunoLogado.logout();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Login.fxml"));
-            Scene novaCena = new Scene(loader.load(), 1440, 810);
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.getStylesheets().add(getClass().getResource("/style/dialog-style.css").toExternalForm());
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar o CSS do diálogo: " + e.getMessage());
+        }
 
-            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
-            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
-            novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
-            novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
+        Optional<ButtonType> resultado = alert.showAndWait();
 
-            // Obtém o Stage atual a partir do botão que disparou o evento
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(novaCena);
-            stage.setTitle("Trabalho Final");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+            AlunoLogado.getInstance().logout();
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Login.fxml"));
+                Scene novaCena = new Scene(loader.load(), 1440, 810);
+
+                novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+                novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+                novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
+                novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
+
+                // Obtém o Stage atual a partir do botão que disparou o evento
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(novaCena);
+                stage.setTitle("Trabalho Final");
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

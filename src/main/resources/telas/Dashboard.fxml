@@ -34,14 +34,17 @@
                 <padding>
                     <Insets top="20" right="20" bottom="20" left="20"/>
                 </padding>
-                <Button text="Sair"
-                        style="-fx-background-color: #E53935; -fx-text-fill: white; -fx-font-weight: bold;"
-                        onAction="#handleSair"
-                        layoutX="50" layoutY="20"
-                        prefWidth="80" prefHeight="40"/>
+
                 <Region HBox.hgrow="ALWAYS"/>
                 <Label fx:id="bemVindoLabel" style="-fx-font-weight: bold; -fx-font-size: 30px;-fx-text-fill: #395BC7;"/>
                 <Region HBox.hgrow="ALWAYS"/>
+                <!-- Botão de sair com ícone -->
+                <Button fx:id="sairButton" onAction="#handleSair"
+                        style="-fx-background-radius: 50; -fx-background-color: #C0C3E5; -fx-min-width: 30px; -fx-min-height: 30px;">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-sign-out-alt" iconSize="15" iconColor="#6A7FC1"/>
+                    </graphic>
+                </Button>
             </HBox>
         </VBox>
     </top>
