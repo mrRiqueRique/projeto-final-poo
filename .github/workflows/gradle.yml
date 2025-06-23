@@ -27,7 +27,7 @@ jobs:
       - name: Build fat jar
         run: ./gradlew clean jar
 
-      - name: Package with fpm (corrigido)
+      - name: Package with fpm (com dependência openjfx)
         run: |
           mkdir -p package/usr/local/gerenciador-academico
           cp build/libs/*.jar package/usr/local/gerenciador-academico/
@@ -35,6 +35,8 @@ jobs:
           fpm -s dir -t deb \
               -n gerenciador-academico \
               -v 1.0.0 \
+              --depends openjfx \
+              --depends openjdk-17-jre \
               -C package .
 
       - name: Upload .deb installer
