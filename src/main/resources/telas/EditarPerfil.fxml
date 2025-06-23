@@ -38,11 +38,12 @@
 
             </HBox>
 
-            <!-- Área da seta com posição fixa -->
+            <!-- Botão de voltar posicionado -->
             <AnchorPane prefHeight="50">
-                <Button styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="20">
+                <Button fx:id="voltarButton" styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="15"
+                        style="-fx-background-color: transparent;">
                     <graphic>
-                        <FontIcon iconLiteral="fas-arrow-left" iconSize="40" iconColor="#87A5EF"/>
+                        <FontIcon iconLiteral="fas-arrow-left" iconSize="35" iconColor="#87A5EF" />
                     </graphic>
                 </Button>
             </AnchorPane>

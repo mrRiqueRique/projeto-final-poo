@@ -14,19 +14,13 @@
     <top>
         <VBox spacing="0">
             <!-- Cabeçalho azul -->
-            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="85">
+            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="70">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
                 <Label text=" Gerenciador de Estudos" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
                 <Region HBox.hgrow="ALWAYS"/>
-
-                <!-- Botão do Perfil -->
-                <StackPane fx:id="profileButton" onMouseClicked="#handleProfileClick" style="-fx-cursor: hand;">
-                    <Circle radius="22" fill="white"/>
-                    <Circle fx:id="profileImageCircle" radius="20" fill="#C0C3E5"/>
-                </StackPane>
-
+                <Circle radius="12" fill="#C0C3E5"/>
             </HBox>
 
             <!-- Área da seta e título na mesma linha -->

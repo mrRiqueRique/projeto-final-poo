@@ -1,6 +1,5 @@
 package projetofinal.ui;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +16,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton; 
-import javafx.application.Platform;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
@@ -66,32 +64,23 @@ public class PerfilController {
 
         // 2. Inicia a variável 'imagem' com a imagem PADRÃO.
         // Garantimos que ela nunca será nula.
-        Image imagem;
-        Image imagemPadrao = new Image(getClass().getResourceAsStream("/images/unicamp.png"));
+        Image imagem = new Image(getClass().getResourceAsStream("/images/unicamp.png"));
 
+        // 3. Tenta carregar a foto específica do aluno para sobrescrever a padrão
         String caminhoFoto = alunoLogado.getCaminhoFoto();
-
         if (caminhoFoto != null && !caminhoFoto.isEmpty()) {
             try {
-                // Tenta carregar a imagem a partir do caminho absoluto salvo
-                File fotoFile = new File(caminhoFoto);
-                if (fotoFile.exists()) {
-                    imagem = new Image(fotoFile.toURI().toString());
-                } else {
-                    // Se o arquivo não for encontrado, usa a imagem padrão
-                    System.err.println("PerfilController: Arquivo de foto não encontrado em: " + caminhoFoto);
-                    imagem = imagemPadrao;
+                Image fotoAluno = new Image(getClass().getResourceAsStream("/" + caminhoFoto));
+                // Se a imagem do aluno foi carregada sem erros, ela se torna a imagem principal
+                if (!fotoAluno.isError()) {
+                    imagem = fotoAluno;
                 }
             } catch (Exception e) {
-                // Se qualquer outro erro ocorrer, usa a imagem padrão
-                System.err.println("PerfilController: Falha ao carregar imagem de perfil do arquivo. Usando imagem padrão. Erro: " + e.getMessage());
-                imagem = imagemPadrao;
+                // Se der erro ao carregar a foto do aluno, não fazemos nada,
+                // pois a 'imagem' padrão já está carregada. Apenas registramos o erro.
+                System.err.println("Falha ao carregar imagem de perfil do aluno. Usando imagem padrão. Erro: " + e.getMessage());
             }
-        } else {
-            // Se o aluno não tiver um caminho de foto, usa a imagem padrão
-            imagem = imagemPadrao;
         }
-
         
         // 4. Aplica a imagem final.
         perfilImage.setFill(new ImagePattern(imagem, 0, 0, 1, 1, true));
@@ -132,14 +121,6 @@ public class PerfilController {
             System.err.println("Falha ao carregar a imagem padrão: " + e.getMessage());
         }
     }
-
-    Platform.runLater(() -> {
-        if (menuButton != null && menuButton.getScene() != null) {
-            menuButton.getStyleClass().add("menu-navegacao");
-            
-            menuButton.getScene().getStylesheets().add(getClass().getResource("/style/menu-button-style.css").toExternalForm());
-        }
-    });
 }
 
     /**
@@ -148,23 +129,8 @@ public class PerfilController {
      */
     @FXML
     void handleVoltar(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Dashboard.fxml"));
-            Scene novaCena = new Scene(loader.load(), 1440, 810);
-
-            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
-            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
-            novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
-            novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
-
-            // Obtém o Stage atual a partir do botão que disparou o evento
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(novaCena);
-            stage.setTitle("Trabalho Final");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Botão Voltar foi clicado!");
+        irParaDashboard(event);
     }
 
     /**
@@ -207,7 +173,7 @@ public class PerfilController {
         }
 
         try {
-            Stage stage = (Stage) editarPerfilButton.getScene().getWindow();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/EditarPerfil.fxml"));
 
             Scene scene = new Scene(loader.load(), 1440, 810);
