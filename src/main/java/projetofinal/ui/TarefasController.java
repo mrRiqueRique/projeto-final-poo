@@ -256,25 +256,42 @@ public class TarefasController {
 
     @FXML
     private void handleSalvarTarefa() {
-        String nome = campoNome.getText();
-        String disciplinaCodigo = campoDisciplina.getText();
-        String avaliacaoNome = campoAvaliacao.getText();
-        LocalDate data = campoData.getValue();
+            String nome = campoNome.getText();
+            String disciplinaCodigo = campoDisciplina.getText();
+            String avaliacaoNome = campoAvaliacao.getText();
+            LocalDate data = campoData.getValue();
 
-        ToggleButton selecionado = (ToggleButton) prioridadeGroup.getSelectedToggle();
-        String prioridade = selecionado != null ? selecionado.getText() : null;
+            ToggleButton selecionado = (ToggleButton) prioridadeGroup.getSelectedToggle();
+            String prioridade = selecionado != null ? selecionado.getText() : null;
 
-        if (nome.isEmpty() || disciplinaCodigo.isEmpty() || avaliacaoNome.isEmpty() || data == null || prioridade == null) {
-            System.err.println("Erro: Todos os campos devem ser preenchidos.");
-            return;
-        }
+            // Validação de campos obrigatórios
+            if (nome.isEmpty() || disciplinaCodigo.isEmpty() || data == null || prioridade == null) {
+                Alert alerta = new Alert(Alert.AlertType.ERROR);
+                alerta.setTitle("Campos obrigatórios");
+                alerta.setHeaderText(null);
+                alerta.setContentText("Todos os campos devem ser preenchidos.");
+                alerta.showAndWait();
+                return;
+            }
 
-        String dataFormatada = data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        alunoLogado.cadastrarTodoItem(nome, disciplinaCodigo, avaliacaoNome, dataFormatada, prioridade);
-        carregarTodoList();
+            // Validação de data passada
+            if (data.isBefore(LocalDate.now())) {
+                Alert alerta = new Alert(Alert.AlertType.WARNING);
+                alerta.setTitle("Data inválida");
+                alerta.setHeaderText(null);
+                alerta.setContentText("A data selecionada já passou. Escolha uma data futura.");
+                alerta.showAndWait();
+                return;
+            }
 
-        modalContainer.setVisible(false);
-        fundoModal.setVisible(false);
+            // Cadastro
+            String dataFormatada = data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            alunoLogado.cadastrarTodoItem(nome, disciplinaCodigo, avaliacaoNome, dataFormatada, prioridade);
+            carregarTodoList();
+
+            // Fecha o modal
+            modalContainer.setVisible(false);
+            fundoModal.setVisible(false);
     }
 
     @FXML
