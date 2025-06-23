@@ -11,6 +11,10 @@ import com.google.auth.oauth2.GoogleCredentials;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,9 +43,27 @@ public class GoogleSheetsFacade {
     public GoogleSheetsFacade() throws GeneralSecurityException, IOException {
         String credenciais = Main.class.getResource("/credentials.json").getPath();
         String spreadsheetId = "1Ie0FsmkwFZHv4AO-4pdGRV4lLMaRH1mLMQq-BSKB0BA";
+        
+        private static final String EXTERNAL_CREDENTIALS_PATH = "/usr/local/gerenciador-academico/credentials.json";
+        private static final String RESOURCE_CREDENTIALS_PATH = "/credentials.json";
 
+    public GoogleSheetsFacade() throws GeneralSecurityException, IOException {
+        String spreadsheetId = "1Ie0FsmkwFZHv4AO-4pdGRV4lLMaRH1mLMQq-BSKB0BA";
         this.spreadsheetId = spreadsheetId;
-        this.sheetsService = criarSheetsService(credenciais);
+
+        // Verifica se o arquivo externo existe
+        Path externalPath = Paths.get(EXTERNAL_CREDENTIALS_PATH);
+        if (Files.exists(externalPath)) {
+            // Usa arquivo externo
+            this.sheetsService = criarSheetsService(Files.newInputStream(externalPath));
+        } else {
+            // Usa arquivo dentro do JAR (resource)
+            InputStream resourceStream = Main.class.getResourceAsStream(RESOURCE_CREDENTIALS_PATH);
+            if (resourceStream == null) {
+                throw new IOException("Arquivo de credenciais não encontrado no recurso interno nem no caminho externo");
+            }
+            this.sheetsService = criarSheetsService(resourceStream);
+        }
     }
 
     /**
@@ -52,8 +74,10 @@ public class GoogleSheetsFacade {
      * @throws GeneralSecurityException Se ocorrer um erro de segurança ao criar o serviço.
      * @throws IOException              Se ocorrer um erro de entrada/saída ao carregar as credenciais.
      */
-    private Sheets criarSheetsService(String credentialsPath) throws GeneralSecurityException, IOException {
-        GoogleCredentials credenciais = GoogleCredentials.fromStream(new FileInputStream(credentialsPath)).createScoped(SCOPES);
+    private Sheets criarSheetsService(InputStream credentialsStream) throws GeneralSecurityException, IOException {
+        GoogleCredentials credenciais = GoogleCredentials
+                .fromStream(credentialsStream)
+                .createScoped(SCOPES);
 
         return new Sheets.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, new HttpCredentialsAdapter(credenciais)).setApplicationName("Google Sheets API - Facade Example").build();
     }

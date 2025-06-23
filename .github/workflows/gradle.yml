@@ -23,12 +23,6 @@ jobs:
           mkdir -p src/main/resources
           printf '%s' "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > src/main/resources/credentials.json
 
-      - name: Install fpm
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ruby ruby-dev build-essential
-          sudo gem install --no-document fpm
-
       - name: Build fat jar
         run: ./gradlew clean jar
 
@@ -36,18 +30,21 @@ jobs:
         run: |
           mkdir -p package/usr/local/gerenciador-academico
           cp build/libs/*.jar package/usr/local/gerenciador-academico/
-
+          # Copiar também o credentials.json para a mesma pasta do jar
+          cp src/main/resources/credentials.json package/usr/local/gerenciador-academico/
+          
           mkdir -p package/usr/bin
           echo '#!/bin/bash
           java --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml -jar /usr/local/gerenciador-academico/projetofinal-1.0.0.jar' > package/usr/bin/gerenciador-academico
           chmod +x package/usr/bin/gerenciador-academico
-
+          
           fpm -s dir -t deb \
               -n gerenciador-academico \
               -v 1.0.0 \
               --depends openjfx \
               --depends openjdk-17-jre \
               -C package .
+
 
       - name: Upload .deb installer
         uses: actions/upload-artifact@v4
