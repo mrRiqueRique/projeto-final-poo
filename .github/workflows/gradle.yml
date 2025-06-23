@@ -27,7 +27,7 @@ jobs:
       - name: Build fat jar
         run: ./gradlew clean jar
 
-      - name: Package with fpm
+      - name: Package with fpm (corrigido)
         run: |
           mkdir -p package/usr/local/gerenciador-academico
           cp build/libs/*.jar package/usr/local/gerenciador-academico/
@@ -35,7 +35,6 @@ jobs:
           fpm -s dir -t deb \
               -n gerenciador-academico \
               -v 1.0.0 \
-              --prefix /usr/local/gerenciador-academico \
               -C package .
 
       - name: Upload .deb installer
