@@ -38,6 +38,12 @@ jobs:
               --prefix /usr/local/gerenciador-academico \
               -C package .
 
+      - name: Upload .deb installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: gerenciador-academico-deb
+          path: "*.deb"
+
   build-windows:
     runs-on: windows-latest
     steps:
@@ -53,8 +59,13 @@ jobs:
         run: ./gradlew clean jar
 
       - name: Package with jpackage (Windows)
-        run: |
-          ./gradlew createInstaller -PinstallerType=msi
+        run: ./gradlew createInstaller -PinstallerType=msi
+
+      - name: Upload .msi installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: gerenciador-academico-msi
+          path: build/installer/*.msi
 
   build-macos:
     runs-on: macos-latest
@@ -71,5 +82,10 @@ jobs:
         run: ./gradlew clean jar
 
       - name: Package with jpackage (macOS)
-        run: |
-          ./gradlew createInstaller -PinstallerType=pkg
+        run: ./gradlew createInstaller -PinstallerType=pkg
+
+      - name: Upload .pkg installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: gerenciador-academico-pkg
+          path: build/installer/*.pkg
