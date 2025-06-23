@@ -39,21 +39,27 @@ jobs:
         run: ./gradlew clean build createInstaller -PinstallerType=${{ runner.os == 'Windows' && 'exe' || runner.os == 'macOS' && 'pkg' || 'app-image' }}
         shell: bash
 
-      - name: Setup snapcraft on Linux
+      - name: Setup snapcraft and lxd on Linux
         if: runner.os == 'Linux'
-        run: sudo snap install snapcraft --classic
+        run: |
+          sudo snap install snapcraft --classic
+          sudo snap install lxd
+          sudo usermod -aG lxd $USER
+          newgrp lxd
+          sudo lxd init --auto
+        shell: bash
 
       - name: Create Snap launch script and prepare files
         if: runner.os == 'Linux'
         run: |
           ./gradlew clean build
-          mkdir -p snap/bin
-          cp build/libs/projetofinal-1.0.0.jar snap/bin/
-          cat << 'EOF' > snap/launch-gerenciador-academico
+          mkdir -p snap/local/bin
+          cp build/libs/projetofinal-1.0.0.jar snap/local/bin/
+          cat << 'EOF' > snap/local/launch-gerenciador-academico
           #!/bin/sh
           exec java --module-path \$SNAP/lib --add-modules javafx.controls,javafx.fxml -jar \$SNAP/bin/projetofinal-1.0.0.jar
           EOF
-          chmod +x snap/launch-gerenciador-academico
+          chmod +x snap/local/launch-gerenciador-academico
         shell: bash
 
       - name: Build Snap Package on Linux
