@@ -1,45 +1,75 @@
-name: Java Build & Package
+name: Build Installers
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
-  build-and-package:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
-
-    permissions:
-      contents: read
-
+  build-linux:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
           distribution: 'temurin'
+          java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Create credentials.json
+      - name: Install fpm
         run: |
-          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > src/main/resources/credentials.json
-        shell: bash
+          sudo apt-get update
+          sudo apt-get install -y ruby ruby-dev build-essential
+          sudo gem install --no-document fpm
 
-      - name: Build and Package App
-        run: ./gradlew clean build createInstaller -PinstallerType=${{ runner.os == 'Windows' && 'exe' || runner.os == 'macOS' && 'pkg' || 'app-image' }}
-        shell: bash
+      - name: Build fat jar
+        run: ./gradlew clean jar
 
-      - name: Upload Installer Artifact
-        uses: actions/upload-artifact@v4
+      - name: Package with fpm
+        run: |
+          mkdir -p package/usr/local/gerenciador-academico
+          cp build/libs/*.jar package/usr/local/gerenciador-academico/
+
+          fpm -s dir -t deb \
+              -n gerenciador-academico \
+              -v 1.0.0 \
+              --prefix /usr/local/gerenciador-academico \
+              -C package .
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
-          name: Gerenciador-Academico-${{ matrix.os }}
-          path: build/installer/*
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Build fat jar
+        run: ./gradlew clean jar
+
+      - name: Package with jpackage (Windows)
+        run: |
+          ./gradlew createInstaller -PinstallerType=msi
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Build fat jar
+        run: ./gradlew clean jar
+
+      - name: Package with jpackage (macOS)
+        run: |
+          ./gradlew createInstaller -PinstallerType=pkg
