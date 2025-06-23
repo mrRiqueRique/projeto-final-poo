@@ -122,7 +122,7 @@ public class EditarPerfilController {
         try {
             double novoCR = Double.parseDouble(crTextField.getText().replace(",", "."));
 
-            Aluno alunoAtualizado = new Aluno(alunoAtual.getRa(), nomeTextField.getText(), cursoTextField.getText());
+            Aluno alunoAtualizado = new Aluno(alunoAtual.getRa(), nomeTextField.getText(), cursoTextField.getText(), alunoAtual.getSenha());
             alunoAtualizado.setCR(novoCR);
             alunoAtualizado.getDisciplinas().addAll(alunoAtual.getDisciplinas());
             
