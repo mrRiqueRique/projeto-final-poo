@@ -70,7 +70,6 @@ jobs:
               --depends openjfx \
               --depends openjdk-17-jre \
               -C package .
-  
 
   build-windows:
     runs-on: windows-latest
@@ -87,13 +86,14 @@ jobs:
         run: ./gradlew clean jar
 
       - name: Package with jpackage (Windows)
-        run: ./gradlew createInstaller -PinstallerType=msi
+        run: ./gradlew createInstaller -PinstallerType=exe
 
-      - name: Upload .msi installer
+      - name: Upload .exe installer
         uses: actions/upload-artifact@v4
         with:
-          name: gerenciador-academico-msi
-          path: build/installer/*.msi
+          name: gerenciador-academico-exe
+          path: build/installer/*.exe
+
 
   build-macos:
     runs-on: macos-latest
