@@ -18,10 +18,10 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
-      - name: Create credentials.json from secret
+      - name: Create credentials.json from base64 secret
         run: |
           mkdir -p src/main/resources
-          printf '%b' "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > src/main/resources/credentials.json
+          echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" | base64 -d > src/main/resources/credentials.json
 
       - name: Check JSON output (debug)
         run: |
