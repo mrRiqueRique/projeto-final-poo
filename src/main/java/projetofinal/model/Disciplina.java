@@ -45,6 +45,10 @@ public class Disciplina {
         return this.faltas;
     }
 
+    public String getPED(){
+        return this.PED;
+    }
+
     public void setFaltas(int faltas) {
         this.faltas = faltas;
     }
