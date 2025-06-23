@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,6 +24,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import projetofinal.model.Aluno;
 import projetofinal.model.AlunoRepository;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
+import projetofinal.model.AlunoLogado;
+import javafx.scene.control.DialogPane;
 
 /**
  * Controlador da interface gráfica da tela de editar perfil.
@@ -79,12 +85,25 @@ public class EditarPerfilController {
      */
     private void carregarImagemPerfil() {
         Image imagem;
-        if (alunoAtual.getCaminhoFoto() != null && !alunoAtual.getCaminhoFoto().isEmpty()) {
-            imagem = new Image(getClass().getResourceAsStream("/" + alunoAtual.getCaminhoFoto()));
+        Image imagemPadrao = new Image(getClass().getResourceAsStream("/images/unicamp.png"));
+        String caminhoFoto = alunoAtual.getCaminhoFoto();
+
+        if (caminhoFoto != null && !caminhoFoto.isEmpty()) {
+            try {
+                File fotoFile = new File(caminhoFoto);
+                if (fotoFile.exists()) {
+                    imagem = new Image(fotoFile.toURI().toString());
+                } else {
+                    imagem = imagemPadrao;
+                }
+            } catch (Exception e) {
+                imagem = imagemPadrao;
+            }
         } else {
-            imagem = new Image(getClass().getResourceAsStream("/images/unicamp.png"));
+            imagem = imagemPadrao;
         }
         fotoPreview.setImage(imagem);
+
     }
     
     /**
@@ -144,8 +163,27 @@ public class EditarPerfilController {
             // Atualiza no repositório
             AlunoRepository.getInstancia().atualizarAluno(alunoAtual, alunoAtualizado);
 
-            messageLabel.setText("Perfil atualizado com sucesso!");
-            messageLabel.setTextFill(Color.GREEN);
+            // 1. Atualiza o aluno na sessão atual (em memória)
+             AlunoLogado.getInstance().setAluno(alunoAtualizado);
+
+            // 2. Mostra um alerta de sucesso e navega ao clicar OK
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Sucesso");
+            alert.setHeaderText("Pefil atualizado com sucesso!");
+            alert.setContentText("As suas informações foram salvas");
+
+             try {
+                DialogPane dialogPane = alert.getDialogPane();
+                dialogPane.getStylesheets().add(getClass().getResource("/style/dialog-style.css").toExternalForm());
+                alert.setGraphic(null); 
+            } catch (Exception e) {
+                System.err.println("Erro ao carregar o CSS do diálogo: " + e.getMessage());
+            }
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                handleVoltar(event);
+            }
 
         } catch (NumberFormatException e) {
             messageLabel.setText("O valor do CR deve ser um número válido.");
@@ -162,7 +200,9 @@ public class EditarPerfilController {
      * @throws IOException Se ocorrer erro ao copiar o arquivo.
      */
     private String salvarArquivoFoto(File foto, String ra) throws IOException {
-        Path destFolder = Paths.get("src/main/resources/images/profiles");
+        String userHome = System.getProperty("user.home");
+        Path destFolder = Paths.get(userHome, ".gerenciador-de-estudos", "profiles");
+
         if (!Files.exists(destFolder)) {
             Files.createDirectories(destFolder);
         }
@@ -171,7 +211,7 @@ public class EditarPerfilController {
         Path destPath = destFolder.resolve(nomeArquivo);
 
         Files.copy(foto.toPath(), destPath, StandardCopyOption.REPLACE_EXISTING);
-        return "images/profiles/" + nomeArquivo;
+        return destPath.toAbsolutePath().toString(); // Retorna o caminho absoluto
     }
 
     /**
