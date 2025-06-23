@@ -30,16 +30,33 @@ public class Disciplina {
         return this.nome;
     }
 
+    public void setNome(String novoNome){
+        this.nome = novoNome;
+    }
+
     public String getCodigo(){
         return this.codigo;
     }
+
+    public void setCodigo(String novoCodigo){
+        this.codigo = novoCodigo;
+    }
+
 
     public int getCreditos(){
         return this.creditos;
     }
 
+    public void setCreditos(int novoCreditos){
+        this.creditos = novoCreditos;
+    }
+
     public String getProfessor(){
         return this.professor;
+    }
+
+    public void setProfessor(String novoProfessor){
+        this.professor = novoProfessor;
     }
 
     public int getFaltas() {
@@ -48,6 +65,10 @@ public class Disciplina {
 
     public String getPED(){
         return this.PED;
+    }
+
+    public void setPED(String novoPED){
+        this.PED = novoPED;
     }
 
     public void setFaltas(int faltas) {
@@ -68,6 +89,10 @@ public class Disciplina {
 
     public void setAulas(List<Aula> aulas){
         this.aulas = aulas;
+    }
+
+    public String getMedia(){
+        return this.media;
     }
     // ver como quer tratar quando ultrapassar as faltas restantes, se vai mandar mensagem, etc
 

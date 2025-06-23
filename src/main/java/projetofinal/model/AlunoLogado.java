@@ -122,6 +122,10 @@ public class AlunoLogado {
         }
     }
 
+    public Service getService(){
+        return this.service;
+    }
+
     public List<Aula> carregarAulas() {
         if (aluno != null) {
             List<Aula> aulas = new ArrayList<>();

@@ -4,6 +4,7 @@ package projetofinal.ui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -183,46 +184,101 @@ public class DisciplinasController {
         titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 24));
         titulo.setStyle("-fx-text-fill: #395BC7;");
     
-        // Nome
-        Label nome = new Label("Nome: " + d.getNome());
-        nome.setFont(Font.font(16));
+        // Campos editáveis
+        editar.getChildren().add(titulo);
     
-        // Código
-        Label codigo = new Label("Código: " + d.getCodigo());
-        codigo.setFont(Font.font(16));
-    
-        // Professor
-        Label professor = new Label("Professor: " + d.getProfessor());
-        professor.setFont(Font.font(16));
-    
-        // Créditos
-        Label creditos = new Label("Créditos: " + d.getCreditos());
-        creditos.setFont(Font.font(16));
-    
-        // PED
-        Label ped = new Label("PED: " + d.getPED());
-        ped.setFont(Font.font(16));
+        criarCampoEditavel("Nome", d.getNome(), novoValor -> {
+            Disciplina dNova = new Disciplina(d.getCodigo(), novoValor, d.getPED(), d.getCreditos(), d.getMedia(), d.getProfessor());
+            alunoLogado.getService().atualizarDisciplina(d, dNova);
+            d.setNome(novoValor);
+        });
+        
+        criarCampoEditavel("Código", d.getCodigo(), novoValor -> {
+            Disciplina dNova = new Disciplina(novoValor, d.getNome(), d.getPED(), d.getCreditos(), d.getMedia(), d.getProfessor());
+            alunoLogado.getService().atualizarDisciplina(d, dNova);
+            d.setCodigo(novoValor);
+        });
+        
+        criarCampoEditavel("Professor", d.getProfessor(), novoValor -> {
+            Disciplina dNova = new Disciplina(d.getCodigo(), d.getNome(), d.getPED(), d.getCreditos(), d.getMedia(), novoValor);
+            alunoLogado.getService().atualizarDisciplina(d, dNova);
+            d.setProfessor(novoValor);
+        });
+        
+        criarCampoEditavel("Créditos", String.valueOf(d.getCreditos()), novoValor -> {
+            int novosCreditos = Integer.parseInt(novoValor);
+            Disciplina dNova = new Disciplina(d.getCodigo(), d.getNome(), d.getPED(), novosCreditos, d.getMedia(), d.getProfessor());
+            alunoLogado.getService().atualizarDisciplina(d, dNova);
+            d.setCreditos(novosCreditos);
+        });
+        
+        criarCampoEditavel("PED", d.getPED(), novoValor -> {
+            Disciplina dNova = new Disciplina(d.getCodigo(), d.getNome(), novoValor, d.getCreditos(), d.getMedia(), d.getProfessor());
+            alunoLogado.getService().atualizarDisciplina(d, dNova);
+            d.setPED(novoValor);
+        });
     
         // Faltas
         Label faltas = new Label("Faltas: " + d.getFaltas());
         faltas.setFont(Font.font(16));
     
-        // Faltas Restantes
-        Label faltasRestantes = new Label("Faltas restantes: " + d.consultarFaltasRestantes());
-        faltasRestantes.setFont(Font.font(16));
+        Button lancarFalta = new Button("Adicionar Falta");
+        lancarFalta.getStyleClass().add("botao-personalizado");
+        lancarFalta.setOnAction(e -> {
+            alunoLogado.getService().atualizarFalta(d, alunoLogado.getAluno().getRa());
+            faltas.setText("Faltas: " + d.getFaltas());
+        });
     
-        // Botão de fechar o modal
         Button fechar = new Button("Fechar");
         fechar.getStyleClass().add("botao-personalizado");
         fechar.setOnAction(e -> editar.setVisible(false));
     
-        // Espaçamento
+        editar.getChildren().addAll(faltas, lancarFalta, fechar);
         editar.setSpacing(10);
         editar.setPadding(new Insets(20));
-    
-        // Adiciona tudo
-        editar.getChildren().addAll(titulo, nome, codigo, professor, creditos, ped, faltas, faltasRestantes, fechar);
-        
-        editar.setVisible(true); // Torna visível
+        editar.setVisible(true);
     }
+
+    private void criarCampoEditavel(String labelTexto, String valorInicial, java.util.function.Consumer<String> onSalvar) {
+        HBox linha = new HBox(10);
+        linha.setAlignment(Pos.CENTER);
+    
+        Label label = new Label(labelTexto + ": " + valorInicial);
+        label.setFont(Font.font(16));
+    
+        label.setOnMouseClicked(e -> {
+            // Trocar Label por TextField + Botao Salvar + Botao Cancelar
+            linha.getChildren().clear();
+    
+            TextField textField = new TextField(valorInicial);
+    
+            Button botaoSalvar = new Button("Salvar");
+            botaoSalvar.getStyleClass().add("botao-personalizado");
+    
+            Button botaoCancelar = new Button("✖"); // Botão X
+            botaoCancelar.setStyle("-fx-cursor: hand; -fx-background-color: transparent; -fx-text-fill: red; -fx-font-weight: bold;"); // opcional: deixa vermelho
+    
+            botaoSalvar.setOnAction(ev -> {
+                String novoValor = textField.getText();
+                onSalvar.accept(novoValor); // Atualiza no banco
+    
+                // Volta pro Label
+                linha.getChildren().clear();
+                label.setText(labelTexto + ": " + novoValor);
+                linha.getChildren().add(label);
+            });
+    
+            botaoCancelar.setOnAction(ev -> {
+                // Apenas volta pro Label (não altera nada)
+                linha.getChildren().clear();
+                linha.getChildren().add(label);
+            });
+    
+            linha.getChildren().addAll(textField, botaoSalvar, botaoCancelar);
+        });
+    
+        linha.getChildren().add(label);
+        editar.getChildren().add(linha);
+    }
+
 }
