@@ -48,28 +48,27 @@ jobs:
           chmod +x package/usr/bin/gerenciador-academico
 
           mkdir -p package/usr/share/applications
-          cat > package/usr/share/applications/gerenciador-academico.desktop <<EOF
-          [Desktop Entry]
-          Version=1.0
-          Type=Application
-          Name=Gerenciador Acadêmico
-          Comment=Gerenciador Acadêmico JavaFX
-          Exec=/usr/bin/gerenciador-academico
-          Icon=/usr/share/icons/gerenciador-academico.png
-          Terminal=false
-          Categories=Education;Utility;
-          StartupNotify=true
-          EOF
+          printf '%s\n' '[Desktop Entry]' \
+          'Version=1.0' \
+          'Type=Application' \
+          'Name=Gerenciador Acadêmico' \
+          'Comment=Gerenciador Acadêmico JavaFX' \
+          'Exec=/usr/bin/gerenciador-academico' \
+          'Icon=/usr/share/icons/gerenciador-academico.png' \
+          'Terminal=false' \
+          'Categories=Education;Utility;' \
+          'StartupNotify=true' > package/usr/share/applications/gerenciador-academico.desktop
 
           mkdir -p package/usr/share/icons
           cp src/main/resources/icon.png package/usr/share/icons/gerenciador-academico.png
 
           fpm -s dir -t deb \
-              -n gerenciador-academico \
-              -v 1.0.0 \
-              --depends openjfx \
-              --depends openjdk-17-jre \
-              -C package .
+            -n gerenciador-academico \
+            -v 1.0.0 \
+            --depends openjfx \
+            --depends openjdk-17-jre \
+            -C package .
+  
 
   build-windows:
     runs-on: windows-latest
