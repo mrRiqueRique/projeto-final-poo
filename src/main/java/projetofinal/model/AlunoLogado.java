@@ -68,8 +68,9 @@ public class AlunoLogado {
         this.aluno.setTodoList(todoItemRepository.getTodoListPorAluno(ra));
         this.aluno.setDisciplinas(this.disciplinaRepository.getDisciplinasPorAluno(ra));
         this.avaliacoes = new ArrayList<>();
+        this.aulas = new ArrayList<>();
         for (Disciplina disciplina : this.aluno.getDisciplinas()) {
-            this.aulas = aulasRepository.listarAulasPorDisciplina(disciplina.getCodigo());
+            this.aulas.addAll(aulasRepository.listarAulasPorDisciplina(disciplina.getCodigo()));
             this.avaliacoes.addAll(provaRepository.getProvasPorDisciplina(disciplina.getCodigo()));
             this.avaliacoes.addAll(trabalhoRepository.getTrabalhosPorDisciplina(disciplina.getCodigo()));
         }
