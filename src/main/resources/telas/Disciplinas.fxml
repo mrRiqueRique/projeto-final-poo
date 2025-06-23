@@ -15,28 +15,29 @@
       <top>
         <VBox spacing="0">
             <!-- Cabeçalho azul -->
-            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="85">
+            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="70">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
-                <Label text="Gerenciador de Estudos" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
+                <Label text=" Gerenciador de Estudos" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Circle radius="12" fill="#C0C3E5"/>
             </HBox>
 
-            <!-- Área da seta com posição fixa -->
-            <AnchorPane prefHeight="50">
-                <Button styleClass="botao-voltar" onAction="#handleVoltar" layoutX="50" layoutY="20">
+            <!-- Área da seta e título na mesma linha -->
+            <HBox alignment="CENTER" spacing="0" prefHeight="50">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <Button styleClass="botao-voltar" onAction="#handleVoltar">
                     <graphic>
-                        <FontIcon iconLiteral="fas-arrow-left" iconSize="40" iconColor="#87A5EF"/>
+                        <FontIcon iconLiteral="fas-arrow-left" iconSize="30" iconColor="#87A5EF"/>
                     </graphic>
                 </Button>
-            </AnchorPane>
-
-            <StackPane prefHeight="30">
-                <Label text="Disciplinas"
-                    style="-fx-font-weight: bold; -fx-font-size: 40px; -fx-text-fill: #395BC7;"/>
-            </StackPane>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Disciplinas   " style="-fx-font-weight: bold; -fx-font-size: 40px; -fx-text-fill: #395BC7;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
 
         </VBox>
     </top>

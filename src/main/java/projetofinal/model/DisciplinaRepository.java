@@ -2,13 +2,11 @@ package projetofinal.model;
 
 import java.util.List;
 
-public class DisciplinaRepository {
+public class DisciplinaRepository extends Repository<Disciplina> {
     private static DisciplinaRepository instancia;
-    private List<Disciplina> disciplinas;
-    private Service service;
 
     private DisciplinaRepository() {
-        service = new Service();
+        super();
         carregarDisciplinas();
     }
 
@@ -19,13 +17,17 @@ public class DisciplinaRepository {
         return instancia;
     }
 
-    public List<Disciplina> getDisciplinas() {
-        return this.disciplinas;
+    public List<Disciplina> getDisciplinasPorAluno(String raAluno) {
+        return service.getDiciplinasDoAluno(raAluno);
+    }
+
+    public Disciplina getDisciplina(String codigoDisciplina) {
+        return getItems().stream().filter(s -> s.getCodigo().equals(codigoDisciplina)).findFirst().orElse(null);
     }
 
     private void carregarDisciplinas() {
         try {
-            disciplinas = service.getDisciplinas();
+            setItems(service.getDisciplinas());
         } catch (Exception e) {
             System.err.println("Erro ao carregar disciplinas: " + e.getMessage());
         }
@@ -33,11 +35,10 @@ public class DisciplinaRepository {
 
     public void adicionarDisciplina(Disciplina disciplina) {
         try {
+            addItem(disciplina);
             service.adicionarDisciplina(disciplina);
-            disciplinas.add(disciplina);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar disciplina: " + e.getMessage());
         }
     }
-
 }

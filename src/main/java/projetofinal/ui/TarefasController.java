@@ -2,6 +2,8 @@ package projetofinal.ui;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.animation.FadeTransition;
@@ -11,60 +13,72 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import projetofinal.model.AlunoLogado;
-import projetofinal.model.Disciplina;
-import projetofinal.model.Prova;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import projetofinal.model.TodoItem;
-import projetofinal.model.TodoList;
-import projetofinal.model.Trabalho;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.DatePicker;
 import javafx.util.Duration;
+import javafx.scene.text.FontWeight;
+
+import projetofinal.filters.*;
+import projetofinal.model.*;
 
 public class TarefasController {
 
-    @FXML
     private AlunoLogado alunoLogado;
 
     @FXML
     private VBox tarefasContainer;
+    @FXML
+    private Region fundoModal;
+    @FXML
+    private VBox modalContainer;
 
-    @FXML private Region fundoModal;
+    @FXML
+    private TextField campoNome, campoDisciplina, campoAvaliacao;
+    @FXML
+    private DatePicker campoData;
+    @FXML
+    private ToggleGroup prioridadeGroup;
 
-    @FXML private VBox modalContainer;
-    @FXML private TextField campoNome, campoDisciplina, campoAvaliacao;
-    @FXML private DatePicker campoData;
-    @FXML private ToggleGroup prioridadeGroup;
+    @FXML
+    private TextField campoFiltro;
+    @FXML
+    private ComboBox<String> filtroDisciplinas;
+    @FXML
+    private ComboBox<String> filtroPrioridades;
+    @FXML
+    private ComboBox<String> filtroOrdem;
+    @FXML
+    private DatePicker filtroData;
 
     @FXML
     public void initialize() {
         alunoLogado = AlunoLogado.getInstance();
         carregarTodoList();
+
+        // Inicializa ComboBoxes
+        List<String> codigosDisciplinas = alunoLogado.getDisciplinas().stream().map(Disciplina::getCodigo).toList();
+        filtroDisciplinas.getItems().addAll(codigosDisciplinas);
     }
 
     @FXML
     private void carregarTodoList() {
-        tarefasContainer.getChildren().clear(); // limpa tarefas anteriores
+        tarefasContainer.getChildren().clear();
         TodoList listaToDo = alunoLogado.getTodoList();
-
         for (TodoItem item : listaToDo.listarItems()) {
+            tarefasContainer.getChildren().add(criarItemTarefa(item));
+        }
+    }
+
+    @FXML
+    private void carregarTodoList(TodoList lista) {
+        tarefasContainer.getChildren().clear();
+        for (TodoItem item : lista.listarItems()) {
             tarefasContainer.getChildren().add(criarItemTarefa(item));
         }
     }
@@ -73,11 +87,11 @@ public class TarefasController {
         Label tag = new Label(texto);
         tag.setFont(Font.font("Raleway", FontWeight.BOLD, 11));
         tag.setStyle(String.format("""
-            -fx-background-color: %s;
-            -fx-background-radius: 12;
-            -fx-padding: 4 10 4 10;
-            -fx-text-fill: %s;
-        """, corFundo, corTexto));
+                    -fx-background-color: %s;
+                    -fx-background-radius: 12;
+                    -fx-padding: 4 10 4 10;
+                    -fx-text-fill: %s;
+                """, corFundo, corTexto));
         return tag;
     }
 
@@ -86,11 +100,11 @@ public class TarefasController {
         box.setPadding(new Insets(10));
         box.setMaxWidth(600);
         box.setStyle("""
-            -fx-border-color: #6A7FC1;
-            -fx-border-radius: 8;
-            -fx-background-radius: 8;
-            -fx-background-color: #E8EBF9;
-        """);
+                    -fx-border-color: #6A7FC1;
+                    -fx-border-radius: 8;
+                    -fx-background-radius: 8;
+                    -fx-background-color: #E8EBF9;
+                """);
 
         CheckBox chk = new CheckBox();
         chk.setFocusTraversable(false);
@@ -110,68 +124,62 @@ public class TarefasController {
         nomeLabel.setFont(Font.font("Raleway", FontWeight.BOLD, 14));
         textos.getChildren().add(nomeLabel);
 
-        // ----- DISCIPLINA -----
         if (item.getDisciplina() != null) {
             HBox linha = new HBox(5);
             Label titulo = new Label("Disciplina:");
             titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
-            titulo.setTextFill(Color.web("#A9A9A9")); // cinza claro só no título
-            Label valor = criarTag(item.getDisciplina().getCodigo(), "#E1BEE7", "#6A1B9A"); // roxo
+            titulo.setTextFill(Color.web("#A9A9A9"));
+            Label valor = criarTag(item.getDisciplina().getCodigo(), "#E1BEE7", "#6A1B9A");
             linha.getChildren().addAll(titulo, valor);
             textos.getChildren().add(linha);
         }
 
-        // ----- PROVA -----
         if (item.getAvaliacao() instanceof Prova prova) {
             HBox linha = new HBox(5);
             Label titulo = new Label("Prova:");
             titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
-            titulo.setTextFill(Color.web("#A9A9A9")); // cinza claro só no título
-            Label valor = criarTag(prova.getNome(), "rgb(169, 233, 219)", "#006064"); // rosa
+            titulo.setTextFill(Color.web("#A9A9A9"));
+            Label valor = criarTag(prova.getNome(), "rgb(169, 233, 219)", "#006064");
             linha.getChildren().addAll(titulo, valor);
             textos.getChildren().add(linha);
         }
 
-        // ----- TRABALHO -----
         if (item.getAvaliacao() instanceof Trabalho trab) {
             HBox linha = new HBox(5);
             Label titulo = new Label("Trabalho:");
             titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
-            titulo.setTextFill(Color.web("#A9A9A9")); // cinza claro só no título
-            Label valor = criarTag(trab.getNome(), "#B2EBF2", "#0097A7"); // ciano
+            titulo.setTextFill(Color.web("#A9A9A9"));
+            Label valor = criarTag(trab.getNome(), "#B2EBF2", "#0097A7");
             linha.getChildren().addAll(titulo, valor);
             textos.getChildren().add(linha);
         }
 
-        // ----- PRIORIDADE -----
         if (item.getPrioridade() != null) {
             HBox linha = new HBox(5);
             Label titulo = new Label("Prioridade:");
             titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
-            titulo.setTextFill(Color.web("#A9A9A9")); // cinza claro só no título
-
+            titulo.setTextFill(Color.web("#A9A9A9"));
             String prioridade = item.getPrioridade().toLowerCase();
-            String corFundo = "#FFCDD2"; // default red
+            String corFundo = "#FFCDD2";
             String corTexto = "#C62828";
-
             if (prioridade.contains("média") || prioridade.contains("media")) {
-                corFundo = "#ffec82"; corTexto = "#d48f28"; // amarelo
+                corFundo = "#ffec82";
+                corTexto = "#d48f28";
             } else if (prioridade.contains("baixa")) {
-                corFundo = "#C8E6C9"; corTexto = "#2E7D32"; // verde
+                corFundo = "#C8E6C9";
+                corTexto = "#2E7D32";
             }
-
             Label valor = criarTag(item.getPrioridade(), corFundo, corTexto);
             linha.getChildren().addAll(titulo, valor);
             textos.getChildren().add(linha);
         }
 
-        // ----- DATA -----
         if (item.getData() != null) {
             HBox linha = new HBox(5);
             Label titulo = new Label("Data:");
             titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 12));
-            titulo.setTextFill(Color.web("#A9A9A9")); // cinza claro só no título
-            Label valor = criarTag(item.getData().toString(), "#BBDEFB", "#1565C0"); // azul
+            titulo.setTextFill(Color.web("#A9A9A9"));
+            Label valor = criarTag(item.getData().toString(), "#BBDEFB", "#1565C0");
             linha.getChildren().addAll(titulo, valor);
             textos.getChildren().add(linha);
         }
@@ -194,6 +202,45 @@ public class TarefasController {
         return box;
     }
 
+    @FXML
+    private void aplicarFiltro() {
+        TodoList tarefasFiltradas = new TodoList();
+        List<TodoItem> lista = alunoLogado.getTodoList().listarItems();
+
+        String textoBusca = campoFiltro.getText().toLowerCase();
+        String disciplinaSelecionada = filtroDisciplinas.getValue();
+        String prioridadeSelecionada = filtroPrioridades.getValue();
+        String ordemSelecionada = filtroOrdem.getValue();
+        LocalDate dataSelecionada = filtroData.getValue();
+
+        List<TodoItem> filtrada = new ArrayList<>(lista);
+
+        if (textoBusca != null && !textoBusca.isBlank()) {
+            filtrada = new FiltroPorNome(textoBusca).meetCriteria(filtrada);
+        }
+        if (disciplinaSelecionada != null) {
+            filtrada = new FiltroPorDisciplina(disciplinaSelecionada).meetCriteria(filtrada);
+        }
+        if (prioridadeSelecionada != null) {
+            filtrada = new FiltroPorPrioridade(prioridadeSelecionada).meetCriteria(filtrada);
+        }
+        if (dataSelecionada != null) {
+            String dataFormatada = dataSelecionada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            filtrada = new FiltroPorData(dataFormatada).meetCriteria(filtrada);
+        }
+        if (ordemSelecionada != null) {
+            if (ordemSelecionada.equals("Ordem Alfabética")) {
+                filtrada = new FiltroPorOrdemAlfabetica().meetCriteria(filtrada);
+            } else if (ordemSelecionada.equals("Prioridade Crescente")) {
+                filtrada = new FiltroPorOrdemPrioridadeCrescente().meetCriteria(filtrada);
+            } else if (ordemSelecionada.equals("Prioridade Descrscente")) {
+                filtrada = new FiltroPorOrdemPrioridadeDecrescente().meetCriteria(filtrada);
+            }
+        }
+
+        tarefasFiltradas.adicionarTodoItens(filtrada);
+        carregarTodoList(tarefasFiltradas);
+    }
 
     @FXML
     private void handleNovoItem() {
@@ -210,35 +257,35 @@ public class TarefasController {
     @FXML
     private void handleSalvarTarefa() {
         String nome = campoNome.getText();
-        String disciplina = campoDisciplina.getText();
-        String avaliacao = campoAvaliacao.getText();
+        String disciplinaCodigo = campoDisciplina.getText();
+        String avaliacaoNome = campoAvaliacao.getText();
         LocalDate data = campoData.getValue();
 
         ToggleButton selecionado = (ToggleButton) prioridadeGroup.getSelectedToggle();
-        if (selecionado != null) {
-            String prioridade = selecionado.getText(); // "Baixa", "Média" ou "Alta"
+        String prioridade = selecionado != null ? selecionado.getText() : null;
+
+        if (nome.isEmpty() || disciplinaCodigo.isEmpty() || avaliacaoNome.isEmpty() || data == null || prioridade == null) {
+            System.err.println("Erro: Todos os campos devem ser preenchidos.");
+            return;
         }
-        // Aqui você cria a tarefa (ajuste conforme suas classes)
-        // Exemplo:
-        // TodoItem item = new TodoItem(nome, ..., data, prioridade);
-        // alunoLogado.getTodoList().adicionarItem(item);
-        // carregarTodoList();
+
+        String dataFormatada = data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        alunoLogado.cadastrarTodoItem(nome, disciplinaCodigo, avaliacaoNome, dataFormatada, prioridade);
+        carregarTodoList();
 
         modalContainer.setVisible(false);
+        fundoModal.setVisible(false);
     }
 
-
-    @FXML private void handleVoltar(ActionEvent event) {
+    @FXML
+    private void handleVoltar(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Dashboard.fxml"));
             Scene novaCena = new Scene(loader.load(), 1440, 810);
-
             novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
             novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
             novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
             novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
-
-            // Obtém o Stage atual a partir do botão que disparou o evento
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(novaCena);
             stage.setTitle("Trabalho Final");
@@ -246,5 +293,15 @@ public class TarefasController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleResetFiltro() {
+        campoFiltro.clear();
+        filtroDisciplinas.getSelectionModel().clearSelection();
+        filtroPrioridades.getSelectionModel().clearSelection();
+        filtroOrdem.getSelectionModel().clearSelection();
+        filtroData.setValue(null);
+        carregarTodoList();
     }
 }

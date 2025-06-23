@@ -94,7 +94,7 @@ public class GoogleSheetsFacade {
     public void escreverDados(String nomePlanilha, String colunaInicial, String colunaFinal, List<List<Object>> valores) throws IOException {
         int ultimaLinhaComDados = obterUltimaLinhaComDados(nomePlanilha, colunaInicial, colunaFinal);
         int linhasNecessarias = valores.size();
-        int linhaDestino = ultimaLinhaComDados + 1;
+        int linhaDestino = ultimaLinhaComDados + 2;
 
         // 1. Verifica quantas linhas existem atualmente na planilha
         Spreadsheet spreadsheet = sheetsService.spreadsheets().get(spreadsheetId).execute();

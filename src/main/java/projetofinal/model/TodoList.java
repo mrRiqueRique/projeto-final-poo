@@ -15,6 +15,10 @@ public class TodoList {
         todoList.add(item);
     }
 
+    public void adicionarTodoItens(List<TodoItem> items){
+        todoList.addAll(items);
+    }
+
     public void concluirTarefa(TodoItem item){
         item.concluir(true);
         todoList.remove(item);

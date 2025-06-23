@@ -17,14 +17,13 @@ public class Service {
     // CRUD
     public List<Aluno> getAlunos() {
         try {
-            // --> Alterado para "E" para incluir a coluna da foto. (Lari)
-            List<List<Object>> dataAluno = sheetsFacade.lerDados("Aluno", "A", "E");
+            List<List<Object>> dataAluno = sheetsFacade.lerDados("Aluno", "A", "F");
             List<Aluno> alunos = new ArrayList<>();
             for (List<Object> linha : dataAluno) {
                 if (linha.isEmpty()) continue; // Pula linhas vazias
                 
                 // Lógica de criação do aluno para incluir CR e Foto.
-                Aluno aluno = new Aluno(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString());
+                Aluno aluno = new Aluno(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(4).toString());
 
                 // Adiciona o CR se a coluna existir
                 if (linha.size() > 3 && linha.get(3) != null && !linha.get(3).toString().isEmpty()) {
@@ -32,8 +31,8 @@ public class Service {
                 }
                 
                 // Adiciona o caminho da foto se a coluna existir
-                if (linha.size() > 4 && linha.get(4) != null) {
-                    aluno.setCaminhoFoto(linha.get(4).toString());
+                if (linha.size() > 5 && linha.get(5) != null) {
+                    aluno.setCaminhoFoto(linha.get(5).toString());
                 }
 
                 alunos.add(aluno);
@@ -47,19 +46,17 @@ public class Service {
 
     public Aluno getAluno(String ra) {
         try {
-            // --> Alterado para "E" para incluir a coluna da foto. (Lari)
-            List<Object> dataAluno = sheetsFacade.lerDadosLinhaPorId("Aluno", "A", "E", ra);
+            List<Object> dataAluno = sheetsFacade.lerDadosLinhaPorId("Aluno", "A", "F", ra);
             if (dataAluno.isEmpty()) return null;
             
-            // --> Lógica de criação do aluno melhorada para incluir CR e Foto. (Lari)
-            Aluno aluno = new Aluno(dataAluno.get(0).toString(), dataAluno.get(1).toString(), dataAluno.get(2).toString());
+            Aluno aluno = new Aluno(dataAluno.get(0).toString(), dataAluno.get(1).toString(), dataAluno.get(2).toString(), dataAluno.get(4).toString());
 
             if (dataAluno.size() > 3 && dataAluno.get(3) != null && !dataAluno.get(3).toString().isEmpty()) {
                 aluno.setCR(Double.parseDouble(dataAluno.get(3).toString()));
             }
             
-            if (dataAluno.size() > 4 && dataAluno.get(4) != null) {
-                aluno.setCaminhoFoto(dataAluno.get(4).toString());
+            if (dataAluno.size() > 4 && dataAluno.get(5) != null) {
+                aluno.setCaminhoFoto(dataAluno.get(5).toString());
             }
 
             return aluno;
@@ -124,7 +121,7 @@ public class Service {
             List<Prova> provas = new ArrayList<>();
             for (List<Object> linha : dataProva) {
 
-                provas.add(new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString()));
+                provas.add(new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString(), linha.get(4).toString()));
             }
             return provas;
         } catch (Exception e) {
@@ -138,7 +135,7 @@ public class Service {
             List<List<Object>> dataProva = sheetsFacade.lerDados("Prova", "A", "F");
             for (List<Object> linha : dataProva) {
                 if (linha.get(0).toString().equals(nomeProva) && linha.get(4).toString().equals(codigoDisciplina)) {
-                    return new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(),linha.get(5).toString());
+                    return new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString(), linha.get(4).toString());
                 }
             }
             return null; // Retorna null se não encontrar a prova
@@ -154,7 +151,7 @@ public class Service {
             List<Prova> provas = new ArrayList<>();
             for (List<Object> linha : dataProva) {
                 if (linha.get(4).toString().equals(codigoDisciplina)) { // Filtra pelo código da disciplina
-                    provas.add(new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(),linha.get(5).toString()));
+                    provas.add(new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString(), linha.get(4).toString()));
                 }
             }
             return provas;
@@ -163,7 +160,6 @@ public class Service {
             return List.of(); // Retorna uma lista vazia em caso de erro
         }
     }
-
 
 
     public int getNotaProva(String nomeProva, String codigoDisciplina, String raAluno) {
@@ -186,7 +182,7 @@ public class Service {
             List<List<Object>> dataTrabalho = sheetsFacade.lerDados("Trabalho", "A", "F");
             List<Trabalho> trabalhos = new ArrayList<>();
             for (List<Object> linha : dataTrabalho) {
-                trabalhos.add(new Trabalho(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Boolean.parseBoolean(linha.get(3).toString())));
+                trabalhos.add(new Trabalho(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Boolean.parseBoolean(linha.get(3).toString()), linha.get(5).toString()));
             }
             return trabalhos;
         } catch (Exception e) {
@@ -195,14 +191,12 @@ public class Service {
         }
     }
 
-    // TO DO: ERRO!!!! NÃO CONSEGUE CRIAR O TRABALHO
-
     public Trabalho getTrabalho(String nomeTrabalho, String codigoDisciplina) {
         try {
             List<List<Object>> dataTrabalho = sheetsFacade.lerDados("Trabalho", "A", "F");
             for (List<Object> linha : dataTrabalho) {
-                if (linha.get(0).toString().equals(nomeTrabalho) && linha.get(4).toString().equals(codigoDisciplina)) {
-                    return new Trabalho(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), false);
+                if (linha.get(0).toString().equals(nomeTrabalho) && linha.get(5).toString().equals(codigoDisciplina)) {
+                    return new Trabalho(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), false, linha.get(5).toString()); // Cria o objeto Trabalho com os dados da linha
                 }
             }
             return null; // Retorna null se não encontrar o trabalho
@@ -223,7 +217,7 @@ public class Service {
 
                 // Mas aqui estamos tentando acessar a coluna F (índice 5)
                 if (linha.get(5).toString().equals(codigoDisciplina)) { // Filtra pelo código da disciplina
-                    trabalhos.add(new Trabalho(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Boolean.parseBoolean(linha.get(3).toString())));
+                    trabalhos.add(new Trabalho(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Boolean.parseBoolean(linha.get(3).toString()), linha.get(5).toString()));
                 }
             }
             return trabalhos;
@@ -248,33 +242,33 @@ public class Service {
         }
     }
 
-    public TodoList getTodoListAluno(String raAluno) {
-        TodoList todoList = new TodoList();
-        try {
-            List<List<Object>> dataTodoItem = sheetsFacade.lerDados("TodoItem", "A", "h");
-            for (List<Object> linha : dataTodoItem) {
-                if (linha.get(0).toString().equals(raAluno)) {
-                    Disciplina disciplina = getDisciplina(linha.get(2).toString());
+//    public TodoList getTodoListAluno(String raAluno) {
+//        TodoList todoList = new TodoList();
+//        try {
+//            List<List<Object>> dataTodoItem = sheetsFacade.lerDados("TodoItem", "A", "h");
+//            for (List<Object> linha : dataTodoItem) {
+//                if (linha.get(0).toString().equals(raAluno)) {
+//                    Disciplina disciplina = getDisciplina(linha.get(2).toString());
+//
+//                    MetodoDeAvaliacao metodoDeAvaliacao;
+//                    Prova prova = getProva(linha.get(3).toString(), linha.get(2).toString());
+//                    if (prova == null)
+//                        metodoDeAvaliacao = getTrabalho(linha.get(3).toString(), linha.get(2).toString());
+//                    else metodoDeAvaliacao = prova;
+//
+//                    TodoItem todoItem = new TodoItem(linha.get(1).toString(), disciplina, metodoDeAvaliacao, linha.get(4).toString(), linha.get(5).toString());
+//                    todoItem.setConcluido(Boolean.parseBoolean(linha.get(6).toString()));
+//
+//                    todoList.adicionarItem(todoItem);
+//                }
+//            }
+//        } catch (Exception e) {
+//            System.err.println("Erro ao obter TodoLists do aluno: " + e.getMessage());
+//        }
+//        return todoList;
+//    }
 
-                    MetodoDeAvaliacao metodoDeAvaliacao;
-                    Prova prova = getProva(linha.get(3).toString(), linha.get(2).toString());
-                    if (prova == null)
-                        metodoDeAvaliacao = getTrabalho(linha.get(3).toString(), linha.get(2).toString());
-                    else metodoDeAvaliacao = prova;
-
-                    TodoItem todoItem = new TodoItem(linha.get(1).toString(), disciplina, metodoDeAvaliacao, linha.get(4).toString(), linha.get(5).toString());
-                    todoItem.setConcluido(Boolean.parseBoolean(linha.get(6).toString()));
-
-                    todoList.adicionarItem(todoItem);
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Erro ao obter TodoLists do aluno: " + e.getMessage());
-        }
-        return todoList;
-    }
-
-    public List<MetodoDeAvaliacao> getAvaliacoesAluno(String raAluno){
+    public List<MetodoDeAvaliacao> getAvaliacoesAluno(String raAluno) {
         List<MetodoDeAvaliacao> avaliacoes = new ArrayList<>();
         try {
             List<List<Object>> dataAlunoProva = sheetsFacade.lerDados("AlunoProva", "A", "D");
@@ -298,7 +292,7 @@ public class Service {
                     }
                 }
             }
-            
+
         } catch (Exception e) {
             System.err.println("Erro ao obter avaliações do aluno: " + e.getMessage());
         }
@@ -321,6 +315,26 @@ public class Service {
         }
     }
 
+    public List<TodoItem> getTodoItens() {
+        List<TodoItem> todoItems = new ArrayList<>();
+        try {
+            List<List<Object>> dataTodoItem = sheetsFacade.lerDados("TodoItem", "A", "G");
+            for (List<Object> linha : dataTodoItem) {
+                Disciplina disciplina = getDisciplina(linha.get(2).toString());
+                MetodoDeAvaliacao avaliacao = getProva(linha.get(3).toString(), linha.get(2).toString());
+
+                if (avaliacao == null) avaliacao = getTrabalho(linha.get(3).toString(), linha.get(2).toString());
+
+                TodoItem todoItem = new TodoItem(linha.get(0).toString(), linha.get(1).toString(), disciplina, avaliacao, linha.get(4).toString(), linha.get(5).toString());
+                todoItem.setConcluido(Boolean.parseBoolean(linha.get(6).toString()));
+                todoItems.add(todoItem);
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao obter TodoItems: " + e.getMessage());
+        }
+        return todoItems;
+    }
+
     // add s
 
     public void adicionarAulasDisciplina(String codigoDisciplina, List<Aula> aulas) {
@@ -337,18 +351,17 @@ public class Service {
 
     public void adicionarAluno(Aluno aluno) {
         try {
-            // --> Adicionado o 'getCaminhoFoto' na lista de dados a serem escritos. (Lari)
             List<List<Object>> novoAluno = List.of(
                 List.of(
                     aluno.getRa(), 
                     aluno.getNome(), 
                     aluno.getCurso(), 
                     aluno.getCR(), 
+                    aluno.getSenha(),
                     aluno.getCaminhoFoto() != null ? aluno.getCaminhoFoto() : "" // Garante que não seja nulo
                 )
             );
-            // --> Alterado para "E" para incluir a nova coluna. (Lari)
-            sheetsFacade.escreverDados("Aluno", "A", "E", novoAluno);
+            sheetsFacade.escreverDados("Aluno", "A", "F", novoAluno);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar aluno: " + e.getMessage());
         }
@@ -421,24 +434,21 @@ public class Service {
 
     public void atualizarAluno(Aluno alunoVelho, Aluno alunoNovo) {
         try {
-            // --> Alterado para "E" para ler todas as colunas do aluno. (Lari)
-            List<List<Object>> dadosAluno = sheetsFacade.lerDados("Aluno", "A", "E");
-
-            // --> Adicionado o 'getCaminhoFoto' na nova linha de dados. (Lari)
+            List<List<Object>> dadosAluno = sheetsFacade.lerDados("Aluno", "A", "F");
             List<Object> linhaNova = new ArrayList<>(
                 List.of(
                     alunoNovo.getRa(), 
                     alunoNovo.getNome(), 
                     alunoNovo.getCurso(), 
                     alunoNovo.getCR(),
+                    alunoNovo.getSenha(),
                     alunoNovo.getCaminhoFoto() != null ? alunoNovo.getCaminhoFoto() : ""
                 )
             );
 
             for (List<Object> linha : dadosAluno) {
                 if (linha.get(0).toString().equals(alunoVelho.getRa())) {
-                    // --> Alterado para "E" para atualizar o intervalo correto. (Lari)
-                    sheetsFacade.atualizarDados("Aluno", "A", "E", List.of(linha), List.of(linhaNova));
+                    sheetsFacade.atualizarDados("Aluno", "A", "F", List.of(linha), List.of(linhaNova));
                     return;
                 }
             }
@@ -515,7 +525,7 @@ public class Service {
     public void atualizarProva(String codigoDisciplina, Prova provaAntiga, Prova provaNova) {
         try {
             List<List<Object>> dadosProva = sheetsFacade.lerDados("Prova", "A", "F");
-            List<Object> novaLinha = new ArrayList<>(List.of(provaNova.getNome(), provaNova.getLocal(), provaNova.getDuracao(), provaNova.getData(), provaNova.getHorarioInicio(),codigoDisciplina));
+            List<Object> novaLinha = new ArrayList<>(List.of(provaNova.getNome(), provaNova.getLocal(), provaNova.getDuracao(), provaNova.getData(), provaNova.getHorarioInicio(), codigoDisciplina));
             for (List<Object> linha : dadosProva) {
                 if (linha.get(0).toString().equals(provaAntiga.getNome()) && linha.get(4).toString().equals(codigoDisciplina)) {
                     sheetsFacade.atualizarDados("Prova", "A", "F", List.of(linha), List.of(novaLinha));
@@ -567,8 +577,7 @@ public class Service {
             for (int index = 0; index < dadosAluno.size(); index++) {
                 Aluno alunoAtual = dadosAluno.get(index);
                 if (alunoAtual.getRa().equals(aluno.getRa())) {
-                    // --> Alterado para "E" para garantir que a linha inteira seja considerada (Lari)
-                    sheetsFacade.deletarDados("Aluno", "A", "E", index + 2); // +2 para pular o cabeçalho e ajustar o índice
+                    sheetsFacade.deletarDados("Aluno", "A", "F", index + 2); // +2 para pular o cabeçalho e ajustar o índice
                     return;
                 }
             }

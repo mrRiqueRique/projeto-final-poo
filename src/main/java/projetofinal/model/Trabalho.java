@@ -13,13 +13,15 @@ public class Trabalho extends MetodoDeAvaliacao{
     private String dataEntrega;
     private boolean emGrupo;
     private List<Aluno> grupo;
+    private String codigoDisciplina;
 
-    public Trabalho(String nome, String dataInicio, String dataEntrega, boolean emGrupo){
+    public Trabalho(String nome, String dataInicio, String dataEntrega, boolean emGrupo, String codigoDisciplina){
         super(nome);
         this.dataInicio = dataInicio;
         this.dataEntrega = dataEntrega;
         this.emGrupo = emGrupo;
         grupo = new ArrayList<>();
+        this.codigoDisciplina = codigoDisciplina;
     }
 
     public String getDataInicio() {
@@ -28,6 +30,10 @@ public class Trabalho extends MetodoDeAvaliacao{
 
     public String getDataEntrega() {
         return this.dataEntrega;
+    }
+
+    public String getCodigoDisciplina() {
+        return this.codigoDisciplina;
     }
 
     public boolean getEmGrupo(){
