@@ -48,6 +48,10 @@ public class AlunoLogado {
         return this.aluno;
     }
 
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
+    }
+
     public void logout() {
         alunoLogado = null;
     }
