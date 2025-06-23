@@ -41,12 +41,10 @@ jobs:
           mkdir -p package/usr/local/gerenciador-academico
           cp build/libs/*.jar package/usr/local/gerenciador-academico/
           cp src/main/resources/credentials.json package/usr/local/gerenciador-academico/
-
           mkdir -p package/usr/bin
           echo '#!/bin/bash
           java --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml -jar /usr/local/gerenciador-academico/projetofinal-1.0.0.jar' > package/usr/bin/gerenciador-academico
           chmod +x package/usr/bin/gerenciador-academico
-
           mkdir -p package/usr/share/applications
           printf '%s\n' '[Desktop Entry]' \
           'Version=1.0' \
@@ -58,17 +56,28 @@ jobs:
           'Terminal=false' \
           'Categories=Education;Utility;' \
           'StartupNotify=true' > package/usr/share/applications/gerenciador-academico.desktop
-
           mkdir -p package/usr/share/icons
           cp src/main/resources/icon.png package/usr/share/icons/gerenciador-academico.png
-
           fpm -s dir -t deb \
             -n gerenciador-academico \
             -v 1.0.0 \
             --depends openjfx \
             --depends openjdk-17-jre \
             -C package .
-  
+
+          # Debug para listar arquivos gerados
+          ls -l *.deb
+
+          # Copia o arquivo .deb para a raiz para upload
+          cp gerenciador-academico_1.0.0_amd64.deb .
+
+      - name: Upload .deb installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: gerenciador-academico-deb
+          path: gerenciador-academico_1.0.0_amd64.deb
+
+
 
   build-windows:
     runs-on: windows-latest
