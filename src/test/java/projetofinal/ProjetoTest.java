@@ -23,7 +23,7 @@ public class ProjetoTest {
     @Test 
     public void CadastrarDisciplina(){
         Aluno aluno = new Aluno("281773", "Gabriela Taniguchi", "Ciência da Computação", "123");
-        Disciplina poo = new Disciplina("MC322", "Programação Orientada a Objetos", "Gabriel De Freitas Leite", 4, 0, "Marcos Raimundo");
+        Disciplina poo = new Disciplina("MC322", "Programação Orientada a Objetos", "Gabriel De Freitas Leite", 4, "0", "Marcos Raimundo");
         aluno.cadastrarDisciplina(poo);
 
         assertEquals(poo, aluno.getDisciplinas().get(0));
@@ -56,11 +56,11 @@ public class ProjetoTest {
     // Teste dos métodos de adicionaeAvaliação e os getters da classe Disciplina
     @Test
     public void Disciplinas(){
-        Disciplina poo = new Disciplina("MC322", "Programação Orientada a Objetos", "Gabriel De Freitas Leite", 4, 0, "Marcos Raimundo");
+        Disciplina poo = new Disciplina("MC322", "Programação Orientada a Objetos", "Gabriel De Freitas Leite", 4, "0", "Marcos Raimundo");
         poo.computarFalta();
-        Trabalho trabalho_final = new Trabalho("projeto-final", "09/06/2025", "23/06/2025", true, "MC322");
-        Prova prova = new Prova("P1 de poo", "PB 13", "2 horas", "02/06/2025", "19:00", "21:00");
-        poo.adicionarAvaliacao(trabalho_final);
+        Trabalho trabalho_final = new Trabalho("projeto-final","TODO - ADICIONAR DISCIPLINA", "09/06/2025", "23/06/2025", true, "MC322");
+            Prova prova = new Prova("P1 de poo", "TODO - ADICIONAR DISCIPLINA","PB 13", "2 horas", "02/06/2025", "19:00");
+            poo.adicionarAvaliacao(trabalho_final);
         poo.adicionarAvaliacao(prova);       
 
         assertEquals(1, poo.getFaltas());
@@ -119,7 +119,7 @@ public class ProjetoTest {
     @Test
     public void DisciplinaNaoEncontradaException() {
         Aluno aluno = new Aluno("281773", "Gabriela Taniguchi", "Ciência da Computação", "123");
-        Disciplina poo = new Disciplina("MC322", "Programação Orientada a Objetos", "Gabriel De Freitas Leite", 4, 0, "Marcos Raimundo");
+        Disciplina poo = new Disciplina("MC322", "Programação Orientada a Objetos", "Gabriel De Freitas Leite", 4, "0", "Marcos Raimundo");
         
         ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStreamCaptor));
@@ -134,7 +134,7 @@ public class ProjetoTest {
     @Test
     public void TrabalhoGettersESetters() {
 
-        Trabalho trab = new Trabalho("Projeto A", "23/06/2025", "30/06/2025", true, "MC322");
+        Trabalho trab = new Trabalho("Projeto A", "MC322", "23/06/2025", "30/06/2025", true, "MC322");
 
         assertEquals("23/06/2025", trab.getDataInicio());
         assertEquals("30/06/2025", trab.getDataEntrega());
@@ -148,7 +148,7 @@ public class ProjetoTest {
     // Teste dos getters e setters da classe TodoItem
     @Test
     public void TodoItemGettersESetters() {
-        Disciplina disc = new Disciplina("MC102", "Algoritmos", "Ieremies", 6, 0, "Santiago");
+        Disciplina disc = new Disciplina("MC102", "Algoritmos", "Ieremies", 6, "0", "Santiago");
         Prova avaliacao = new Prova("P1", "PB 16", "2h", "15/07/2025", "10:00", "MC102");
         TodoItem item = new TodoItem("123456", "Estudar para prova", disc, avaliacao, "Alta", "10/07/2025");
 
@@ -171,7 +171,7 @@ public class ProjetoTest {
         item.setConcluido(true);
         assertTrue(item.getConcluido());
 
-        Disciplina novaDisc = new Disciplina("MC202", "Estruturas de Dados", "Lucas", 6, 0, "Lehilton");
+        Disciplina novaDisc = new Disciplina("MC202", "Estruturas de Dados", "Lucas", 6, "0", "Lehilton");
         item.setDisciplina(novaDisc);
         assertEquals(novaDisc, item.getDisciplina());
     }

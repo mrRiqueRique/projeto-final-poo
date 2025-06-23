@@ -30,7 +30,7 @@ public class TrabalhoRepository extends Repository<Trabalho> {
     }
 
     public Trabalho getTrabalho(String codigoDisciplina, String nomeTrabalho) {
-        return getItems().stream()
+        return getTrabalhos().stream()
                 .filter(trabalho -> trabalho.getCodigoDisciplina().equals(codigoDisciplina) && trabalho.getNome().equals(nomeTrabalho))
                 .findFirst()
                 .orElse(null);

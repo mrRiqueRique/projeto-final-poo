@@ -66,7 +66,8 @@ public class CadastrarDisciplinaController {
 
     private Map<String, Boolean> diasAulas;
 
-    @FXML private void handleVoltar(ActionEvent event) {
+    @FXML
+    private void handleVoltar(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Disciplinas.fxml"));
             Scene novaCena = new Scene(loader.load(), 1440, 810);
@@ -108,22 +109,21 @@ public class CadastrarDisciplinaController {
 
     @FXML
     public void handleBotaoDia(MouseEvent event) {
-        StackPane dia = (StackPane) event.getSource();  
+        StackPane dia = (StackPane) event.getSource();
 
         Label label = findNodeById(dia, "label", Label.class);
         TextField inicio = findNodeById(dia, "inicio", TextField.class);
         TextField fim = findNodeById(dia, "fim", TextField.class);
-        TextField local = findNodeById(dia, "local", TextField.class); 
+        TextField local = findNodeById(dia, "local", TextField.class);
 
-        if(!diasAulas.get(label.getText())){
+        if (!diasAulas.get(label.getText())) {
             diasAulas.put(label.getText(), true);
             label.setStyle("-fx-text-fill: white;");
             dia.setStyle("-fx-background-color: #395BC7; -fx-border-width: 0;");
             inicio.setVisible(true);
             fim.setVisible(true);
             local.setVisible(true);
-        }
-        else{
+        } else {
             diasAulas.put(label.getText(), false);
             label.setStyle("-fx-text-fill: gray;");
             dia.setStyle("-fx-background-color: white; -fx-border-width: 2;");
@@ -147,80 +147,78 @@ public class CadastrarDisciplinaController {
         avaliacoes = new ArrayList<>();
     }
 
-    
-    
+
     @FXML
-    public void handleInserirMedia(ActionEvent event){
+    public void handleInserirMedia(ActionEvent event) {
         fundoCalculadora.setVisible(true);
         calculadora.setVisible(true);
     }
-    
+
     @FXML
-    public void handleVoltarBtn(ActionEvent event){
+    public void handleVoltarBtn(ActionEvent event) {
         fundoCalculadora.setVisible(false);
         calculadora.setVisible(false);
     }
-    
+
     @FXML
-    public void handleVoltarRect(MouseEvent event){
+    public void handleVoltarRect(MouseEvent event) {
         fundoCalculadora.setVisible(false);
         calculadora.setVisible(false);
     }
-    
-    private void addTraco(){
+
+    private void addTraco() {
         String visualFormula = formula.substring(0, traco) + "|" + formula.substring(traco);
         resultado.setText(visualFormula);
     }
-    
+
     @FXML
-    public void handleCalculadora(ActionEvent event){
-        Button btn = (Button)event.getSource();
-        
+    public void handleCalculadora(ActionEvent event) {
+        Button btn = (Button) event.getSource();
+
         formula = formula.substring(0, traco) + btn.getText() + formula.substring(traco);
         traco += 1;
-        addTraco();        
+        addTraco();
     }
-    
+
     @FXML
-    public void handleBack(ActionEvent event){
-        if(formula.charAt(traco - 1) == '}'){
-            while(true){
+    public void handleBack(ActionEvent event) {
+        if (formula.charAt(traco - 1) == '}') {
+            while (true) {
                 traco -= 1;
-                if(formula.charAt(traco) == '{'){
+                if (formula.charAt(traco) == '{') {
                     break;
                 }
             }
-        }
-        else if(traco > 0){
+        } else if (traco > 0) {
             traco -= 1;
         }
-        addTraco();        
+        addTraco();
     }
-    
+
     @FXML
-    public void handleForward(ActionEvent event){
-        if(formula.charAt(traco) == '{'){
-            while(formula.charAt(traco) != '}'){
+    public void handleForward(ActionEvent event) {
+        if (formula.charAt(traco) == '{') {
+            while (formula.charAt(traco) != '}') {
                 traco += 1;
             }
         }
-        if(traco < formula.length()){
+        if (traco < formula.length()) {
             traco += 1;
             addTraco();
         }
     }
-    
+
     @FXML
     public void handleBackspace(ActionEvent event) {
         if (traco == 0) return;  // nothing to delete
-        
+
         if (formula.charAt(traco - 1) == '}') {
             do {
                 formula = formula.substring(0, traco - 1) + formula.substring(traco);
                 traco -= 1;
-                
+
             } while (formula.charAt(traco - 1) != '{');
-            
+
             if (traco > 0) {
                 formula = formula.substring(0, traco - 1) + formula.substring(traco);
                 traco -= 1;
@@ -229,12 +227,12 @@ public class CadastrarDisciplinaController {
             formula = formula.substring(0, traco - 1) + formula.substring(traco);
             traco -= 1;
         }
-        
+
         addTraco();
     }
-    
-    private void handleVariableToFormula(String text){
-        formula = formula.substring(0, traco) + "{" + formula.substring(traco); 
+
+    private void handleVariableToFormula(String text) {
+        formula = formula.substring(0, traco) + "{" + formula.substring(traco);
         traco += 1;
         formula = formula.substring(0, traco) + text + formula.substring(traco);
         traco += text.length();
@@ -242,142 +240,139 @@ public class CadastrarDisciplinaController {
         traco += 1;
         addTraco();
     }
-    
+
     @FXML
     private VBox inputsProva;
-    
+
     @FXML
     private VBox inputsTrabalho;
-    
+
     @FXML
     private HBox addMetodoAvaliacao;
-    
+
     @FXML
     private TextField integrantes;
-    
+
     @FXML
-    public void handleAddProva(ActionEvent event){
+    public void handleAddProva(ActionEvent event) {
         addMetodoAvaliacao.setVisible(false);
         inputsProva.setVisible(true);
     }
-    
+
     @FXML
-    public void handleAddTrabalho(ActionEvent event){
+    public void handleAddTrabalho(ActionEvent event) {
         addMetodoAvaliacao.setVisible(false);
         inputsTrabalho.setVisible(true);
     }
-    
+
     @FXML
-    public void handleProvaToMetodo(ActionEvent event){
+    public void handleProvaToMetodo(ActionEvent event) {
         inputsProva.setVisible(false);
         addMetodoAvaliacao.setVisible(true);
     }
-    
+
     @FXML
-    public void handleTrabalhoToMetodo(ActionEvent event){
+    public void handleTrabalhoToMetodo(ActionEvent event) {
         inputsTrabalho.setVisible(false);
         addMetodoAvaliacao.setVisible(true);
     }
-    
+
     @FXML
-    public void handleGroup(ActionEvent event){
-        Button btn = (Button)event.getSource();
+    public void handleGroup(ActionEvent event) {
+        Button btn = (Button) event.getSource();
         btn.setVisible(false);
         integrantes.setVisible(true);
     }
-    
+
     @FXML
     private FlowPane avaliacoesCadastradas;
-    
-    
+
+
     @FXML
-    public void handleSaveProva(ActionEvent event){
+    public void handleSaveProva(ActionEvent event) {
         TextField nome = findNodeById(inputsProva, "nome", TextField.class);
-        TextField local = findNodeById(inputsProva, "local", TextField.class); 
+        TextField local = findNodeById(inputsProva, "local", TextField.class);
         DatePicker data = findNodeById(inputsProva, "data", DatePicker.class);
         TextField horarioInicio = findNodeById(inputsProva, "horarioInicio", TextField.class);
         TextField duracao = findNodeById(inputsProva, "duracao", TextField.class);
-        
-        Prova prova = new Prova(nome.getText(), local.getText(), horarioInicio.getText(), duracao.getText(), data.getValue().toString());
+
+        Prova prova = new Prova(nome.getText(),"TODO - DISCIPLINA", local.getText(), horarioInicio.getText(), duracao.getText(), data.getValue().toString());
         avaliacoes.add(prova);
         Button btn = new Button(nome.getText());
-        
+
         btn.setStyle("-fx-background-color: white; -fx-border-width: 1px; -fx-border-color: black; -fx-cursor: hand");
-        
+
         btn.setOnMousePressed(e -> {
             if (e.getButton() == MouseButton.PRIMARY) {
                 handleVariableToFormula(btn.getText());
-            }
-            else if(e.getButton() == MouseButton.SECONDARY) {
+            } else if (e.getButton() == MouseButton.SECONDARY) {
                 avaliacoesCadastradas.getChildren().remove(btn);
                 avaliacoes.remove(prova);
             }
         });
-        
+
         avaliacoesCadastradas.getChildren().add(btn);
-        
+
         nome.setText("");
         local.setText("");
         data.setValue(null);
         horarioInicio.setText("");
         duracao.setText("");
-        
+
         handleProvaToMetodo(event);
     }
-    
+
     @FXML
-    public void handleSaveTrabalho(ActionEvent event){
+    public void handleSaveTrabalho(ActionEvent event) {
         TextField nome = findNodeById(inputsTrabalho, "nome", TextField.class);
-        DatePicker dataInicio = findNodeById(inputsTrabalho, "inicio", DatePicker.class); 
+        DatePicker dataInicio = findNodeById(inputsTrabalho, "inicio", DatePicker.class);
         DatePicker dataEntrega = findNodeById(inputsTrabalho, "entrega", DatePicker.class);
         Button grupo = findNodeById(inputsTrabalho, "grupo", Button.class);
         TextField integrantes = findNodeById(inputsTrabalho, "integrantes", TextField.class);
-        
-        Trabalho trabalho = new Trabalho(nome.getText(), dataInicio.getValue().toString(), dataEntrega.getValue().toString(), !grupo.isVisible(), integrantes.toString());
+
+        Trabalho trabalho = new Trabalho(nome.getText(), "TODO - COLOCAR DISCIPLINA", dataInicio.getValue().toString(), dataEntrega.getValue().toString(), !grupo.isVisible(), integrantes.toString());
         avaliacoes.add(trabalho);
         Button btn = new Button(nome.getText());
         btn.setStyle("-fx-background-color: white; -fx-border-width: 1px; -fx-border-color: black; -fx-cursor: hand");
-        
-        
-        
+
+
         btn.setOnMousePressed(e -> {
             if (e.getButton() == MouseButton.PRIMARY) {
                 handleVariableToFormula(btn.getText());
-            }
-            else if(e.getButton() == MouseButton.SECONDARY) {
+            } else if (e.getButton() == MouseButton.SECONDARY) {
                 avaliacoesCadastradas.getChildren().remove(btn);
                 avaliacoes.remove(trabalho);
             }
         });
-        
+
         avaliacoesCadastradas.getChildren().add(btn);
-        
+
         nome.setText("");
         dataInicio.setValue(null);
         dataEntrega.setValue(null);
         grupo.setVisible(true);
         integrantes.setText("");
         integrantes.setVisible(false);
-        
+
         handleTrabalhoToMetodo(event);
     }
-    
+
     private List<MetodoDeAvaliacao> avaliacoes;
-    
+
     @FXML
     public void handleCadastrarDisciplina(ActionEvent event) {
-        try{
+        try {
             String nome = nomeInput.getText();
             String professor = professorInput.getText();
             String PED = PEDInput.getText();
             String codigo = codigoInput.getText();
             int creditos = Integer.parseInt(creditosInput.getText());
-            
+
             Disciplina disciplina = new Disciplina(codigo, nome, PED, creditos, professor, formula);
-            
+
             List<Aula> aulas = new ArrayList<>();
-            for(var item : diasAulas.entrySet()){
-                if(item.getValue()){
+            for (var item : diasAulas.entrySet()) {
+                if (item.getValue()) {
                     StackPane botaoAula = (StackPane) findNodeById(botoesAulas, item.getKey(), StackPane.class);
                     TextField inicio = findNodeById(botaoAula, "inicio", TextField.class);
                     TextField fim = findNodeById(botaoAula, "fim", TextField.class);
@@ -389,15 +384,14 @@ public class CadastrarDisciplinaController {
             }
             disciplina.setAulas(aulas);
 
-            for(var avaliacao : avaliacoes){
+            for (var avaliacao : avaliacoes) {
                 avaliacao.setCodigo(codigo);
             }
 
             disciplina.setAvaliacoes(avaliacoes);
 
             alunoLogado.getAluno().cadastrarDisciplina(disciplina);
-        }
-        catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             //EXCEÇÕES: CAIXA VAZIA, CREDITOS NÃO É UM NÚMERO, FÓRMULA INVÁLIDA (parentesis aberto, operação inaproppriada)
             //typeError.setText("Insira um número inteiro");
         }

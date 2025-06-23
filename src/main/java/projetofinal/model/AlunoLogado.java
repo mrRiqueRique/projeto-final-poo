@@ -70,6 +70,7 @@ public class AlunoLogado {
         this.avaliacoes = new ArrayList<>();
         this.aulas = new ArrayList<>();
         for (Disciplina disciplina : this.aluno.getDisciplinas()) {
+            System.out.println(disciplina.getCodigo());
             this.aulas.addAll(aulasRepository.listarAulasPorDisciplina(disciplina.getCodigo()));
             this.avaliacoes.addAll(provaRepository.getProvasPorDisciplina(disciplina.getCodigo()));
             this.avaliacoes.addAll(trabalhoRepository.getTrabalhosPorDisciplina(disciplina.getCodigo()));

@@ -11,8 +11,8 @@ public class Trabalho extends MetodoDeAvaliacao{
     private boolean emGrupo;
     private String grupo;
 
-    public Trabalho(String nome, String dataInicio, String dataEntrega, boolean emGrupo, String grupo){
-        super(nome);
+    public Trabalho(String nome, String codigoDisciplina, String dataInicio, String dataEntrega, boolean emGrupo, String grupo){
+        super(nome, codigoDisciplina);
         this.dataInicio = dataInicio;
         this.dataEntrega = dataEntrega;
         this.emGrupo = emGrupo;

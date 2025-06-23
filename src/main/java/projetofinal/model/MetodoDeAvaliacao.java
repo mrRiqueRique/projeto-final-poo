@@ -5,16 +5,21 @@ public abstract class MetodoDeAvaliacao {
     private String nome;
     private String codigoDisciplina;
 
-    public MetodoDeAvaliacao(String nome){
+    public MetodoDeAvaliacao(String nome) {
         this.nome = nome;
     }
 
-    public MetodoDeAvaliacao(String nome, double nota){
+    public MetodoDeAvaliacao(String nome, String codigoDisciplina) {
+        this.nome = nome;
+        this.codigoDisciplina = codigoDisciplina;
+    }
+
+    public MetodoDeAvaliacao(String nome, double nota) {
         this.nome = nome;
         this.nota = nota;
     }
 
-    public void setCodigo(String codigo){
+    public void setCodigo(String codigo) {
         this.codigoDisciplina = codigo;
     }
 
@@ -22,19 +27,19 @@ public abstract class MetodoDeAvaliacao {
         this.nota = nota;
     }
 
-    public double getNota(){
+    public double getNota() {
         return this.nota;
     }
 
-    public String getNome(){
+    public String getNome() {
         return this.nome;
     }
 
-    public void lancarNota(double nota){
+    public void lancarNota(double nota) {
         this.nota = nota;
     }
 
-    public String getCodigoDisciplina(){
+    public String getCodigoDisciplina() {
         return this.codigoDisciplina;
     }
 
