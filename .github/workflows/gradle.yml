@@ -21,7 +21,7 @@ jobs:
       - name: Create credentials.json from secret
         run: |
           mkdir -p src/main/resources
-          printf "%s" "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > src/main/resources/credentials.json
+          printf '%s' "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > src/main/resources/credentials.json
 
       - name: Check JSON output (debug)
         run: |
