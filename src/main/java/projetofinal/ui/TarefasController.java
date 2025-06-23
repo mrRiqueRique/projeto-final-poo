@@ -265,11 +265,11 @@ public class TarefasController {
             String prioridade = selecionado != null ? selecionado.getText() : null;
 
             // Validação de campos obrigatórios
-            if (nome.isEmpty() || disciplinaCodigo.isEmpty() || data == null || prioridade == null) {
+            if (nome.isEmpty() || disciplinaCodigo.isEmpty() || data == null) {
                 Alert alerta = new Alert(Alert.AlertType.ERROR);
                 alerta.setTitle("Campos obrigatórios");
                 alerta.setHeaderText(null);
-                alerta.setContentText("Todos os campos devem ser preenchidos.");
+                alerta.setContentText("Preencha o nome, a data e a prioridade da tarefa");
                 alerta.showAndWait();
                 return;
             }
