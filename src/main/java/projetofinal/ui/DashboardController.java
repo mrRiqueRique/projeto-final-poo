@@ -1,5 +1,6 @@
 package projetofinal.ui;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -23,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -32,6 +35,11 @@ import javafx.util.Duration;
 import projetofinal.filters.ComparatorPrioridade;
 import projetofinal.model.*;
 
+import javafx.scene.shape.Circle;
+import javafx.scene.paint.ImagePattern;
+
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 
 public class DashboardController {
 
@@ -42,6 +50,9 @@ public class DashboardController {
     @FXML
     private VBox aulasHojeContainer;
 
+    @FXML private StackPane profileButton;
+    @FXML private Circle profileImageCircle;
+
     private AlunoLogado alunoLogado = AlunoLogado.getInstance();
 
 
@@ -50,12 +61,78 @@ public class DashboardController {
         String nome = alunoLogado.getAluno().getNome().trim();
         String spacesToCenter = " ".repeat(nome.length()+ 3);
         bemVindoLabel.setText("Bem‑vindo, " + alunoLogado.getAluno().getNome().trim() + "!" + spacesToCenter);
+        carregarFotoPerfil(); // Carrega a foto do aluno no círculo
 
         // Executa o carregamento dos dados após renderizar o cabeçalho
         Platform.runLater(() -> {
             carregarTarefasUrgentes();
             carregarAulasHoje();
         });
+    }
+
+
+    private void carregarFotoPerfil() {
+        Aluno aluno = alunoLogado.getAluno();
+        Image imagem;
+        Image imagemPadrao = new Image(getClass().getResourceAsStream("/images/unicamp.png"));
+
+        if (aluno != null && aluno.getCaminhoFoto() != null && !aluno.getCaminhoFoto().isEmpty()) {
+            try {
+                File fotoFile = new File(aluno.getCaminhoFoto());
+                if (fotoFile.exists()) {
+                    imagem = new Image(fotoFile.toURI().toString());
+                } else {
+                    System.err.println("DashboardController: Arquivo de foto não encontrado em: " + aluno.getCaminhoFoto());
+                    imagem = imagemPadrao;
+                }
+            } catch (Exception e) {
+                System.err.println("DashboardController: Falha ao carregar imagem de perfil do arquivo. Erro: " + e.getMessage());
+                imagem = imagemPadrao;
+            }
+        } else {
+            imagem = imagemPadrao;
+        }
+        
+        profileImageCircle.setFill(new ImagePattern(imagem));
+
+    }
+
+    @FXML
+    private void handleProfileClick(MouseEvent event) {
+        try {
+            Stage stage = (Stage) profileButton.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Perfil.fxml"));
+            Scene novaCena = new Scene(loader.load(), 1440, 810);
+
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            
+            stage.setScene(novaCena);
+            stage.setTitle("Perfil do Aluno");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void irParaPerfil(ActionEvent event) {
+        try {
+            // Usa o profileButton para obter o Stage, garantindo que nunca seja nulo neste contexto
+            Stage stage = (Stage) profileButton.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Perfil.fxml"));
+            Scene novaCena = new Scene(loader.load(), 1440, 810);
+
+            // Adicione os CSS que a tela de Perfil precisa
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
+            // Adicione outros CSS se necessário
+
+            stage.setScene(novaCena);
+            stage.setTitle("Perfil do Aluno");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void carregarTarefasUrgentes() {
