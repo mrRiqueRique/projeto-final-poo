@@ -99,10 +99,13 @@ public class Service {
         List<Disciplina> disciplinasDoAluno = new ArrayList<>();
         try {
             List<List<Object>> dataDisciplinaAluno = sheetsFacade.lerDados("AlunoDisciplina", "A", "C");
+            System.out.println("AAAAAA"+ dataDisciplinaAluno);
             for (List<Object> linha : dataDisciplinaAluno) {
                 if (linha.get(0).toString().equals(raAluno)) {
                     Disciplina disciplina = getDisciplina(linha.get(1).toString());
                     if (disciplina != null) {
+                        System.out.println("2. AAAAAA"+ disciplina);
+
                         disciplina.setFaltas(Integer.parseInt(linha.get(2).toString()));
                         disciplinasDoAluno.add(disciplina);
                     }
@@ -347,9 +350,9 @@ public class Service {
         try {
             List<List<Object>> novasAulas = new ArrayList<>();
             for (Aula aula : aulas) {
-                novasAulas.add(List.of(codigoDisciplina, aula.getHorarioInicio(), aula.getHorarioFim(), aula.getDiaSemana()));
+                novasAulas.add(List.of(codigoDisciplina, aula.getHorarioInicio(), aula.getHorarioFim(), aula.getDiaSemana(), aula.getLocal()));
             }
-            sheetsFacade.escreverDados("Aula", "A", "D", novasAulas);
+            sheetsFacade.escreverDados("Aula", "A", "E", novasAulas);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar aulas à disciplina: " + e.getMessage());
         }
@@ -375,7 +378,7 @@ public class Service {
 
     public void adicionarDisciplina(Disciplina disciplina) {
         try {
-            List<List<Object>> novaDisciplina = List.of(List.of(disciplina.getCodigo(), disciplina.getNome(), disciplina.getCreditos(), disciplina.getProfessor()));
+            List<List<Object>> novaDisciplina = List.of(List.of(disciplina.getCodigo(), disciplina.getNome(), disciplina.getPED(),disciplina.getCreditos(), disciplina.getProfessor(),"0"));
             sheetsFacade.escreverDados("Disciplina", "A", "F", novaDisciplina);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar disciplina: " + e.getMessage());
@@ -391,9 +394,10 @@ public class Service {
         }
     }
 
-    public void adicionarProva(Prova prova, String codigoDisciplina) {
+    public void adicionarProva(Prova prova) {
         try {
-            List<List<Object>> novaProva = List.of(List.of(prova.getNome(), prova.getLocal(), prova.getDuracao(), prova.getData(), codigoDisciplina));
+
+            List<List<Object>> novaProva = List.of(List.of(prova.getNome(), prova.getLocal(), prova.getDuracao(), prova.getData(), prova.getCodigoDisciplina(), prova.getHorarioInicio()));
             sheetsFacade.escreverDados("Prova", "A", "F", novaProva);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar prova: " + e.getMessage());
@@ -409,9 +413,9 @@ public class Service {
         }
     }
 
-    public void adicionarTrabalho(Trabalho trabalho, String codigoDisciplina) {
+    public void adicionarTrabalho(Trabalho trabalho) {
         try {
-            List<List<Object>> novoTrabalho = List.of(List.of(trabalho.getNome(), trabalho.getDataInicio(), trabalho.getDataEntrega(), trabalho.getEmGrupo(), trabalho.getGrupo(), codigoDisciplina));
+            List<List<Object>> novoTrabalho = List.of(List.of(trabalho.getNome(), trabalho.getDataInicio(), trabalho.getDataEntrega(), trabalho.getEmGrupo(), trabalho.getGrupo(), trabalho.getCodigoDisciplina()));
             sheetsFacade.escreverDados("Trabalho", "A", "F", novoTrabalho);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar trabalho: " + e.getMessage());

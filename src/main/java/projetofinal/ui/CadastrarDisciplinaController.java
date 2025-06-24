@@ -2,6 +2,7 @@ package projetofinal.ui;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -296,8 +297,10 @@ public class CadastrarDisciplinaController {
         TextField horarioInicio = findNodeById(inputsProva, "horarioInicio", TextField.class);
         TextField duracao = findNodeById(inputsProva, "duracao", TextField.class);
 
-        Prova prova = new Prova(nome.getText(),"TODO - DISCIPLINA", local.getText(), horarioInicio.getText(), duracao.getText(), data.getValue().toString());
+        String dataFormatada = data.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        Prova prova = new Prova(nome.getText(), codigoInput.getText(), local.getText(), duracao.getText(), dataFormatada, horarioInicio.getText());
         avaliacoes.add(prova);
+        alunoLogado.cadastrarProva(prova);
         Button btn = new Button(nome.getText());
 
         btn.setStyle("-fx-background-color: white; -fx-border-width: 1px; -fx-border-color: black; -fx-cursor: hand");
@@ -330,11 +333,15 @@ public class CadastrarDisciplinaController {
         Button grupo = findNodeById(inputsTrabalho, "grupo", Button.class);
         TextField integrantes = findNodeById(inputsTrabalho, "integrantes", TextField.class);
 
-        Trabalho trabalho = new Trabalho(nome.getText(), "TODO - COLOCAR DISCIPLINA", dataInicio.getValue().toString(), dataEntrega.getValue().toString(), !grupo.isVisible(), integrantes.toString());
+        String dataInicioFormatada = dataInicio.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String dataEntregaFormatada = dataEntrega.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String integrantesFormatados = integrantes.getText().replaceAll("\\s+", ", ").trim();
+
+        Trabalho trabalho = new Trabalho(nome.getText(), codigoInput.getText(), dataInicioFormatada, dataEntregaFormatada, !grupo.isVisible(), integrantesFormatados);
         avaliacoes.add(trabalho);
+        alunoLogado.cadastrarTrabalho(trabalho);
         Button btn = new Button(nome.getText());
         btn.setStyle("-fx-background-color: white; -fx-border-width: 1px; -fx-border-color: black; -fx-cursor: hand");
-
 
         btn.setOnMousePressed(e -> {
             if (e.getButton() == MouseButton.PRIMARY) {
@@ -367,7 +374,6 @@ public class CadastrarDisciplinaController {
             String PED = PEDInput.getText();
             String codigo = codigoInput.getText();
             int creditos = Integer.parseInt(creditosInput.getText());
-
             Disciplina disciplina = new Disciplina(codigo, nome, PED, creditos, formula, professor);
 
             List<Aula> aulas = new ArrayList<>();
@@ -377,12 +383,11 @@ public class CadastrarDisciplinaController {
                     TextField inicio = findNodeById(botaoAula, "inicio", TextField.class);
                     TextField fim = findNodeById(botaoAula, "fim", TextField.class);
                     TextField local = findNodeById(botaoAula, "local", TextField.class);
-
-
                     aulas.add(new Aula(inicio.getText(), fim.getText(), item.getKey(), codigo, local.getText()));
                 }
             }
             disciplina.setAulas(aulas);
+            alunoLogado.cadastrarAula(codigoInput.getText(), aulas);
 
             for (var avaliacao : avaliacoes) {
                 avaliacao.setCodigo(codigo);
@@ -390,17 +395,17 @@ public class CadastrarDisciplinaController {
 
             disciplina.setAvaliacoes(avaliacoes);
 
-            alunoLogado.getAluno().cadastrarDisciplina(disciplina);
+            alunoLogado.cadastrarDisciplina(disciplina);
 
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Disciplinas.fxml"));
                 Scene novaCena = new Scene(loader.load(), 1440, 810);
-    
+
                 novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
                 novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
                 novaCena.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
                 novaCena.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
-    
+
                 // Obtém o Stage atual a partir do botão que disparou o evento
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(novaCena);
