@@ -64,12 +64,13 @@ public class AlunoLogado {
             return false;
         }
 
-
         this.aluno.setTodoList(todoItemRepository.getTodoListPorAluno(ra));
         this.aluno.setDisciplinas(this.disciplinaRepository.getDisciplinasPorAluno(ra));
         this.avaliacoes = new ArrayList<>();
         this.aulas = new ArrayList<>();
+
         for (Disciplina disciplina : this.aluno.getDisciplinas()) {
+            System.out.println(disciplina.getCodigo());
             this.aulas.addAll(aulasRepository.listarAulasPorDisciplina(disciplina.getCodigo()));
             this.avaliacoes.addAll(provaRepository.getProvasPorDisciplina(disciplina.getCodigo()));
             this.avaliacoes.addAll(trabalhoRepository.getTrabalhosPorDisciplina(disciplina.getCodigo()));
@@ -87,8 +88,8 @@ public class AlunoLogado {
     }
 
     public List<Disciplina> getDisciplinas() {
-        if (aluno != null) {
-            return aluno.getDisciplinas(); // Delegate to Aluno
+        if (this.aluno != null) {
+            return this.aluno.getDisciplinas(); // Delegate to Aluno
         } else {
             System.out.println("Nenhum aluno logado.");
             return new ArrayList<>();
@@ -112,13 +113,41 @@ public class AlunoLogado {
         }
     }
 
+    public void cadastrarProva(Prova prova) {
+        if (aluno != null) {
+            service.adicionarProva(prova);
+        } else {
+            System.out.println("Nenhum aluno logado.");
+        }
+    }
+
+    public void cadastrarAula(String ocdigoDisciplina, List<Aula> aulas) {
+        if (aluno != null) {
+            service.adicionarAulasDisciplina(ocdigoDisciplina, aulas);
+        } else {
+            System.out.println("Nenhum aluno logado.");
+        }
+    }
+
+    public void cadastrarTrabalho(Trabalho trabalho) {
+        if (aluno != null) {
+            service.adicionarTrabalho(trabalho);
+        } else {
+            System.out.println("Nenhum aluno logado.");
+        }
+    }
 
     public void cadastrarDisciplina(Disciplina disciplina) {
         if (aluno != null) {
             aluno.cadastrarDisciplina(disciplina); // Delegate to Aluno
+            service.adicionarDisciplina(disciplina);
         } else {
             System.out.println("Nenhum aluno logado.");
         }
+    }
+
+    public Service getService(){
+        return this.service;
     }
 
     public List<Aula> carregarAulas() {

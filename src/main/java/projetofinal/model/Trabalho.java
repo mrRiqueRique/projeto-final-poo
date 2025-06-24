@@ -2,26 +2,21 @@ package projetofinal.model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
-import projetofinal.exceptions.AlunoNaoEncontradoException;
 import projetofinal.exceptions.DataInvalidaException;
 
 public class Trabalho extends MetodoDeAvaliacao{
     private String dataInicio;
     private String dataEntrega;
     private boolean emGrupo;
-    private List<Aluno> grupo;
-    private String codigoDisciplina;
+    private String grupo;
 
-    public Trabalho(String nome, String dataInicio, String dataEntrega, boolean emGrupo, String codigoDisciplina){
-        super(nome);
+    public Trabalho(String nome, String codigoDisciplina, String dataInicio, String dataEntrega, boolean emGrupo, String grupo){
+        super(nome, codigoDisciplina);
         this.dataInicio = dataInicio;
         this.dataEntrega = dataEntrega;
         this.emGrupo = emGrupo;
-        grupo = new ArrayList<>();
-        this.codigoDisciplina = codigoDisciplina;
+        this.grupo = grupo;
     }
 
     public String getDataInicio() {
@@ -32,41 +27,17 @@ public class Trabalho extends MetodoDeAvaliacao{
         return this.dataEntrega;
     }
 
-    public String getCodigoDisciplina() {
-        return this.codigoDisciplina;
-    }
 
     public boolean getEmGrupo(){
         return this.emGrupo;
     }
 
-    public List<Aluno> getGrupo(){
+    public String getGrupo(){
         return this.grupo;
     }
 
     public void setEmGrupo(boolean emGrupo){
         this.emGrupo = emGrupo;
-    }
-
-    public void adicionaGrupo(List<Aluno> grupo){
-        this.grupo.addAll(grupo);
-    }
-
-    public void adicionarMembro(Aluno aluno){
-        this.grupo.add(aluno);
-    }
-
-    public void removerMembro(Aluno alunoRemovido){
-        try{
-            if(!this.grupo.contains(alunoRemovido))
-                throw new AlunoNaoEncontradoException("Aluno não pertence ao grupo");
-            
-            this.grupo.remove(alunoRemovido);
-            
-
-        }catch(AlunoNaoEncontradoException e){
-            System.out.println(e.getMessage());
-        }
     }
 
     public void alterarDataInicio(String data){

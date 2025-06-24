@@ -43,26 +43,30 @@
 
     <!-- CENTRO: Scroll com disciplinas + botões -->
     <center>
-        <VBox spacing="10" alignment="CENTER">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
+        <StackPane>
+            <VBox spacing="10" alignment="CENTER">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
 
-            <!-- SCROLL com as disciplinas -->
-            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" prefHeight="520">
-                <StackPane alignment="TOP_CENTER"> <!-- Wrapper centralizador -->
-                    <VBox fx:id="disciplinasContainer" spacing="10" maxWidth="600">
-                        <padding>
-                            <Insets top="10" right="10" bottom="10" left="10"/>
-                        </padding>
-                    </VBox>
-                </StackPane>
-            </ScrollPane>
+                <!-- SCROLL com as disciplinas -->
+                <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" prefHeight="500">
+                    <StackPane alignment="TOP_CENTER"> <!-- Wrapper centralizador -->
+                        <VBox fx:id="disciplinasContainer" spacing="10" maxWidth="600">
+                            <padding>
+                                <Insets top="10" right="10" bottom="10" left="10"/>
+                            </padding>
+                        </VBox>
+                    </StackPane>
+                </ScrollPane>
 
-            <!-- BOTÕES abaixo -->
-            <Button text="Lançar Nota" styleClass="botao-personalizado" onAction="#handleLancarNota"/>
-            <Button text="+ Cadastrar Disciplina" styleClass="botao-personalizado" onAction="#handleCadastrarDisciplina"/>
-        </VBox>
+                <!-- BOTÕES abaixo -->
+                <Button text="+ Cadastrar Disciplina" styleClass="botao-personalizado" onAction="#handleCadastrarDisciplina"/>
+            </VBox>
+
+            <VBox alignment="CENTER" maxWidth="800" maxHeight="400" style="-fx-background-radius: 20; -fx-background-color: rgb(205, 218, 248)white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 0, 3);" fx:id="editar" visible="false">
+            </VBox>
+        </StackPane>
     </center>
 
 </BorderPane>

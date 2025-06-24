@@ -68,12 +68,12 @@ public class Service {
 
     public List<Disciplina> getDisciplinas() {
         try {
-            List<List<Object>> dataDisciplina = sheetsFacade.lerDados("Disciplina", "A", "E");
+            List<List<Object>> dataDisciplina = sheetsFacade.lerDados("Disciplina", "A", "F");
 
             List<Disciplina> disciplinas = new ArrayList<>();
             for (List<Object> linha : dataDisciplina) {
                 // todo - arrumar tratamento do ultimo parametro de [avaliações]
-                disciplinas.add(new Disciplina(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Integer.parseInt(linha.get(3).toString()), 0, linha.get(4).toString()));
+                disciplinas.add(new Disciplina(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Integer.parseInt(linha.get(3).toString()), linha.get(5).toString(), linha.get(4).toString()));
             }
 
             return disciplinas;
@@ -85,9 +85,9 @@ public class Service {
 
     public Disciplina getDisciplina(String codigo) {
         try {
-            List<Object> dataDisciplina = sheetsFacade.lerDadosLinhaPorId("Disciplina", "A", "E", codigo);
+            List<Object> dataDisciplina = sheetsFacade.lerDadosLinhaPorId("Disciplina", "A", "F", codigo);
             if (dataDisciplina.isEmpty()) return null;
-            Disciplina disciplina = new Disciplina(dataDisciplina.get(0).toString(), dataDisciplina.get(1).toString(), dataDisciplina.get(2).toString(), Integer.parseInt(dataDisciplina.get(3).toString()), 0, dataDisciplina.get(4).toString());
+            Disciplina disciplina = new Disciplina(dataDisciplina.get(0).toString(), dataDisciplina.get(1).toString(), dataDisciplina.get(2).toString(), Integer.parseInt(dataDisciplina.get(3).toString()), dataDisciplina.get(5).toString(), dataDisciplina.get(4).toString());
             return disciplina;
         } catch (Exception e) {
             System.err.println("Erro ao obter disciplina: " + e.getMessage());
@@ -99,10 +99,13 @@ public class Service {
         List<Disciplina> disciplinasDoAluno = new ArrayList<>();
         try {
             List<List<Object>> dataDisciplinaAluno = sheetsFacade.lerDados("AlunoDisciplina", "A", "C");
+            System.out.println("AAAAAA"+ dataDisciplinaAluno);
             for (List<Object> linha : dataDisciplinaAluno) {
                 if (linha.get(0).toString().equals(raAluno)) {
                     Disciplina disciplina = getDisciplina(linha.get(1).toString());
                     if (disciplina != null) {
+                        System.out.println("2. AAAAAA"+ disciplina);
+
                         disciplina.setFaltas(Integer.parseInt(linha.get(2).toString()));
                         disciplinasDoAluno.add(disciplina);
                     }
@@ -120,8 +123,9 @@ public class Service {
             List<List<Object>> dataProva = sheetsFacade.lerDados("Prova", "A", "F");
             List<Prova> provas = new ArrayList<>();
             for (List<Object> linha : dataProva) {
-
-                provas.add(new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString(), linha.get(4).toString()));
+                Prova novaProva = new Prova(linha.get(0).toString(),linha.get(4).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString());
+                novaProva.setCodigo(linha.get(3).toString());
+                provas.add(novaProva);
             }
             return provas;
         } catch (Exception e) {
@@ -135,8 +139,10 @@ public class Service {
             List<List<Object>> dataProva = sheetsFacade.lerDados("Prova", "A", "F");
             for (List<Object> linha : dataProva) {
                 if (linha.get(0).toString().equals(nomeProva) && linha.get(4).toString().equals(codigoDisciplina)) {
-                    return new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString(), linha.get(4).toString());
-                }
+                    Prova novaProva = new Prova(linha.get(0).toString(),linha.get(4).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString());
+                    novaProva.setCodigo(linha.get(3).toString());
+                    return novaProva;
+                }              
             }
             return null; // Retorna null se não encontrar a prova
         } catch (Exception e) {
@@ -151,8 +157,9 @@ public class Service {
             List<Prova> provas = new ArrayList<>();
             for (List<Object> linha : dataProva) {
                 if (linha.get(4).toString().equals(codigoDisciplina)) { // Filtra pelo código da disciplina
-                    provas.add(new Prova(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString(), linha.get(4).toString()));
-                }
+                    Prova novaProva = new Prova(linha.get(0).toString(),linha.get(4).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString());
+                    novaProva.setCodigo(linha.get(3).toString());
+                    provas.add(novaProva);                }
             }
             return provas;
         } catch (Exception e) {
@@ -181,8 +188,10 @@ public class Service {
         try {
             List<List<Object>> dataTrabalho = sheetsFacade.lerDados("Trabalho", "A", "F");
             List<Trabalho> trabalhos = new ArrayList<>();
+            System.out.println("TRABALHOOOS"+dataTrabalho);
             for (List<Object> linha : dataTrabalho) {
-                trabalhos.add(new Trabalho(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Boolean.parseBoolean(linha.get(3).toString()), linha.get(5).toString()));
+                trabalhos.add(new Trabalho(linha.get(0).toString(),linha.get(5).toString(), linha.get(1).toString(), linha.get(2).toString(), Boolean.parseBoolean(linha.get(3).toString()), linha.get(4).toString()));
+                System.out.println("TRABALHOOOS"+trabalhos+" "+linha.get(5).toString());
             }
             return trabalhos;
         } catch (Exception e) {
@@ -196,7 +205,7 @@ public class Service {
             List<List<Object>> dataTrabalho = sheetsFacade.lerDados("Trabalho", "A", "F");
             for (List<Object> linha : dataTrabalho) {
                 if (linha.get(0).toString().equals(nomeTrabalho) && linha.get(5).toString().equals(codigoDisciplina)) {
-                    return new Trabalho(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), false, linha.get(5).toString()); // Cria o objeto Trabalho com os dados da linha
+                    return new Trabalho(linha.get(0).toString(),linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), false, linha.get(4).toString()); // Cria o objeto Trabalho com os dados da linha
                 }
             }
             return null; // Retorna null se não encontrar o trabalho
@@ -217,7 +226,7 @@ public class Service {
 
                 // Mas aqui estamos tentando acessar a coluna F (índice 5)
                 if (linha.get(5).toString().equals(codigoDisciplina)) { // Filtra pelo código da disciplina
-                    trabalhos.add(new Trabalho(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), Boolean.parseBoolean(linha.get(3).toString()), linha.get(5).toString()));
+                    trabalhos.add(new Trabalho(linha.get(0).toString(), linha.get(0).toString(),linha.get(1).toString(), linha.get(2).toString(), Boolean.parseBoolean(linha.get(3).toString()), linha.get(4).toString()));
                 }
             }
             return trabalhos;
@@ -341,9 +350,9 @@ public class Service {
         try {
             List<List<Object>> novasAulas = new ArrayList<>();
             for (Aula aula : aulas) {
-                novasAulas.add(List.of(codigoDisciplina, aula.getHorarioInicio(), aula.getHorarioFim(), aula.getDiaSemana()));
+                novasAulas.add(List.of(codigoDisciplina, aula.getHorarioInicio(), aula.getHorarioFim(), aula.getDiaSemana(), aula.getLocal()));
             }
-            sheetsFacade.escreverDados("Aula", "A", "D", novasAulas);
+            sheetsFacade.escreverDados("Aula", "A", "E", novasAulas);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar aulas à disciplina: " + e.getMessage());
         }
@@ -369,8 +378,8 @@ public class Service {
 
     public void adicionarDisciplina(Disciplina disciplina) {
         try {
-            List<List<Object>> novaDisciplina = List.of(List.of(disciplina.getCodigo(), disciplina.getNome(), disciplina.getCreditos(), disciplina.getProfessor()));
-            sheetsFacade.escreverDados("Disciplina", "A", "E", novaDisciplina);
+            List<List<Object>> novaDisciplina = List.of(List.of(disciplina.getCodigo(), disciplina.getNome(), disciplina.getPED(),disciplina.getCreditos(), disciplina.getProfessor(),"0"));
+            sheetsFacade.escreverDados("Disciplina", "A", "F", novaDisciplina);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar disciplina: " + e.getMessage());
         }
@@ -385,9 +394,10 @@ public class Service {
         }
     }
 
-    public void adicionarProva(Prova prova, String codigoDisciplina) {
+    public void adicionarProva(Prova prova) {
         try {
-            List<List<Object>> novaProva = List.of(List.of(prova.getNome(), prova.getLocal(), prova.getDuracao(), prova.getData(), codigoDisciplina));
+
+            List<List<Object>> novaProva = List.of(List.of(prova.getNome(), prova.getLocal(), prova.getDuracao(), prova.getData(), prova.getCodigoDisciplina(), prova.getHorarioInicio()));
             sheetsFacade.escreverDados("Prova", "A", "F", novaProva);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar prova: " + e.getMessage());
@@ -403,9 +413,9 @@ public class Service {
         }
     }
 
-    public void adicionarTrabalho(Trabalho trabalho, String codigoDisciplina) {
+    public void adicionarTrabalho(Trabalho trabalho) {
         try {
-            List<List<Object>> novoTrabalho = List.of(List.of(trabalho.getNome(), trabalho.getDataInicio(), trabalho.getDataEntrega(), trabalho.getEmGrupo(), trabalho.getGrupo(), codigoDisciplina));
+            List<List<Object>> novoTrabalho = List.of(List.of(trabalho.getNome(), trabalho.getDataInicio(), trabalho.getDataEntrega(), trabalho.getEmGrupo(), trabalho.getGrupo(), trabalho.getCodigoDisciplina()));
             sheetsFacade.escreverDados("Trabalho", "A", "F", novoTrabalho);
         } catch (Exception e) {
             System.err.println("Erro ao adicionar trabalho: " + e.getMessage());
@@ -459,11 +469,11 @@ public class Service {
 
     public void atualizarDisciplina(Disciplina disciplinaVelha, Disciplina disciplinaNova) {
         try {
-            List<List<Object>> dadosDisciplina = sheetsFacade.lerDados("Disciplina", "A", "E");
+            List<List<Object>> dadosDisciplina = sheetsFacade.lerDados("Disciplina", "A", "F");
             List<Object> linhaNova = new ArrayList<>(List.of(disciplinaNova.getCodigo(), disciplinaNova.getNome(), disciplinaNova.getCreditos(), disciplinaNova.getProfessor()));
             for (List<Object> linha : dadosDisciplina) {
                 if (linha.get(0).toString().equals(disciplinaVelha.getCodigo())) {
-                    sheetsFacade.atualizarDados("Disciplina", "A", "E", List.of(linha), List.of(linhaNova));
+                    sheetsFacade.atualizarDados("Disciplina", "A", "F", List.of(linha), List.of(linhaNova));
                     return;
                 }
             }
@@ -593,7 +603,7 @@ public class Service {
             for (int index = 0; index < dadosDisciplina.size(); index++) {
                 Disciplina disciplinaAtual = dadosDisciplina.get(index);
                 if (disciplinaAtual.getCodigo().equals(disciplina.getCodigo())) {
-                    sheetsFacade.deletarDados("Disciplina", "A", "E", index + 2); // +2 para pular o cabeçalho e ajustar o índice
+                    sheetsFacade.deletarDados("Disciplina", "A", "F", index + 2); // +2 para pular o cabeçalho e ajustar o índice
                     return;
                 }
             }

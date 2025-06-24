@@ -37,13 +37,4 @@ public class ProvaRepository extends Repository<Prova> {
             System.err.println("Erro ao carregar provas: " + e.getMessage());
         }
     }
-
-    public void adicionarProva(Prova prova, String codigoDisciplina) {
-        try {
-            service.adicionarProva(prova, codigoDisciplina);
-            addItem(prova);
-        } catch (Exception e) {
-            System.err.println("Erro ao adicionar prova: " + e.getMessage());
-        }
-    }
 }

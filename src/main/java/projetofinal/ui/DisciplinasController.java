@@ -4,6 +4,7 @@ package projetofinal.ui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -30,6 +31,9 @@ public class DisciplinasController {
     private AlunoLogado alunoLogado = AlunoLogado.getInstance();
 
     @FXML
+    private VBox editar;
+
+    @FXML
     public void initialize() {
         carregarDisciplinas();
     }
@@ -39,6 +43,7 @@ public class DisciplinasController {
 
         List<Disciplina> disciplinas = alunoLogado.getDisciplinas();
         for (Disciplina d : disciplinas) {
+            System.out.println("AAAAAAAAAAAAAAAAA "+ d.getCodigo());
             disciplinasContainer.getChildren().add(criarItemDisciplina(d));
         }
     }
@@ -81,9 +86,9 @@ public class DisciplinasController {
                 -fx-background-color: #C7D1FF;
             """);
 
-            // Você pode chamar método para abrir detalhes da disciplina
-            System.out.println("Selecionada disciplina: " + d.getNome());
-            // abrirDetalhesDisciplina(d); // ex
+            
+            mostrarDetalhesDisciplina(d);
+
         });
 
         return box;
@@ -127,18 +132,14 @@ public class DisciplinasController {
             CadastrarDisciplinaController controller = loader.getController();
             scene.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
             scene.getStylesheets().add(getClass().getResource("/style/botao-aula.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/botao-calc.css").toExternalForm());
 
             Stage stage = (Stage)((javafx.scene.Node)event.getSource()).getScene().getWindow();
             stage.setScene(scene);
         }
         catch(IOException e){
             e.printStackTrace();
-            System.out.println("Tela de cadastrar disciplina não carregou");
         }
-                     
-
-        System.out.println("Botão 'Cadastrar Disciplina' clicado.");
-            // todo - implementar abertura de tela para cadastrar nova disciplina
     }
 
 
@@ -166,6 +167,112 @@ public class DisciplinasController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private void mostrarDetalhesDisciplina(Disciplina d) {
+        editar.getChildren().clear(); // Limpa o que já tinha
+    
+        // Título
+        Label titulo = new Label("Detalhes da Disciplina");
+        titulo.setFont(Font.font("Raleway", FontWeight.BOLD, 24));
+        titulo.setStyle("-fx-text-fill: #395BC7;");
+    
+        // Campos editáveis
+        editar.getChildren().add(titulo);
+    
+        criarCampoEditavel("Nome", d.getNome(), novoValor -> {
+            Disciplina dNova = new Disciplina(d.getCodigo(), novoValor, d.getPED(), d.getCreditos(), d.getMedia(), d.getProfessor());
+            alunoLogado.getService().atualizarDisciplina(d, dNova);
+            d.setNome(novoValor);
+        });
+        
+        criarCampoEditavel("Código", d.getCodigo(), novoValor -> {
+            Disciplina dNova = new Disciplina(novoValor, d.getNome(), d.getPED(), d.getCreditos(), d.getMedia(), d.getProfessor());
+            alunoLogado.getService().atualizarDisciplina(d, dNova);
+            d.setCodigo(novoValor);
+        });
+        
+        criarCampoEditavel("Professor", d.getProfessor(), novoValor -> {
+            Disciplina dNova = new Disciplina(d.getCodigo(), d.getNome(), d.getPED(), d.getCreditos(), d.getMedia(), novoValor);
+            alunoLogado.getService().atualizarDisciplina(d, dNova);
+            d.setProfessor(novoValor);
+        });
+        
+        criarCampoEditavel("Créditos", String.valueOf(d.getCreditos()), novoValor -> {
+            int novosCreditos = Integer.parseInt(novoValor);
+            Disciplina dNova = new Disciplina(d.getCodigo(), d.getNome(), d.getPED(), novosCreditos, d.getMedia(), d.getProfessor());
+            alunoLogado.getService().atualizarDisciplina(d, dNova);
+            d.setCreditos(novosCreditos);
+        });
+        
+        criarCampoEditavel("PED", d.getPED(), novoValor -> {
+            Disciplina dNova = new Disciplina(d.getCodigo(), d.getNome(), novoValor, d.getCreditos(), d.getMedia(), d.getProfessor());
+            alunoLogado.getService().atualizarDisciplina(d, dNova);
+            d.setPED(novoValor);
+        });
+    
+        // Faltas
+        Label faltas = new Label("Faltas: " + d.getFaltas());
+        faltas.setFont(Font.font(16));
+    
+        Button lancarFalta = new Button("Adicionar Falta");
+        lancarFalta.getStyleClass().add("botao-personalizado");
+        lancarFalta.setOnAction(e -> {
+            alunoLogado.getService().atualizarFalta(d, alunoLogado.getAluno().getRa());
+            faltas.setText("Faltas: " + d.getFaltas());
+        });
+    
+        Button fechar = new Button("Fechar");
+        fechar.getStyleClass().add("botao-personalizado");
+        fechar.setOnAction(e -> editar.setVisible(false));
+    
+        editar.getChildren().addAll(faltas, lancarFalta, fechar);
+        editar.setSpacing(10);
+        editar.setPadding(new Insets(20));
+        editar.setVisible(true);
+    }
+
+    private void criarCampoEditavel(String labelTexto, String valorInicial, java.util.function.Consumer<String> onSalvar) {
+        HBox linha = new HBox(10);
+        linha.setAlignment(Pos.CENTER);
+    
+        Label label = new Label(labelTexto + ": " + valorInicial);
+        label.setFont(Font.font(16));
+    
+        label.setOnMouseClicked(e -> {
+            // Trocar Label por TextField + Botao Salvar + Botao Cancelar
+            linha.getChildren().clear();
+    
+            TextField textField = new TextField(valorInicial);
+    
+            Button botaoSalvar = new Button("Salvar");
+            botaoSalvar.getStyleClass().add("botao-personalizado");
+    
+            Button botaoCancelar = new Button("✖"); // Botão X
+            botaoCancelar.setStyle("-fx-cursor: hand; -fx-background-color: transparent; -fx-text-fill: red; -fx-font-weight: bold;"); // opcional: deixa vermelho
+    
+            botaoSalvar.setOnAction(ev -> {
+                String novoValor = textField.getText();
+                onSalvar.accept(novoValor); // Atualiza no banco
+    
+                // Volta pro Label
+                linha.getChildren().clear();
+                label.setText(labelTexto + ": " + novoValor);
+                linha.getChildren().add(label);
+            });
+    
+            botaoCancelar.setOnAction(ev -> {
+                // Apenas volta pro Label (não altera nada)
+                linha.getChildren().clear();
+                linha.getChildren().add(label);
+            });
+    
+            linha.getChildren().addAll(textField, botaoSalvar, botaoCancelar);
+        });
+    
+        linha.getChildren().add(label);
+        editar.getChildren().add(linha);
     }
 
 }
