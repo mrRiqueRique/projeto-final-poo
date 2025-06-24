@@ -32,6 +32,9 @@ public class GoogleSheetsFacade {
     private Sheets sheetsService;
     private final String spreadsheetId;
 
+    private static final String EXTERNAL_CREDENTIALS_PATH = "/usr/local/gerenciador-academico/credentials.json";
+    private static final String RESOURCE_CREDENTIALS_PATH = "/credentials.json";
+
     /**
      * Construtor da classe GoogleSheetsFacade.
      * <p>
@@ -40,13 +43,6 @@ public class GoogleSheetsFacade {
      * @throws GeneralSecurityException Se ocorrer um erro de segurança ao inicializar o serviço.
      * @throws IOException              Se ocorrer um erro de entrada/saída ao carregar as credenciais.
      */
-    public GoogleSheetsFacade() throws GeneralSecurityException, IOException {
-        String credenciais = Main.class.getResource("/credentials.json").getPath();
-        String spreadsheetId = "1Ie0FsmkwFZHv4AO-4pdGRV4lLMaRH1mLMQq-BSKB0BA";
-        
-        private static final String EXTERNAL_CREDENTIALS_PATH = "/usr/local/gerenciador-academico/credentials.json";
-        private static final String RESOURCE_CREDENTIALS_PATH = "/credentials.json";
-
     public GoogleSheetsFacade() throws GeneralSecurityException, IOException {
         String spreadsheetId = "1Ie0FsmkwFZHv4AO-4pdGRV4lLMaRH1mLMQq-BSKB0BA";
         this.spreadsheetId = spreadsheetId;
@@ -75,9 +71,7 @@ public class GoogleSheetsFacade {
      * @throws IOException              Se ocorrer um erro de entrada/saída ao carregar as credenciais.
      */
     private Sheets criarSheetsService(InputStream credentialsStream) throws GeneralSecurityException, IOException {
-        GoogleCredentials credenciais = GoogleCredentials
-                .fromStream(credentialsStream)
-                .createScoped(SCOPES);
+        GoogleCredentials credenciais = GoogleCredentials.fromStream(credentialsStream).createScoped(SCOPES);
 
         return new Sheets.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, new HttpCredentialsAdapter(credenciais)).setApplicationName("Google Sheets API - Facade Example").build();
     }
