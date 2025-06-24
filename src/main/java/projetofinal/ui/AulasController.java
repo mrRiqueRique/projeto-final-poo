@@ -18,22 +18,48 @@ import projetofinal.model.*;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Controller responsável por exibir o calendário de aulas do aluno.
+ * <p>
+ * Esta classe gerencia a tela de visualização do cronograma de aulas,
+ * organizando os horários em um grid e exibindo uma legenda com as disciplinas.
+ * Permite também a navegação de volta ao dashboard principal.
+ */
 public class AulasController {
 
+    /** Container que exibe a legenda com as cores e nomes das disciplinas. */
     @FXML
     private VBox legendaDisciplinas;
 
+    /** Grade que representa visualmente o calendário de aulas, com dias e horários. */
     @FXML
     private GridPane calendarioGrid;
 
+    /** Instância singleton representando o aluno logado. */
     AlunoLogado alunoLogado;
 
+    /**
+     * Método de inicialização automática do controller.
+     * <p>
+     * Invocado automaticamente pelo JavaFX após o carregamento do FXML.
+     * Obtém a instância do aluno logado e carrega as aulas na interface.
+     */
     @FXML
     public void initialize() {
         alunoLogado = AlunoLogado.getInstance();
         carregarAulas();
     }
 
+    /**
+     * Carrega e organiza visualmente as aulas do aluno no calendário.
+     * <p>
+     * Este método popula o {@link #calendarioGrid} com os horários das aulas
+     * e gera uma legenda visual em {@link #legendaDisciplinas}, associando cores
+     * diferentes para cada disciplina.
+     * <p>
+     * Ele calcula o intervalo de horários com base nas aulas cadastradas e distribui
+     * os elementos visuais para cada dia da semana.
+     */
     @FXML
     private void carregarAulas() {
         calendarioGrid.getChildren().clear();
@@ -42,7 +68,7 @@ public class AulasController {
         // Array de cores para disciplinas
         String[] cores = {"#87A5EF", "#F4A261", "#E76F51", "#2A9D8F", "#E9C46A", "#264653", "#6A7FC1", "#C0C3E5", "#F4B400", "#34A853"};
 
-        // Mapa de cor por disciplina
+        // Mapeia cores únicas para cada disciplina
         Map<String, String> mapaCores = new HashMap<>();
         int corIndex = 0;
 
@@ -54,12 +80,11 @@ public class AulasController {
             }
         }
 
-        // Adicionar cabeçalhos dos dias da semana
+        // Cabeçalho com dias da semana
         List<String> diasSemana = new ArrayList<>(List.of("Segunda", "Terça", "Quarta", "Quinta", "Sexta"));
 
         for (int coluna = 1; coluna <= 5; coluna++) {
             StackPane diaCelula = new StackPane();
-//            diaCelula.setPrefSize(100, 40);
             Label diaLabel = new Label(diasSemana.get(coluna - 1));
             diaLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-font-size: 14px;");
             diaCelula.getChildren().add(diaLabel);
@@ -67,16 +92,18 @@ public class AulasController {
             calendarioGrid.add(diaCelula, coluna, 0);
         }
 
-        // Determinar o intervalo de horários com base nas aulas
+        // Determina o horário mais cedo e mais tarde das aulas
         int horarioMaisCedo = aulas.stream().mapToInt(aula -> Integer.parseInt(aula.getHorarioInicio().split(":")[0])).min().orElse(7);
         int horarioMaisTarde = aulas.stream().mapToInt(aula -> Integer.parseInt(aula.getHorarioFim().split(":")[0])).max().orElse(23) - 1;
+
         Set<String> celulasPreenchidas = new HashSet<>();
 
+        // Preenche a grade de horários e dias com as aulas
         for (int linha = horarioMaisCedo - 6; linha <= horarioMaisTarde - 6; linha++) {
             int hora = 6 + linha;
             String textoHora = String.format("%02d:00", hora);
 
-            // Coluna de horários
+            // Coluna com o horário (lado esquerdo)
             StackPane horarioCelula = new StackPane();
             Label horarioLabel = new Label(textoHora);
             horarioLabel.setStyle("-fx-font-weight: bold;");
@@ -84,6 +111,7 @@ public class AulasController {
             StackPane.setAlignment(horarioLabel, Pos.CENTER);
             calendarioGrid.add(horarioCelula, 0, linha + 1);
 
+            // Preenche as colunas de dias da semana
             for (int coluna = 1; coluna <= 5; coluna++) {
                 String diaSemana = diasSemana.get(coluna - 1);
                 boolean celulaPreenchida = false;
@@ -94,7 +122,7 @@ public class AulasController {
                     int horaInicio = Integer.parseInt(aula.getHorarioInicio().split(":")[0]);
                     int horaFim = Integer.parseInt(aula.getHorarioFim().split(":")[0]);
 
-                    // Se essa aula cobre essa hora
+                    // Verifica se a aula ocorre nesse horário
                     if (hora >= horaInicio && hora < horaFim) {
                         String idCelula = coluna + "-" + (linha + 1);
                         if (celulasPreenchidas.contains(idCelula)) {
@@ -127,6 +155,7 @@ public class AulasController {
                     }
                 }
 
+                // Se não houver aula nesse horário, insere célula em branco
                 if (!celulaPreenchida) {
                     StackPane celula = new StackPane();
                     celula.setPrefSize(100, 35);
@@ -135,18 +164,20 @@ public class AulasController {
                 }
             }
 
-//          LEGENDAS
+            // LEGENDAS (refaz a cada ciclo de linha)
             legendaDisciplinas.getChildren().clear();
 
             for (Disciplina d : alunoLogado.getDisciplinas()) {
                 HBox item = new HBox();
                 item.setSpacing(10);
                 item.setAlignment(Pos.TOP_LEFT);
-                // Quadrado de cor da disciplina
+
+                // Quadradinho de cor da disciplina
                 Region corBox = new Region();
                 corBox.setPrefSize(15, 15);
                 corBox.setStyle("-fx-background-color: " + mapaCores.get(d.getCodigo()) + "; -fx-border-color: lightgray; -fx-margin-right: 10px;");
-                // Texto com detalhes
+
+                // Texto com nome e professor
                 VBox info = new VBox(2);
                 Label titleLabel = new Label(d.getCodigo() + " - " + d.getNome());
                 titleLabel.setStyle("-fx-font-weight: bold;");
@@ -158,19 +189,27 @@ public class AulasController {
             }
         }
 
-
+        // Define as proporções das colunas
         for (int i = 0; i <= 5; i++) {
             ColumnConstraints cc = new ColumnConstraints();
             if (i == 0) {
-                cc.setPercentWidth(10);
+                cc.setPercentWidth(10);  // coluna de horários
             } else {
-                cc.setPercentWidth(18);
+                cc.setPercentWidth(18);  // colunas de dias da semana
             }
             calendarioGrid.getColumnConstraints().add(cc);
         }
     }
 
-    @FXML private void handleVoltar(ActionEvent event) {
+    /**
+     * Manipula o clique no botão "Voltar".
+     * <p>
+     * Retorna o usuário à tela de dashboard principal, recarregando a interface.
+     *
+     * @param event Evento de clique no botão.
+     */
+    @FXML
+    private void handleVoltar(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/telas/Dashboard.fxml"));
             Scene novaCena = new Scene(loader.load(), 1440, 810);
