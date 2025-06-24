@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Classe responsável por interagir com a API do Google Sheets.
+ * <p>
+ * Esta classe fornece métodos para ler, escrever, atualizar e deletar dados em planilhas do Google Sheets.
+ */
 public class GoogleSheetsFacade {
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS);
@@ -23,6 +28,14 @@ public class GoogleSheetsFacade {
     private Sheets sheetsService;
     private final String spreadsheetId;
 
+    /**
+     * Construtor da classe GoogleSheetsFacade.
+     * <p>
+     * Inicializa o serviço do Google Sheets e define o ID da planilha.
+     *
+     * @throws GeneralSecurityException Se ocorrer um erro de segurança ao inicializar o serviço.
+     * @throws IOException              Se ocorrer um erro de entrada/saída ao carregar as credenciais.
+     */
     public GoogleSheetsFacade() throws GeneralSecurityException, IOException {
         String credenciais = Main.class.getResource("/credentials.json").getPath();
         String spreadsheetId = "1Ie0FsmkwFZHv4AO-4pdGRV4lLMaRH1mLMQq-BSKB0BA";
@@ -31,19 +44,29 @@ public class GoogleSheetsFacade {
         this.sheetsService = criarSheetsService(credenciais);
     }
 
+    /**
+     * Cria o serviço do Google Sheets com base nas credenciais fornecidas.
+     *
+     * @param credentialsPath O caminho para o arquivo de credenciais.
+     * @return Uma instância do serviço Sheets.
+     * @throws GeneralSecurityException Se ocorrer um erro de segurança ao criar o serviço.
+     * @throws IOException              Se ocorrer um erro de entrada/saída ao carregar as credenciais.
+     */
     private Sheets criarSheetsService(String credentialsPath) throws GeneralSecurityException, IOException {
-        // Carrega as credenciais do arquivo JSON
-        GoogleCredentials credenciais = GoogleCredentials
-                .fromStream(new FileInputStream(credentialsPath))
-                .createScoped(SCOPES);
+        GoogleCredentials credenciais = GoogleCredentials.fromStream(new FileInputStream(credentialsPath)).createScoped(SCOPES);
 
-        return new Sheets.Builder(
-                GoogleNetHttpTransport.newTrustedTransport(),
-                JSON_FACTORY,
-                new HttpCredentialsAdapter(credenciais)
-        ).setApplicationName("Google Sheets API - Facade Example").build();
+        return new Sheets.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, new HttpCredentialsAdapter(credenciais)).setApplicationName("Google Sheets API - Facade Example").build();
     }
 
+    /**
+     * Obtém a última linha com dados em um intervalo específico da planilha.
+     *
+     * @param nomePlanilha O nome da aba da planilha.
+     * @param colunaInicio A coluna inicial do intervalo.
+     * @param colunaFim    A coluna final do intervalo.
+     * @return O número da última linha com dados.
+     * @throws IOException Se ocorrer um erro ao ler os dados da planilha.
+     */
     private int obterUltimaLinhaComDados(String nomePlanilha, String colunaInicio, String colunaFim) throws IOException {
         List<List<Object>> valores = lerDados(nomePlanilha, colunaInicio, colunaFim);
 
@@ -52,12 +75,10 @@ public class GoogleSheetsFacade {
         if (valores != null) {
             for (int i = 0; i < valores.size(); i++) {
                 List<Object> linha = valores.get(i);
-
-                // Verifica se a linha tem pelo menos uma célula com conteúdo
                 boolean temDado = linha.stream().anyMatch(celula -> !celula.toString().trim().isEmpty());
 
                 if (temDado) {
-                    ultimaLinha = i + 1; // +1 pois linhas no Sheets começam em 1 (não 0)
+                    ultimaLinha = i + 1;
                 }
             }
         }
@@ -65,96 +86,105 @@ public class GoogleSheetsFacade {
         return ultimaLinha;
     }
 
-
+    /**
+     * Lê dados de um intervalo específico da planilha.
+     *
+     * @param nomePlanilha O nome da aba da planilha.
+     * @param celulaInicio A célula inicial do intervalo.
+     * @param celulaFim    A célula final do intervalo.
+     * @return Uma lista de listas representando os dados lidos.
+     * @throws IOException Se ocorrer um erro ao ler os dados da planilha.
+     */
     public List<List<Object>> lerDados(String nomePlanilha, String celulaInicio, String celulaFim) throws IOException {
-        String intervaldo = nomePlanilha + "!" + celulaInicio + ":" + celulaFim;
-        ValueRange response = sheetsService.spreadsheets().values()
-                .get(spreadsheetId, intervaldo)
-                .execute();
+        String intervalo = nomePlanilha + "!" + celulaInicio + ":" + celulaFim;
+        ValueRange response = sheetsService.spreadsheets().values().get(spreadsheetId, intervalo).execute();
         List<List<Object>> valores = response.getValues();
-        if (valores != null && !valores.isEmpty())
-            valores.remove(0); // Remove the header (first row)
+        if (valores != null && !valores.isEmpty()) valores.remove(0);
 
         return valores;
     }
 
-
+    /**
+     * Lê uma linha específica da planilha com base em um ID.
+     *
+     * @param nomePlanilha O nome da aba da planilha.
+     * @param celulaInicio A célula inicial do intervalo.
+     * @param celulaFim    A célula final do intervalo.
+     * @param id           O ID da linha a ser buscada.
+     * @return Uma lista representando a linha correspondente ao ID.
+     * @throws IOException Se ocorrer um erro ao ler os dados da planilha.
+     */
     public List<Object> lerDadosLinhaPorId(String nomePlanilha, String celulaInicio, String celulaFim, String id) throws IOException {
         List<List<Object>> dados = lerDados(nomePlanilha, celulaInicio, celulaFim);
 
         for (List<Object> linha : dados) {
             if (!linha.isEmpty() && linha.get(0).equals(id)) {
-                return linha; // Retorna a linha correspondente ao ID
+                return linha;
             }
         }
 
-        return Collections.emptyList(); // Retorna uma lista vazia se o ID não for encontrado
+        return Collections.emptyList();
     }
 
+    /**
+     * Escreve dados em um intervalo específico da planilha.
+     *
+     * @param nomePlanilha  O nome da aba da planilha.
+     * @param colunaInicial A coluna inicial do intervalo.
+     * @param colunaFinal   A coluna final do intervalo.
+     * @param valores       Os valores a serem escritos.
+     * @throws IOException Se ocorrer um erro ao escrever os dados na planilha.
+     */
     public void escreverDados(String nomePlanilha, String colunaInicial, String colunaFinal, List<List<Object>> valores) throws IOException {
         int ultimaLinhaComDados = obterUltimaLinhaComDados(nomePlanilha, colunaInicial, colunaFinal);
-        int linhasNecessarias = valores.size();
         int linhaDestino = ultimaLinhaComDados + 2;
 
-        // 1. Verifica quantas linhas existem atualmente na planilha
         Spreadsheet spreadsheet = sheetsService.spreadsheets().get(spreadsheetId).execute();
 
-        Sheet sheet = spreadsheet.getSheets().stream()
-                .filter(s -> s.getProperties().getTitle().equals(nomePlanilha))
-                .findFirst()
-                .orElseThrow(() -> new IOException("Aba '" + nomePlanilha + "' não encontrada"));
+        Sheet sheet = spreadsheet.getSheets().stream().filter(s -> s.getProperties().getTitle().equals(nomePlanilha)).findFirst().orElseThrow(() -> new IOException("Aba '" + nomePlanilha + "' não encontrada"));
 
         int totalLinhas = sheet.getProperties().getGridProperties().getRowCount();
 
-        // 2. Se não houver linhas suficientes, adiciona mais
-        if (linhaDestino + linhasNecessarias - 1 > totalLinhas) {
-            int linhasParaAdicionar = (linhaDestino + linhasNecessarias - 1) - totalLinhas;
+        if (linhaDestino + valores.size() - 1 > totalLinhas) {
+            int linhasParaAdicionar = (linhaDestino + valores.size() - 1) - totalLinhas;
 
-            Request request = new Request().setAppendDimension(new AppendDimensionRequest()
-                    .setSheetId(sheet.getProperties().getSheetId())
-                    .setDimension("ROWS")
-                    .setLength(linhasParaAdicionar));
+            Request request = new Request().setAppendDimension(new AppendDimensionRequest().setSheetId(sheet.getProperties().getSheetId()).setDimension("ROWS").setLength(linhasParaAdicionar));
 
-            BatchUpdateSpreadsheetRequest bodyUpdate = new BatchUpdateSpreadsheetRequest()
-                    .setRequests(Collections.singletonList(request));
+            BatchUpdateSpreadsheetRequest bodyUpdate = new BatchUpdateSpreadsheetRequest().setRequests(Collections.singletonList(request));
 
             sheetsService.spreadsheets().batchUpdate(spreadsheetId, bodyUpdate).execute();
-
-            System.out.printf("Adicionadas %d novas linhas à aba '%s'.%n", linhasParaAdicionar, nomePlanilha);
         }
 
-        // 3. Escreve os dados no intervalo certo
         String intervalo = nomePlanilha + "!" + colunaInicial + linhaDestino + ":" + colunaFinal;
 
-        ValueRange body = new ValueRange()
-                .setRange(intervalo)
-                .setValues(valores);
+        ValueRange body = new ValueRange().setRange(intervalo).setValues(valores);
 
-        UpdateValuesResponse result = sheetsService.spreadsheets().values()
-                .update(spreadsheetId, intervalo, body)
-                .setValueInputOption("RAW")
-                .execute();
-
-        System.out.printf("%d células atualizadas na aba '%s'.%n", result.getUpdatedCells(), nomePlanilha);
+        sheetsService.spreadsheets().values().update(spreadsheetId, intervalo, body).setValueInputOption("RAW").execute();
     }
 
-    public void atualizarDados(String nomePlanilha, String colunaInicial, String colunaFinal,
-                               List<List<Object>> valoresAntigos, List<List<Object>> valoresNovos) throws IOException {
+    /**
+     * Atualiza dados em um intervalo específico da planilha.
+     *
+     * @param nomePlanilha   O nome da aba da planilha.
+     * @param colunaInicial  A coluna inicial do intervalo.
+     * @param colunaFinal    A coluna final do intervalo.
+     * @param valoresAntigos Os valores antigos a serem substituídos.
+     * @param valoresNovos   Os novos valores a serem escritos.
+     * @throws IOException Se ocorrer um erro ao atualizar os dados na planilha.
+     */
+    public void atualizarDados(String nomePlanilha, String colunaInicial, String colunaFinal, List<List<Object>> valoresAntigos, List<List<Object>> valoresNovos) throws IOException {
         if (valoresAntigos.isEmpty() || valoresNovos.isEmpty()) {
             throw new IllegalArgumentException("Listas de valores antigos ou novos estão vazias.");
         }
 
-        // Lê todos os dados da planilha no intervalo desejado
         List<List<Object>> todasAsLinhas = lerDados(nomePlanilha, colunaInicial, colunaFinal);
 
-        // Encontra o índice da linha a ser atualizada
         int linhaAlvo = -1;
         for (int i = 0; i < todasAsLinhas.size(); i++) {
             List<Object> linha = todasAsLinhas.get(i);
 
-            // Compara o conteúdo da linha com valoresAntigos
             if (linha.equals(valoresAntigos.get(0))) {
-                linhaAlvo = i + 2; // +2: uma para pular o cabeçalho, outra porque índice começa em 0
+                linhaAlvo = i + 2;
                 break;
             }
         }
@@ -163,50 +193,32 @@ public class GoogleSheetsFacade {
             throw new IOException("Linha a ser atualizada não encontrada.");
         }
 
-        // Monta o intervalo com base na linhaAlvo
         String intervalo = nomePlanilha + "!" + colunaInicial + linhaAlvo + ":" + colunaFinal + linhaAlvo;
 
-        ValueRange corpo = new ValueRange()
-                .setRange(intervalo)
-                .setValues(valoresNovos);
+        ValueRange corpo = new ValueRange().setRange(intervalo).setValues(valoresNovos);
 
-        UpdateValuesResponse resultado = sheetsService.spreadsheets().values()
-                .update(spreadsheetId, intervalo, corpo)
-                .setValueInputOption("RAW")
-                .execute();
-
-        System.out.printf("Linha %d atualizada (%d células) na aba '%s'.%n",
-                linhaAlvo, resultado.getUpdatedCells(), nomePlanilha);
+        sheetsService.spreadsheets().values().update(spreadsheetId, intervalo, corpo).setValueInputOption("RAW").execute();
     }
 
-    public void deletarDados(String nomePlanilha, String colunaInicial, String colunaFinal, int numeroLinha){
+    /**
+     * Deleta uma linha específica da planilha.
+     *
+     * @param nomePlanilha  O nome da aba da planilha.
+     * @param colunaInicial A coluna inicial do intervalo.
+     * @param colunaFinal   A coluna final do intervalo.
+     * @param numeroLinha   O número da linha a ser deletada.
+     */
+    public void deletarDados(String nomePlanilha, String colunaInicial, String colunaFinal, int numeroLinha) {
         try {
-            // Define o intervalo a ser deletado
             String intervalo = nomePlanilha + "!" + colunaInicial + numeroLinha + ":" + colunaFinal + numeroLinha;
 
-            // Cria a requisição de exclusão
-            Request request = new Request().setDeleteRange(new DeleteRangeRequest()
-                    .setRange(new GridRange()
-                            .setSheetId(sheetsService.spreadsheets().get(spreadsheetId).execute()
-                                    .getSheets().stream()
-                                    .filter(s -> s.getProperties().getTitle().equals(nomePlanilha))
-                                    .findFirst()
-                                    .orElseThrow(() -> new IOException("Aba '" + nomePlanilha + "' não encontrada"))
-                                    .getProperties().getSheetId())
-                            .setStartRowIndex(numeroLinha - 1)
-                            .setEndRowIndex(numeroLinha))
-                    .setShiftDimension("ROWS"));
+            Request request = new Request().setDeleteRange(new DeleteRangeRequest().setRange(new GridRange().setSheetId(sheetsService.spreadsheets().get(spreadsheetId).execute().getSheets().stream().filter(s -> s.getProperties().getTitle().equals(nomePlanilha)).findFirst().orElseThrow(() -> new IOException("Aba '" + nomePlanilha + "' não encontrada")).getProperties().getSheetId()).setStartRowIndex(numeroLinha - 1).setEndRowIndex(numeroLinha)).setShiftDimension("ROWS"));
 
-            // Executa a atualização da planilha
-            BatchUpdateSpreadsheetRequest bodyUpdate = new BatchUpdateSpreadsheetRequest()
-                    .setRequests(Collections.singletonList(request));
+            BatchUpdateSpreadsheetRequest bodyUpdate = new BatchUpdateSpreadsheetRequest().setRequests(Collections.singletonList(request));
 
             sheetsService.spreadsheets().batchUpdate(spreadsheetId, bodyUpdate).execute();
-
-            System.out.printf("Linha %d deletada com sucesso na aba '%s'.%n", numeroLinha, nomePlanilha);
         } catch (IOException e) {
             System.err.println("Erro ao deletar linha: " + e.getMessage());
         }
     }
-
 }
