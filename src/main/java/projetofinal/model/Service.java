@@ -17,14 +17,14 @@ public class Service {
             System.err.println("Erro ao inicializar GoogleSheetsFacade: " + e.getMessage());
         }
     }
-
+    
     // CRUD
     public List<Aluno> getAlunos() {
         try {
             List<List<Object>> dataAluno = sheetsFacade.lerDados("Aluno", "A", "F");
             List<Aluno> alunos = new ArrayList<>();
             for (List<Object> linha : dataAluno) {
-                if (linha.isEmpty()) continue; // Pula linhas vazias
+                if (linha.isEmpty()) continue;
 
                 // Lógica de criação do aluno para incluir CR e Foto.
                 Aluno aluno = new Aluno(linha.get(0).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(4).toString());
