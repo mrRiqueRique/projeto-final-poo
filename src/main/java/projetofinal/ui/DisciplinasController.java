@@ -131,6 +131,8 @@ public class DisciplinasController {
             Scene scene = new Scene(loader.load(), 1440, 810);
             CadastrarDisciplinaController controller = loader.getController();
             scene.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/botao-aula.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/style/botao-calc.css").toExternalForm());
             scene.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
             scene.getStylesheets().add(getClass().getResource("/style/circle-checkbox.css").toExternalForm());
             scene.getStylesheets().add(getClass().getResource("/style/botao-prioridade.css").toExternalForm());
