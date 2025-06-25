@@ -17,7 +17,7 @@ public class Service {
             System.err.println("Erro ao inicializar GoogleSheetsFacade: " + e.getMessage());
         }
     }
-    
+
     // CRUD
     public List<Aluno> getAlunos() {
         try {
@@ -96,7 +96,7 @@ public class Service {
         } catch (Exception e) {
             System.err.println("Erro ao obter disciplina: " + e.getMessage());
             return null;
-        }
+        }   
     }
 
     public List<Disciplina> getDiciplinasDoAluno(String raAluno) {

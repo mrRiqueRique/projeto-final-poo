@@ -13,7 +13,7 @@
     <VBox>
         <VBox spacing="0">
             <!-- Cabeçalho azul -->
-            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="70">
+            <HBox style="-fx-background-color: #6A7FC1;" alignment="CENTER_LEFT" spacing="10" prefHeight="85">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>

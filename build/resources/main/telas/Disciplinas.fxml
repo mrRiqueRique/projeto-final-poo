@@ -48,9 +48,9 @@
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
-    
+
                 <!-- SCROLL com as disciplinas -->
-                <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" prefHeight="520">
+                <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" prefHeight="500">
                     <StackPane alignment="TOP_CENTER"> <!-- Wrapper centralizador -->
                         <VBox fx:id="disciplinasContainer" spacing="10" maxWidth="600">
                             <padding>
@@ -59,7 +59,7 @@
                         </VBox>
                     </StackPane>
                 </ScrollPane>
-    
+
                 <!-- BOTÕES abaixo -->
                 <Button text="+ Cadastrar Disciplina" styleClass="botao-personalizado" onAction="#handleCadastrarDisciplina"/>
             </VBox>
