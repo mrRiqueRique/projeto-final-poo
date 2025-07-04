@@ -43,7 +43,6 @@ public class DisciplinasController {
 
         List<Disciplina> disciplinas = alunoLogado.getDisciplinas();
         for (Disciplina d : disciplinas) {
-            System.out.println("AAAAAAAAAAAAAAAAA "+ d.getCodigo());
             disciplinasContainer.getChildren().add(criarItemDisciplina(d));
         }
     }

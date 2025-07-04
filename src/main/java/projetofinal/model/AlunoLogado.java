@@ -193,6 +193,7 @@ public class AlunoLogado {
     public void cadastrarAula(String codigoDisciplina, List<Aula> aulas) {
         if (aluno != null) {
             service.adicionarAulasDisciplina(codigoDisciplina, aulas);
+            this.aulas.addAll(aulas);
         } else {
             System.out.println("Nenhum aluno logado.");
         }
@@ -218,8 +219,9 @@ public class AlunoLogado {
      */
     public void cadastrarDisciplina(Disciplina disciplina) {
         if (aluno != null) {
-            aluno.cadastrarDisciplina(disciplina);
+            this.aluno.cadastrarDisciplina(disciplina);
             service.adicionarDisciplina(disciplina);
+            service.adicionarDisciplinaAluno(this.aluno, disciplina);
         } else {
             System.out.println("Nenhum aluno logado.");
         }
@@ -304,6 +306,7 @@ public class AlunoLogado {
         Disciplina disciplina = disciplinaRepository.getDisciplina(codigoDisciplina);
         Prova prova = provaRepository.getProva(codigoDisciplina, nomeAvaliacao);
         Trabalho trabalho = trabalhoRepository.getTrabalho(codigoDisciplina, nomeAvaliacao);
+        System.out.println("Aaaaaaaaaaaaaa"+disciplina+" "+prova+" "+trabalho);
         MetodoDeAvaliacao metodoDeAvaliacao = (prova != null) ? prova : trabalho;
         TodoItem todoItem = new TodoItem(this.aluno.getRa(), nome, disciplina, metodoDeAvaliacao, prioridade, data);
         this.aluno.getTodoList().adicionarItem(todoItem);

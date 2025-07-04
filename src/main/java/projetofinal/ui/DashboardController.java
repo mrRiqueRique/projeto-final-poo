@@ -55,17 +55,17 @@ public class DashboardController {
     @FXML
     private VBox aulasHojeContainer;
 
-    @FXML private StackPane profileButton;
-    @FXML private Circle profileImageCircle;
+    @FXML
+    private StackPane profileButton;
+    @FXML
+    private Circle profileImageCircle;
 
     private AlunoLogado alunoLogado = AlunoLogado.getInstance();
 
 
     @FXML
     public void initialize() {
-        String nome = alunoLogado.getAluno().getNome().trim();
-        String spacesToCenter = " ".repeat(nome.length()+ 3);
-        bemVindoLabel.setText("Bem‑vindo, " + alunoLogado.getAluno().getNome().trim() + "!" + spacesToCenter);
+        bemVindoLabel.setText("   " + "Bem‑vindo, " + alunoLogado.getAluno().getNome().trim() + "!");
         carregarFotoPerfil(); // Carrega a foto do aluno no círculo
 
         // Executa o carregamento dos dados após renderizar o cabeçalho
@@ -97,7 +97,7 @@ public class DashboardController {
         } else {
             imagem = imagemPadrao;
         }
-        
+
         profileImageCircle.setFill(new ImagePattern(imagem));
 
     }
@@ -111,7 +111,7 @@ public class DashboardController {
 
             novaCena.getStylesheets().add(getClass().getResource("/style/botao-personalizado.css").toExternalForm());
             novaCena.getStylesheets().add(getClass().getResource("/style/botao-voltar.css").toExternalForm());
-            
+
             stage.setScene(novaCena);
             stage.setTitle("Perfil do Aluno");
             stage.show();

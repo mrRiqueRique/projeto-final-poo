@@ -41,8 +41,9 @@ public class ProvaRepository extends Repository<Prova> {
      * @return A prova correspondente aos critérios, ou `null` se não encontrada.
      */
     public Prova getProva(String codigoDisciplina, String nomeAvaliacao) {
+        System.out.println(getItems());
         return getItems().stream()
-                .filter(prova -> prova.getCodigoDisciplina().equals(codigoDisciplina) && prova.getNome().equals(nomeAvaliacao))
+                .filter(prova -> prova.getCodigoDisciplina().equals(codigoDisciplina.trim()) && prova.getNome().equals(nomeAvaliacao.trim()))
                 .findFirst()
                 .orElse(null);
     }

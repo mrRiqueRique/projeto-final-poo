@@ -103,13 +103,10 @@ public class Service {
         List<Disciplina> disciplinasDoAluno = new ArrayList<>();
         try {
             List<List<Object>> dataDisciplinaAluno = sheetsFacade.lerDados("AlunoDisciplina", "A", "C");
-            System.out.println("AAAAAA"+ dataDisciplinaAluno);
             for (List<Object> linha : dataDisciplinaAluno) {
                 if (linha.get(0).toString().equals(raAluno)) {
                     Disciplina disciplina = getDisciplina(linha.get(1).toString());
                     if (disciplina != null) {
-                        System.out.println("2. AAAAAA"+ disciplina);
-
                         disciplina.setFaltas(Integer.parseInt(linha.get(2).toString()));
                         disciplinasDoAluno.add(disciplina);
                     }
@@ -128,7 +125,6 @@ public class Service {
             List<Prova> provas = new ArrayList<>();
             for (List<Object> linha : dataProva) {
                 Prova novaProva = new Prova(linha.get(0).toString(),linha.get(4).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString());
-                novaProva.setCodigo(linha.get(3).toString());
                 provas.add(novaProva);
             }
             return provas;
@@ -144,7 +140,6 @@ public class Service {
             for (List<Object> linha : dataProva) {
                 if (linha.get(0).toString().equals(nomeProva) && linha.get(4).toString().equals(codigoDisciplina)) {
                     Prova novaProva = new Prova(linha.get(0).toString(),linha.get(4).toString(), linha.get(1).toString(), linha.get(2).toString(), linha.get(3).toString(), linha.get(5).toString());
-                    novaProva.setCodigo(linha.get(3).toString());
                     return novaProva;
                 }
             }
@@ -192,10 +187,8 @@ public class Service {
         try {
             List<List<Object>> dataTrabalho = sheetsFacade.lerDados("Trabalho", "A", "F");
             List<Trabalho> trabalhos = new ArrayList<>();
-            System.out.println("TRABALHOOOS"+dataTrabalho);
             for (List<Object> linha : dataTrabalho) {
                 trabalhos.add(new Trabalho(linha.get(0).toString(),linha.get(5).toString(), linha.get(1).toString(), linha.get(2).toString(), Boolean.parseBoolean(linha.get(3).toString()), linha.get(4).toString()));
-                System.out.println("TRABALHOOOS"+trabalhos+" "+linha.get(5).toString());
             }
             return trabalhos;
         } catch (Exception e) {
